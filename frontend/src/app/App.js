@@ -7,8 +7,8 @@ import {
     // useRouteMatch,
     // useParams
   } from "react-router-dom";
-import ChatRoom from './ChatRoom';
-import Login from './Login';
+import ChatRoom from './components/ChatRoom/ChatRoom';
+import Login from './components/Login/Login';
 
 function App() {
 
@@ -18,6 +18,7 @@ function App() {
                 <Routes>
                     <Route path='/chatroom' element={<ChatRoom />}/>
                     <Route path='/login' element={<Login />} />
+                    <Route path='/sign' element={<Login />} />
                     <Route path='/' element={<Login />} />
                 </Routes>
             </Router>

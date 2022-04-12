@@ -1,0 +1,63 @@
+.Login{
+    background-image: url("./login_back.jpg");
+    background-size: 100% 100%;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+.Login-header{
+    padding-left: 18vw;
+    padding-top: 25vh;
+    color: white;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-align: left;
+}
+.Login-form{
+    margin-top: 20vh;
+    margin-left: 30vh;
+    background-color: rgba(255, 255, 255, 0.3);
+    max-height: 350px;
+    min-width: 250px;
+    padding: 20px 40px 0 40px;
+    color: white;
+    border-radius: 15px;
+    
+}
+.Login-form-email{
+    margin-top: 30px;
+}
+.Login-form-password{
+    margin-top: 20px;
+}
+.Login-form-submit{
+    margin-top: 40px;
+}
+.Login-Sign-in{
+    margin-top: 20px;
+}
+#email{
+    margin-top: 5px;
+    background-color: rgb(228, 228, 228);
+    border: rgb(228, 228, 228) solid;
+    border-radius: 5px;
+    width: 100%;
+    height: 1.5rem;
+}
+#password{
+    margin-top: 5px;
+    background-color: rgb(228, 228, 228);
+    border: rgb(228, 228, 228) solid;
+    border-radius: 5px;
+    width: 100%;
+    height: 1.5rem;
+}
+#submit{
+    border: rgb(228, 228, 228) solid;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    height: 2rem;
+    background-color: rgb(228, 228, 228);
+    color: blueviolet;
+}
