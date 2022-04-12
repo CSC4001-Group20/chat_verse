@@ -6,6 +6,13 @@ var Login = () =>{
     var [loginEmail, setLoginEmail] = React.useState("")
     var [loginPassword, setLoginPassword] = React.useState("")
 
+    var Validate = () =>{
+        // if(SignPassword!==SignPasswordConfir){
+            alert("Inconsistent Password!")
+            setLoginPassword("")
+        // }
+    }
+
     return(
         <div className='Login'>
             <div className='Login-header'>
@@ -24,11 +31,11 @@ var Login = () =>{
                         <input id='password' type="text" value={loginPassword} onChange={e=>setLoginPassword(e.target.value)}/>
                     </div>
                     <div className='Login-form-submit'>
-                        <button id='submit'>Login</button>
+                        <button id='submit' type='button' onClick={Validate}>Sign in</button>
                     </div>
                 </form>
                 <div className='Login-Sign-in'>
-                    Or <a href="/sign"><u>Sign up in ChatVerse</u></a>
+                    Or <a href="/sign" style={{color:"blueviolet"}}><u>Sign up in ChatVerse</u></a>
                 </div>
             </div>
         </div>

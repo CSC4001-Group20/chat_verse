@@ -9,6 +9,7 @@ import {
   } from "react-router-dom";
 import ChatRoom from './components/ChatRoom/ChatRoom';
 import Login from './components/Login/Login';
+import Sign from './components/Sign/Sign';
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
                 <Routes>
                     <Route path='/chatroom' element={<ChatRoom />}/>
                     <Route path='/login' element={<Login />} />
-                    <Route path='/sign' element={<Login />} />
+                    <Route path='/sign' element={<Sign />} />
                     <Route path='/' element={<Login />} />
                 </Routes>
             </Router>
