@@ -2,6 +2,7 @@
   "name": "chatverse",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://calendar.tea-break.cn",
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/holistic": "^0.5.1635989137",

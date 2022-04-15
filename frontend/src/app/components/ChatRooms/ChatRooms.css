@@ -1,0 +1,50 @@
+.ChatRooms{
+    background-image: url("./login_back.jpg");
+    background-size: 100% 100%;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+.ChatRooms-VerseList{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ChatRooms-VerseList-Verse{
+    box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    min-width: 480px;
+    min-height: max-content;
+    padding: 10px 10px 10px 30px;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    align-self: center;
+    text-align: left;
+}
+
+.ChatRooms-VerseList-Verse:hover{
+    cursor: pointer;
+    box-shadow: 5px 5px 6px 4px rgba(0,0,0,0.3);
+    transition: all .2s ease-in-out;
+    border-radius: 10px;
+    min-width: 480px;
+    min-height: max-content;
+    padding: 10px 10px 10px 30px;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    align-self: center;
+    text-align: left;
+}
+
+.ChatRooms-VerseList-Verse-header{
+    font-size: calc(1vh + 13px);
+    /* font-weight: 400; */
+}
+
+.ChatRooms-VerseList-Verse-content{
+    font-size: small;
+}

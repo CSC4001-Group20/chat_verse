@@ -10,6 +10,9 @@ import {
 import ChatRoom from './components/ChatRoom/ChatRoom';
 import Login from './components/Login/Login';
 import Sign from './components/Sign/Sign';
+import ChatRooms from './components/ChatRooms/ChatRooms';
+
+export const API = '/api'
 
 function App() {
 
@@ -17,6 +20,7 @@ function App() {
         <div className="App">
             <Router>
                 <Routes>
+                    <Route path='/chatrooms' element={<ChatRooms />}/>
                     <Route path='/chatroom' element={<ChatRoom />}/>
                     <Route path='/login' element={<Login />} />
                     <Route path='/sign' element={<Sign />} />
