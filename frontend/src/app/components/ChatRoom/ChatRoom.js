@@ -22,6 +22,7 @@ var orbitControls
 
 var motion_socket = null;
 var uid;
+var my_idx = -1;
 
 function ChatRoom() {
 
@@ -40,7 +41,6 @@ function ChatRoom() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         uid = urlParams.get('uid');
-        uids[0] = uid;
     }
 
     const newVideoElement = () => setVideoElement(document.querySelector(".input_video"));
@@ -95,7 +95,9 @@ function ChatRoom() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
-        renderer.domElement.style.pointerEvents = "none"
+
+        // 下面这行可以禁用THREE的交互
+        // renderer.domElement.style.pointerEvents = "none" 
 
         orbitCamera = new THREE.PerspectiveCamera(35,window.innerWidth / window.innerHeight,0.1,1000);
         orbitCamera.position.set(0.0, 1.4, 0.7);
@@ -112,7 +114,10 @@ function ChatRoom() {
     /* Logic Functions */
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const loadVRM = () => {
+    const loadVRM = (_uid) => {
+
+        // TODO: 不同的UID从不同的URL获取
+        // 需要查询Avatar数据库
         loader.load(
             "https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2FAshtra.vrm?v=1630342336981",
     
@@ -120,12 +125,18 @@ function ChatRoom() {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
     
                 VRM.from(gltf).then(vrm => {
+                    let idx = VRMs.length
                     scene.add(vrm.scene);
-                    VRMs[0] = vrm
-                    VRMs[0].scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
-                    transforms[0] = {x:0, z:0, r:0}
+                    VRMs[idx] = vrm
+                    uids[idx] = _uid
+                    if(toString(_uid)===toString(uid)){
+                        my_idx=idx
+                        initControl()
+                    }
+                    // VRMs[idx].scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
                     // console.log("DEBUG 2")
                 });
+                
             },
     
             progress =>
@@ -137,6 +148,36 @@ function ChatRoom() {
     
             error => console.error(error)
         );
+    }
+
+    /* SHOULD DEBUG */
+    // 不想思考角度换算了，谁来思考一下
+    const initControl = () => {
+
+        if(my_idx!==undefined){
+
+            transforms[my_idx] = {x:0, z:0, r:0}
+
+            document.addEventListener('keypress', e=>{
+                if(transforms[my_idx]){
+                    var e = e || window.event;
+                    if(e.key == 'w'){
+                        transforms[my_idx].x += 0.1 * Math.sin(transforms[my_idx].r)
+                        transforms[my_idx].z += 0.1 * Math.cos(transforms[my_idx].r)
+                    }
+                    if(e.key == 's'){	
+                        transforms[my_idx].x -= 0.1 * Math.sin(transforms[my_idx].r)
+                        transforms[my_idx].z -= 0.1 * Math.cos(transforms[my_idx].r)
+                    }
+                    if(e.key == 'a'){
+                        transforms[my_idx].r += 0.3
+                    }
+                    if(e.key == 'd'){	
+                        transforms[my_idx].r -= 0.3
+                    }
+                }
+            }) 
+        }
     }
 
 
@@ -153,6 +194,7 @@ function ChatRoom() {
             VRMSchema.HumanoidBoneName[name]
         );
         if (!Part) {return}
+
         
         let euler = new THREE.Euler(
             rotation.x * dampener,
@@ -237,7 +279,7 @@ function ChatRoom() {
 
     const onResults = (results) => {
         // Animate model
-        if (!VRMs[0]) return;
+        if (!VRMs[my_idx]) return;
 
         // Take the results from `Holistic` and animate character based on its Face, Pose, and Hand Keypoints.
         let riggedPose, riggedLeftHand, riggedRightHand, riggedFace;
@@ -250,18 +292,14 @@ function ChatRoom() {
         // Be careful, hand landmarks may be reversed
         const leftHandLandmarks = results.rightHandLandmarks;
         const rightHandLandmarks = results.leftHandLandmarks;
+        
 
-        let idx = 0
-    
         // Animate Face
         if (faceLandmarks) {
             riggedFace = Kalidokit.Face.solve(faceLandmarks,{
                 runtime:"mediapipe",
                 video:videoElement
             });
-
-            // console.log(riggedFace)
-            rigFace(idx, riggedFace)
         }
 
         
@@ -272,11 +310,55 @@ function ChatRoom() {
                 runtime: "mediapipe",
                 video:videoElement,
             });
-            rigRotation(idx, "Hips", riggedPose.Hips.rotation, 0.7);
+        }
+        
+            // Animate Hands
+        if (leftHandLandmarks) {
+            riggedLeftHand = Kalidokit.Hand.solve(leftHandLandmarks, "Left");
+        }
+            
+        if (rightHandLandmarks) {
+            riggedRightHand = Kalidokit.Hand.solve(rightHandLandmarks, "Right");
+        }
+    
+        
+        // Socket send data
+        let my_data = {
+            uid,
+
+            riggedPose,
+            riggedLeftHand,
+            riggedRightHand,
+            riggedFace,
+        }
+        motion_socket.send(JSON.stringify(my_data))
+
+        // applyMovements( my_data, idx )
+    }
+
+    const applyMovements = ( data, idx ) => {
+
+        let {
+            riggedPose,
+            riggedLeftHand,
+            riggedRightHand,
+            riggedFace,
+        } = data
+
+
+        try{
+
+            // console.log(riggedFace)
+            rigFace(idx, riggedFace)
+        }catch{}
+
+        try{
+            
+            rigRotation(idx, "Hips", {...riggedPose.Hips.rotation, y: riggedPose.Hips.rotation.y + transforms[my_idx].r}, 0.7);
             rigPosition(
                 "Hips",
                 {
-                    x: -riggedPose.Hips.position.x, // Reverse direction
+                    x: riggedPose.Hips.position.x,// Reverse direction
                     y: riggedPose.Hips.position.y + 1, // Add a bit of height
                     z: -riggedPose.Hips.position.z // Reverse direction
                 },
@@ -296,11 +378,10 @@ function ChatRoom() {
             rigRotation(idx, "LeftLowerLeg", riggedPose.LeftLowerLeg, 1, .3);
             rigRotation(idx, "RightUpperLeg", riggedPose.RightUpperLeg, 1, .3);
             rigRotation(idx, "RightLowerLeg", riggedPose.RightLowerLeg, 1, .3);
-        }
-        
-            // Animate Hands
-        if (leftHandLandmarks) {
-            riggedLeftHand = Kalidokit.Hand.solve(leftHandLandmarks, "Left");
+        }catch{}
+
+
+        try{
             rigRotation(idx, "LeftHand", {
                 // Combine pose rotation Z and hand rotation X Y
                 z: riggedPose.LeftHand.z,
@@ -322,10 +403,9 @@ function ChatRoom() {
             rigRotation(idx, "LeftLittleProximal", riggedLeftHand.LeftLittleProximal);
             rigRotation(idx, "LeftLittleIntermediate", riggedLeftHand.LeftLittleIntermediate);
             rigRotation(idx, "LeftLittleDistal", riggedLeftHand.LeftLittleDistal);
-        }
-            
-        if (rightHandLandmarks) {
-            riggedRightHand = Kalidokit.Hand.solve(rightHandLandmarks, "Right");
+        }catch{}
+
+        try{
             rigRotation(idx, "RightHand", {
                 // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
                 z: riggedPose.RightHand.z,
@@ -347,17 +427,11 @@ function ChatRoom() {
             rigRotation(idx, "RightLittleProximal", riggedRightHand.RightLittleProximal);
             rigRotation(idx, "RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
             rigRotation(idx, "RightLittleDistal", riggedRightHand.RightLittleDistal);
-        }
+        }catch{}
 
-        // Socket send data
-        let my_data = {
-            uid,
-            riggedPose,
-            riggedLeftHand,
-            riggedRightHand,
-            riggedFace,
-        }
-        motion_socket.send(JSON.stringify(my_data))
+        // 移动角色位置
+        VRMs[idx].scene.position.x = transforms[idx].x
+        VRMs[idx].scene.position.z = transforms[idx].z
     }
 
 
@@ -387,8 +461,6 @@ function ChatRoom() {
         motion_socket = new WebSocket(
             wss_protocol + window.location.host + '/ws/motion/'  + roomName + '/'
         );
-
-        console.log(wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/')
         // 建立webchat_socket连接时触发此方法
         motion_socket.onopen = function(e) {
             // Do nothing
@@ -396,7 +468,17 @@ function ChatRoom() {
 
         // 从后台接收到数据时触发此方法
         motion_socket.onmessage = function(e) {
-            
+            const data = JSON.parse(e.data);
+            let {uid} = data;
+            let idx = uids.indexOf(uid)
+            if(idx>=0){
+                applyMovements(data, idx)
+            }else{
+                // 收到一个未知用户的信号
+                console.log("cannot found uid", uid)
+                loadVRM(uid)
+
+            }
         };
         
     }
@@ -429,7 +511,7 @@ function ChatRoom() {
 
 
     React.useEffect(()=>{
-        if(loader && scene) loadVRM();    
+        if(loader && scene) loadVRM(uid);    
     },[loader, scene])
 
     React.useEffect(()=>{
@@ -442,10 +524,6 @@ function ChatRoom() {
     React.useEffect(()=>{
         if(holistic) initHolistic()
     },[holistic])
-
-    // React.useState(()=>{
-    //     console.log("DEBUG ",currentVrm)
-    // },[currentVrm])
 
     return(
         <div className='ChatRoom'>
