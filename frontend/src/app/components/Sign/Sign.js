@@ -18,7 +18,7 @@ var Sign = () =>{
                 password: SignPassword,
             }
             setCookie("update",new Date().toUTCString())
-            fetch(`http://127.0.0.1/user/register/?`,{
+            fetch(`/user/register/?`,{
                 method:'POST',
                 body: JSON.stringify(bodydata),
             })
