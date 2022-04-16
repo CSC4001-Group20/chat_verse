@@ -362,7 +362,7 @@ function ChatRoom() {
 
     React.useEffect(()=>{
         if(loader && scene) loadVRM();    
-    },[loadVRM, loader, scene])
+    },[loader, scene])
 
     React.useEffect(()=>{
         if(scene){
