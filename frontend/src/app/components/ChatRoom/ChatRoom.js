@@ -10,7 +10,9 @@ import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
 
-var currentVrm;
+var VRMs = [];
+var transforms = [];
+var uids = []
 
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
@@ -38,6 +40,7 @@ function ChatRoom() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         uid = urlParams.get('uid');
+        uids[0] = uid;
     }
 
     const newVideoElement = () => setVideoElement(document.querySelector(".input_video"));
@@ -118,9 +121,9 @@ function ChatRoom() {
     
                 VRM.from(gltf).then(vrm => {
                     scene.add(vrm.scene);
-                    currentVrm = vrm
-                    // setCurrentVrm(vrm);
-                    currentVrm.scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
+                    VRMs[0] = vrm
+                    VRMs[0].scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
+                    transforms[0] = {x:0, z:0, r:0}
                     // console.log("DEBUG 2")
                 });
             },
@@ -138,11 +141,13 @@ function ChatRoom() {
 
 
     const rigRotation = (
+        idx,
         name,
         rotation = { x: 0, y: 0, z: 0 },
         dampener = 1,
         lerpAmount = 0.3
     ) => {
+        let currentVrm = VRMs[idx]
         if (!currentVrm) {return}
         const Part = currentVrm.humanoid.getBoneNode(
             VRMSchema.HumanoidBoneName[name]
@@ -160,11 +165,13 @@ function ChatRoom() {
 
     // Animate Position Helper Function
     const rigPosition = (
+        idx,
         name,
         position = { x: 0, y: 0, z: 0 },
         dampener = 1,
         lerpAmount = 0.3
     ) => {
+        let currentVrm = VRMs[idx]
         if (!currentVrm) {return}
         const Part = currentVrm.humanoid.getBoneNode(
         VRMSchema.HumanoidBoneName[name]
@@ -180,15 +187,19 @@ function ChatRoom() {
 
 
 
-    const rigFace = (riggedFace) => {
+    const rigFace = (idx, riggedFace) => {
+
+        let currentVrm = VRMs[idx]
 
         // Renaming sime useful functions for easy use.
         const remap = Kalidokit.Utils.remap;
         const clamp = Kalidokit.Utils.clamp;
         const lerp = Kalidokit.Vector.lerp;
 
+        
+
         if(!currentVrm){return}
-        rigRotation("Neck", riggedFace.head, 0.7);
+        rigRotation(idx, "Neck", riggedFace.head, 0.7);
     
         // Blendshapes and Preset Name Schema
         const Blendshape = currentVrm.blendShapeProxy;
@@ -226,8 +237,7 @@ function ChatRoom() {
 
     const onResults = (results) => {
         // Animate model
-        var vrm = currentVrm;
-        if (!vrm) return;
+        if (!VRMs[0]) return;
 
         // Take the results from `Holistic` and animate character based on its Face, Pose, and Hand Keypoints.
         let riggedPose, riggedLeftHand, riggedRightHand, riggedFace;
@@ -240,6 +250,8 @@ function ChatRoom() {
         // Be careful, hand landmarks may be reversed
         const leftHandLandmarks = results.rightHandLandmarks;
         const rightHandLandmarks = results.leftHandLandmarks;
+
+        let idx = 0
     
         // Animate Face
         if (faceLandmarks) {
@@ -249,8 +261,10 @@ function ChatRoom() {
             });
 
             // console.log(riggedFace)
-            rigFace(riggedFace)
+            rigFace(idx, riggedFace)
         }
+
+        
         
         // Animate Pose
         if (pose2DLandmarks && pose3DLandmarks) {
@@ -258,7 +272,7 @@ function ChatRoom() {
                 runtime: "mediapipe",
                 video:videoElement,
             });
-            rigRotation("Hips", riggedPose.Hips.rotation, 0.7);
+            rigRotation(idx, "Hips", riggedPose.Hips.rotation, 0.7);
             rigPosition(
                 "Hips",
                 {
@@ -270,69 +284,69 @@ function ChatRoom() {
                 0.07
             );
         
-            rigRotation("Chest", riggedPose.Spine, 0.25, .3);
-            rigRotation("Spine", riggedPose.Spine, 0.45, .3);
+            rigRotation(idx, "Chest", riggedPose.Spine, 0.25, .3);
+            rigRotation(idx, "Spine", riggedPose.Spine, 0.45, .3);
         
-            rigRotation("RightUpperArm", riggedPose.RightUpperArm, 1, .3);
-            rigRotation("RightLowerArm", riggedPose.RightLowerArm, 1, .3);
-            rigRotation("LeftUpperArm", riggedPose.LeftUpperArm, 1, .3);
-            rigRotation("LeftLowerArm", riggedPose.LeftLowerArm, 1, .3);
+            rigRotation(idx, "RightUpperArm", riggedPose.RightUpperArm, 1, .3);
+            rigRotation(idx, "RightLowerArm", riggedPose.RightLowerArm, 1, .3);
+            rigRotation(idx, "LeftUpperArm", riggedPose.LeftUpperArm, 1, .3);
+            rigRotation(idx, "LeftLowerArm", riggedPose.LeftLowerArm, 1, .3);
         
-            rigRotation("LeftUpperLeg", riggedPose.LeftUpperLeg, 1, .3);
-            rigRotation("LeftLowerLeg", riggedPose.LeftLowerLeg, 1, .3);
-            rigRotation("RightUpperLeg", riggedPose.RightUpperLeg, 1, .3);
-            rigRotation("RightLowerLeg", riggedPose.RightLowerLeg, 1, .3);
+            rigRotation(idx, "LeftUpperLeg", riggedPose.LeftUpperLeg, 1, .3);
+            rigRotation(idx, "LeftLowerLeg", riggedPose.LeftLowerLeg, 1, .3);
+            rigRotation(idx, "RightUpperLeg", riggedPose.RightUpperLeg, 1, .3);
+            rigRotation(idx, "RightLowerLeg", riggedPose.RightLowerLeg, 1, .3);
         }
         
             // Animate Hands
         if (leftHandLandmarks) {
             riggedLeftHand = Kalidokit.Hand.solve(leftHandLandmarks, "Left");
-            rigRotation("LeftHand", {
+            rigRotation(idx, "LeftHand", {
                 // Combine pose rotation Z and hand rotation X Y
                 z: riggedPose.LeftHand.z,
                 y: riggedLeftHand.LeftWrist.y,
                 x: riggedLeftHand.LeftWrist.x
             });
-            rigRotation("LeftRingProximal", riggedLeftHand.LeftRingProximal);
-            rigRotation("LeftRingIntermediate", riggedLeftHand.LeftRingIntermediate);
-            rigRotation("LeftRingDistal", riggedLeftHand.LeftRingDistal);
-            rigRotation("LeftIndexProximal", riggedLeftHand.LeftIndexProximal);
-            rigRotation("LeftIndexIntermediate", riggedLeftHand.LeftIndexIntermediate);
-            rigRotation("LeftIndexDistal", riggedLeftHand.LeftIndexDistal);
-            rigRotation("LeftMiddleProximal", riggedLeftHand.LeftMiddleProximal);
-            rigRotation("LeftMiddleIntermediate", riggedLeftHand.LeftMiddleIntermediate);
-            rigRotation("LeftMiddleDistal", riggedLeftHand.LeftMiddleDistal);
-            rigRotation("LeftThumbProximal", riggedLeftHand.LeftThumbProximal);
-            rigRotation("LeftThumbIntermediate", riggedLeftHand.LeftThumbIntermediate);
-            rigRotation("LeftThumbDistal", riggedLeftHand.LeftThumbDistal);
-            rigRotation("LeftLittleProximal", riggedLeftHand.LeftLittleProximal);
-            rigRotation("LeftLittleIntermediate", riggedLeftHand.LeftLittleIntermediate);
-            rigRotation("LeftLittleDistal", riggedLeftHand.LeftLittleDistal);
+            rigRotation(idx, "LeftRingProximal", riggedLeftHand.LeftRingProximal);
+            rigRotation(idx, "LeftRingIntermediate", riggedLeftHand.LeftRingIntermediate);
+            rigRotation(idx, "LeftRingDistal", riggedLeftHand.LeftRingDistal);
+            rigRotation(idx, "LeftIndexProximal", riggedLeftHand.LeftIndexProximal);
+            rigRotation(idx, "LeftIndexIntermediate", riggedLeftHand.LeftIndexIntermediate);
+            rigRotation(idx, "LeftIndexDistal", riggedLeftHand.LeftIndexDistal);
+            rigRotation(idx, "LeftMiddleProximal", riggedLeftHand.LeftMiddleProximal);
+            rigRotation(idx, "LeftMiddleIntermediate", riggedLeftHand.LeftMiddleIntermediate);
+            rigRotation(idx, "LeftMiddleDistal", riggedLeftHand.LeftMiddleDistal);
+            rigRotation(idx, "LeftThumbProximal", riggedLeftHand.LeftThumbProximal);
+            rigRotation(idx, "LeftThumbIntermediate", riggedLeftHand.LeftThumbIntermediate);
+            rigRotation(idx, "LeftThumbDistal", riggedLeftHand.LeftThumbDistal);
+            rigRotation(idx, "LeftLittleProximal", riggedLeftHand.LeftLittleProximal);
+            rigRotation(idx, "LeftLittleIntermediate", riggedLeftHand.LeftLittleIntermediate);
+            rigRotation(idx, "LeftLittleDistal", riggedLeftHand.LeftLittleDistal);
         }
             
         if (rightHandLandmarks) {
             riggedRightHand = Kalidokit.Hand.solve(rightHandLandmarks, "Right");
-            rigRotation("RightHand", {
+            rigRotation(idx, "RightHand", {
                 // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
                 z: riggedPose.RightHand.z,
                 y: riggedRightHand.RightWrist.y,
                 x: riggedRightHand.RightWrist.x
             });
-            rigRotation("RightRingProximal", riggedRightHand.RightRingProximal);
-            rigRotation("RightRingIntermediate", riggedRightHand.RightRingIntermediate);
-            rigRotation("RightRingDistal", riggedRightHand.RightRingDistal);
-            rigRotation("RightIndexProximal", riggedRightHand.RightIndexProximal);
-            rigRotation("RightIndexIntermediate",riggedRightHand.RightIndexIntermediate);
-            rigRotation("RightIndexDistal", riggedRightHand.RightIndexDistal);
-            rigRotation("RightMiddleProximal", riggedRightHand.RightMiddleProximal);
-            rigRotation("RightMiddleIntermediate", riggedRightHand.RightMiddleIntermediate);
-            rigRotation("RightMiddleDistal", riggedRightHand.RightMiddleDistal);
-            rigRotation("RightThumbProximal", riggedRightHand.RightThumbProximal);
-            rigRotation("RightThumbIntermediate", riggedRightHand.RightThumbIntermediate);
-            rigRotation("RightThumbDistal", riggedRightHand.RightThumbDistal);
-            rigRotation("RightLittleProximal", riggedRightHand.RightLittleProximal);
-            rigRotation("RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
-            rigRotation("RightLittleDistal", riggedRightHand.RightLittleDistal);
+            rigRotation(idx, "RightRingProximal", riggedRightHand.RightRingProximal);
+            rigRotation(idx, "RightRingIntermediate", riggedRightHand.RightRingIntermediate);
+            rigRotation(idx, "RightRingDistal", riggedRightHand.RightRingDistal);
+            rigRotation(idx, "RightIndexProximal", riggedRightHand.RightIndexProximal);
+            rigRotation(idx, "RightIndexIntermediate",riggedRightHand.RightIndexIntermediate);
+            rigRotation(idx, "RightIndexDistal", riggedRightHand.RightIndexDistal);
+            rigRotation(idx, "RightMiddleProximal", riggedRightHand.RightMiddleProximal);
+            rigRotation(idx, "RightMiddleIntermediate", riggedRightHand.RightMiddleIntermediate);
+            rigRotation(idx, "RightMiddleDistal", riggedRightHand.RightMiddleDistal);
+            rigRotation(idx, "RightThumbProximal", riggedRightHand.RightThumbProximal);
+            rigRotation(idx, "RightThumbIntermediate", riggedRightHand.RightThumbIntermediate);
+            rigRotation(idx, "RightThumbDistal", riggedRightHand.RightThumbDistal);
+            rigRotation(idx, "RightLittleProximal", riggedRightHand.RightLittleProximal);
+            rigRotation(idx, "RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
+            rigRotation(idx, "RightLittleDistal", riggedRightHand.RightLittleDistal);
         }
 
         // Socket send data
@@ -346,21 +360,19 @@ function ChatRoom() {
         motion_socket.send(JSON.stringify(my_data))
     }
 
-    const moveVRM = (data, uid) => {
-        // try{
-        //     idx = uid
-        // }catch{}
-    }
 
 
     /* Animation Related Functions */
     function animate() {
         requestAnimationFrame(animate);
       
-        if (currentVrm) {
-          // Update model to render physics
-          currentVrm.update(clock.getDelta());
-        }
+        VRMs.forEach(vrm=>{
+            if (vrm) {
+            // Update model to render physics
+            vrm.update(clock.getDelta());
+            }
+        })
+
         renderer.render(scene, orbitCamera);
     }
 
