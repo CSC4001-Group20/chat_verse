@@ -28,6 +28,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+CHANNEL_LAYERS = {
+'default': {
+    'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    'CONFIG': {
+        "hosts": [('ops-coffee.cn', 6379)],
+    },
+},
+}
+
 # Application definition
 
 INSTALLED_APPS = [
