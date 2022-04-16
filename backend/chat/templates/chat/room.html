@@ -27,7 +27,7 @@
         //  请求url地址为/ws/chat/<room_name>/
         const wss_protocol = (window.location.protocol == 'https:') ? 'wss://': 'ws://';
         const chatSocket = new WebSocket(
-             wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/'
+             wss_protocol + window.location.host + '/ws/motion/'  + roomName + '/'
              );
  
         // 建立websocket连接时触发此方法，展示欢迎提示
@@ -39,7 +39,7 @@
         // 接收到后台数据后对其解析，并加入到聊天记录chat-log
          chatSocket.onmessage = function(e) {
              const data = JSON.parse(e.data);
-             document.querySelector('#chat-log').value += (data.message + '\n');
+             document.querySelector('#chat-log').value += (JSON.stringify(data) + '\n');
          };
  
          // websocket连接断开时触发此方法

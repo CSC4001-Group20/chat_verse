@@ -81,15 +81,14 @@ class MotionConsumer(WebsocketConsumer):
 
     # 从websocket接收到消息时执行函数
     def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data_json_str = text_data
 
         # 发送消息到频道组，频道组调用chat_message方法
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'data_json_str': data_json_str
             }
         )
 
@@ -97,10 +96,7 @@ class MotionConsumer(WebsocketConsumer):
 
     # 从频道组接收到消息后执行方法
     def chat_message(self, event):
-        message = event['message']
-        datetime_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        data_json_str = event['data_json_str']
 
         # 通过websocket发送消息到客户端
-        self.send(text_data=json.dumps({
-            'message': f'{datetime_str}:{message}'
-        }))
+        self.send(text_data=data_json_str)

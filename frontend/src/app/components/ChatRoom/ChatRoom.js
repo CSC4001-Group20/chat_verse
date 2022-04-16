@@ -8,13 +8,18 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { VRM, VRMSchema, VRMUtils } from '@pixiv/three-vrm';
 import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
+import ChatBar from './ChatBar';
 
 var currentVrm;
+
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
 const renderer =  new THREE.WebGLRenderer({alpha:true});
 var orbitCamera;
 var orbitControls
+
+var motion_socket = null;
+var uid;
 
 function ChatRoom() {
 
@@ -27,6 +32,13 @@ function ChatRoom() {
 
     
     /* Initalizing Functions */
+
+    const getUid = () => {
+        // 从 URL Params 获取 roon name
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        uid = urlParams.get('uid');
+    }
 
     const newVideoElement = () => setVideoElement(document.querySelector(".input_video"));
 
@@ -80,6 +92,7 @@ function ChatRoom() {
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
+        renderer.domElement.style.pointerEvents = "none"
 
         orbitCamera = new THREE.PerspectiveCamera(35,window.innerWidth / window.innerHeight,0.1,1000);
         orbitCamera.position.set(0.0, 1.4, 0.7);
@@ -108,7 +121,7 @@ function ChatRoom() {
                     currentVrm = vrm
                     // setCurrentVrm(vrm);
                     currentVrm.scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
-                    console.log("DEBUG 2")
+                    // console.log("DEBUG 2")
                 });
             },
     
@@ -235,11 +248,11 @@ function ChatRoom() {
                 video:videoElement
             });
 
-            console.log(riggedFace)
+            // console.log(riggedFace)
             rigFace(riggedFace)
         }
         
-            // Animate Pose
+        // Animate Pose
         if (pose2DLandmarks && pose3DLandmarks) {
             riggedPose = Kalidokit.Pose.solve(pose3DLandmarks, pose2DLandmarks, {
                 runtime: "mediapipe",
@@ -321,6 +334,22 @@ function ChatRoom() {
             rigRotation("RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
             rigRotation("RightLittleDistal", riggedRightHand.RightLittleDistal);
         }
+
+        // Socket send data
+        let my_data = {
+            uid,
+            riggedPose,
+            riggedLeftHand,
+            riggedRightHand,
+            riggedFace,
+        }
+        motion_socket.send(JSON.stringify(my_data))
+    }
+
+    const moveVRM = (data, uid) => {
+        // try{
+        //     idx = uid
+        // }catch{}
     }
 
 
@@ -334,6 +363,31 @@ function ChatRoom() {
         }
         renderer.render(scene, orbitCamera);
     }
+
+    /* Network (Socket) */
+
+    const initSocket = () => {
+        // 从 URL Params 获取 roon name
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const roomName = urlParams.get('roomname');
+        const wss_protocol = (window.location.protocol == 'https:') ? 'wss://': 'ws://';
+        motion_socket = new WebSocket(
+            wss_protocol + window.location.host + '/ws/motion/'  + roomName + '/'
+        );
+
+        console.log(wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/')
+        // 建立webchat_socket连接时触发此方法
+        motion_socket.onopen = function(e) {
+            // Do nothing
+        }
+
+        // 从后台接收到数据时触发此方法
+        motion_socket.onmessage = function(e) {
+            
+        };
+        
+    }
     
 
 
@@ -342,11 +396,13 @@ function ChatRoom() {
 
     // Init HTML element reference and some mudules
     React.useEffect(()=>{
+        getUid()
         newVideoElement()
         newHolistic()
         newLoader()
         newScene()
         initRenderingPipeline()
+        initSocket()
     },[])
 
     // When videoElement is found, new "@mediapipe/camera_utils".Camera
@@ -387,7 +443,10 @@ function ChatRoom() {
                     position:"absolute",
                     left:10,top:10,
                 }}
-            ></video>       
+            ></video>  
+
+
+            <ChatBar />     
         </div>
     )
 }
