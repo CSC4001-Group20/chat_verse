@@ -5,15 +5,18 @@ import './ChatRooms.css'
 const ChatRooms = () =>{
     return(
         <div className='ChatRooms'>
-            <div style={{
-                    "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Georgia",
-                    marginTop:"10vh"
-                }}>
-                    Select a Verse
+            <div className='ChatRooms-My'>
+                ddd
             </div>
-            <div style={{display:"flex", flexDirection:"row", justifyContent:"center"}}>
+            <div style={{flexDirection:"column"}}>
+                <div style={{
+                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Georgia",
+                        marginTop:"8vh"
+                    }}>
+                        Select a Verse
+                </div>
                 <div className='ChatRooms-VerseList'>
-                    {[1,1,1].map(verse=>{
+                    {[1,1,1,1,1,1].map(verse=>{
                         return(
                             <div className='ChatRooms-VerseList-Verse'>
                                 <div className='ChatRooms-VerseList-Verse-header'>

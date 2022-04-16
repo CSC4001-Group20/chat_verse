@@ -12,7 +12,7 @@ var Login = () =>{
 
     const login = ()=>{
         setCookie("update",new Date().toUTCString())
-        fetch(`http://127.0.0.1/user/login/?`,{
+        fetch(`/user/login/?`,{
             method:'POST',
             body:JSON.stringify({
                 username: Username,
@@ -21,6 +21,9 @@ var Login = () =>{
         }).then(res=>{
             if(res.status===200){
                 message.success("登录成功")
+                setTimeout(() => {
+                    window.location.href="/chatrooms"
+                }, 1000);
             }else{
                 message.warn("发生了未知错误，请稍后再重试！")
             }

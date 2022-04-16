@@ -25,12 +25,7 @@ var Sign = () =>{
             .then(response=>{
                 if (response.status===200) {
                     message.success("成功注册，正在生成验证邮件")
-                }else if (response.status===429) {
-
-                }else if (response.status===403){
-                    message.info("邮箱已被注册！")
-                }
-                else{
+                }else{
                     message.warn("发生了未知错误，请稍后再重试！")
                 }
             })
