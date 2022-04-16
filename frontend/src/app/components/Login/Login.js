@@ -1,6 +1,5 @@
 import { message, Input, Button } from 'antd'
 import React from 'react'
-import { API } from '../../App'
 import { setCookie } from './cookie'
 import './Login.css'
 
@@ -13,7 +12,7 @@ var Login = () =>{
 
     const login = ()=>{
         setCookie("update",new Date().toUTCString())
-        fetch(`http://127.0.0.1:8000/user/login/?`,{
+        fetch(`http://127.0.0.1/user/login/?`,{
             method:'POST',
             body:JSON.stringify({
                 username: Username,
@@ -49,7 +48,7 @@ var Login = () =>{
                         <Input style={{"height":"2rem"}} id='password' type="password" visibilityToggle value={loginPassword} onChange={e=>setLoginPassword(e.target.value)}/>
                     </div>
                     <div className='Login-form-submit'>
-                        <Button id='submit' type='button' onClick={()=>{login()}}>Sign in</Button>
+                        <Button id='submit' type='button' onClick={()=>{login();}}>Sign in</Button>
                     </div>
                 </form>
                 <div className='Login-Sign-in'>

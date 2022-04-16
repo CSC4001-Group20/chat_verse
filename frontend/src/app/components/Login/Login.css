@@ -6,17 +6,17 @@
     display: flex;
     flex-direction: row;
     font-size: 1rem;
+    justify-content: space-around;
+    padding: 0 50px 0 50px;
 }
 .Login-header{
-    padding-left: 18vw;
-    padding-top: 25vh;
+    padding-top: 20vh;
     color: white;
     font-family: Georgia;
     text-align: left;
 }
 .Login-form{
     margin-top: 20vh;
-    margin-left: 30vh;
     background-color: rgba(255, 255, 255, 0.4);
     max-height: 380px;
     min-width: 320px;

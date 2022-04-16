@@ -36,7 +36,10 @@ var Sign = () =>{
             })
         }
         else{
-            message("Inconsistent Password!")
+            message.warn("Inconsistent Password!")
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000);
         }
     }
 

@@ -12,8 +12,6 @@ import Login from './components/Login/Login';
 import Sign from './components/Sign/Sign';
 import ChatRooms from './components/ChatRooms/ChatRooms';
 
-export const API = '/api'
-
 function App() {
 
     return (
