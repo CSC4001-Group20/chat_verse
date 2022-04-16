@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <style>
+        span {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<form action="/user/register/" method="post">{% csrf_token %}
+    <div>
+        <lable>用户名</lable>
+        <input type="text" name="username">
+        <span>{{ username_error }}</span>
+    </div>
+    <div>
+        <lable>密码</lable>
+        <input type="password" name="password">
+        <span>{{ password_error }}</span>
+    </div>
+    <div>
+        <lable>密码(重复)</lable>
+        <input type="password" name="password2">
+        <span>{{ password2_error }}</span>
+    </div>
+
+    <div>
+        <input type="submit" value="注册">
+    </div>
+
+</form>
+
+</body>
+</html>

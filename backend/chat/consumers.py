@@ -27,6 +27,7 @@ class ChatConsumer(WebsocketConsumer):
             self.channel_name
         )
 
+
     # 从websocket接收到消息时执行函数
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -40,6 +41,8 @@ class ChatConsumer(WebsocketConsumer):
                 'message': message
             }
         )
+
+
 
     # 从频道组接收到消息后执行方法
     def chat_message(self, event):

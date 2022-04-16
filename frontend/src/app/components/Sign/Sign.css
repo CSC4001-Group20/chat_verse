@@ -21,7 +21,7 @@
     color: white;
     border-radius: 15px;    
 }
-.Sign-form-email{
+.Sign-form-username{
     /* margin-top: 30px; */
 }
 .Sign-form-password{
@@ -36,7 +36,7 @@
 .Sign-form-passwordConfir{
     margin-top: 20px;
 }
-#email{
+#username{
     margin-top: 5px;
     background-color: rgb(228, 228, 228);
     border: rgb(228, 228, 228) solid;

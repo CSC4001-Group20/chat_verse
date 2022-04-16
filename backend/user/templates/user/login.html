@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+</head>
+<link href="/backend/user/templates/user/Login.css" rel="stylesheet" type="text/css"/>
+
+<body>
+<div >
+<form action="/user/login/" method="POST">{% csrf_token %}
+    <div>
+        <lable>用户名</lable>
+        <input type="text" name="username"
+               value="{{ username }}">
+    </div>
+    <div>
+        <lable>密码</lable>
+        <input type="password" name="password">
+    </div>
+    <div>
+        <lable for="id_remember">记住密码</lable>
+        <input type="checkbox" name="remember" id="id_remember"
+                value="1">
+    </div>
+    <div>
+        <input type="submit" value="登陆">
+    </div>
+
+
+
+</form>
+</div>
+</body>
+</html>
+
+

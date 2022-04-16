@@ -7,18 +7,18 @@ import './Sign.css'
 
 var Sign = () =>{
     
-    var [SignEmail, setSignEmail] = React.useState()
+    var [Username, setUsername] = React.useState()
     var [SignPassword, setSignPassword] = React.useState()
     var [SignPasswordConfir, setSignPasswordConfir] = React.useState()
 
     const sign = () =>{
         if(SignPassword===SignPasswordConfir){
             let bodydata = {
-                email: SignEmail,
-                SignPassword,
+                name: Username,
+                password: SignPassword,
             }
             setCookie("update",new Date().toUTCString())
-            fetch(`${API}/auth/register/`,{
+            fetch(`http://127.0.0.1/user/register/?`,{
                 method:'POST',
                 body: JSON.stringify(bodydata),
             })
@@ -49,9 +49,9 @@ var Sign = () =>{
                 }}>Sign up</div>
                 <div>
                     <form className='Sign-form'>
-                        <div className='Sign-form-email'>
-                            <div style={{textAlign:"left"}}>Email</div>
-                            <Input style={{"height":"2rem"}} id='email' type="text" value={SignEmail} onChange={e=>setSignEmail(e.target.value)}/>
+                        <div className='Sign-form-username'>
+                            <div style={{textAlign:"left"}}>Username</div>
+                            <Input style={{"height":"2rem"}} id='username' type="text" value={Username} onChange={e=>setUsername(e.target.value)}/>
                         </div>
                         <div className='Sign-form-password'>
                             <div style={{textAlign:"left"}}>Password</div>
