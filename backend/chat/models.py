@@ -2,8 +2,8 @@ from pyexpat import model
 import django
 from django.db import models
 
-from chat_verse.backend.chat.views import room
-from chat_verse.backend.user.models import User
+from chat.views import room
+from user.models import User
 
 # Create your models here.
 class ChatRoom(models.Model):
