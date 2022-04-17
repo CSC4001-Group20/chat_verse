@@ -27,8 +27,7 @@
 }
 
 .ChatBar-message {
-    padding: 5px;
+    /* padding: 5px; */
     background-color: white;
-    border: gray 1px solid;
     border-radius: 10px;
 }

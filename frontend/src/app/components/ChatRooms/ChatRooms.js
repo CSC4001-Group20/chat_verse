@@ -1,23 +1,47 @@
-import { Button } from 'antd'
+import { Input, Button } from 'antd'
 import React from 'react'
 
 import './ChatRooms.css'
 
 const ChatRooms = () =>{
+    const [ createRoomName, setCreateRoomName ] = React.useState("")
+
+
     return(
         <div className='ChatRooms'>
             <div className='ChatRooms-My'>
                 <div className='ChatRooms-My-Add'>
                     <div style={{
-                            "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Georgia",
+                            "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
                             marginTop:"8vh"
                         }}>
                             Create a Verse
                     </div>
+
+
+
+
+                    <div >
+                        <input placeholder="Room Name" id='createRoom-input' style={{fontFamily:"Cochin", height:'6vh', width:'24vw',
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: '10px'}} value={createRoomName} onChange={e=>{
+                        setCreateRoomName(e.target.value)}}>
+                        </input>
+                    </div>
+
+                    <div className='createRoom-submit' style={{fontFamily:"Cochin"}}>
+                        <button style={{fontFamily:"Cochin", width:'8vw', height:'6vh',                       
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '10px'}} onClick={()=>{
+                        console.log(createRoomName) // 这里获取了输入的roomname，接下来就是新建name
+                        }}>Create</button>
+                    </div>
+
+
+
+
                 </div>
                 <div style={{
-                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Georgia",
-                        marginTop:"8vh"
+                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
+                        marginTop:"4vh"
                     }}>
                         Manage my Verse
                 </div>
@@ -25,7 +49,7 @@ const ChatRooms = () =>{
                     {[1,1,1,1,1,1].map(verse=>{
                         return(
                             <div className='ChatRooms-My-VerseList-Verse'>
-                                <div  style={{"flexDirection":"column"}}>
+                                <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
                                     <div className='ChatRooms-My-VerseList-Verse-header'>
                                         Lianhao Gao's Personal Verse
                                     </div>
@@ -33,7 +57,7 @@ const ChatRooms = () =>{
                                         20 members active
                                     </div>
                                 </div>
-                                <div style={{"flexDirection":"column"}}>
+                                <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
                                     <Button type="link">
                                         Start Verse
                                     </Button>
