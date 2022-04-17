@@ -47,11 +47,11 @@ def sign(request):
         print("username", username, "password", password)
 
         # 开始注册功能
-        try:
-            user = models.User.objects.create(
-                user_name=username,
-                password=password,
-            )
-            return HttpResponse("Successfully Sign", status=200)
-        except:
-            return HttpResponse("Sign Fail", status=403)
+        #try:
+        user = models.User.objects.create(
+            user_name=username,
+            password=password,
+        )
+        return HttpResponse("Successfully Sign", status=200)
+        #except:
+        #return HttpResponse("Sign Fail", status=403)
