@@ -10,11 +10,17 @@
     padding: 0 50px 0 50px;
 }
 .Login-header{
+    /* font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
     padding-top: 20vh;
     color: white;
     font-family: Georgia;
     text-align: left;
+
 }
+
+
+
+
 .Login-form{
     margin-top: 20vh;
     background-color: rgba(255, 255, 255, 0.4);

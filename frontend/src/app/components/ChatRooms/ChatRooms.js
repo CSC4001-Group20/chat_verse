@@ -10,12 +10,12 @@ const ChatRooms = () =>{
             </div>
             <div style={{flexDirection:"column"}}>
                 <div style={{
-                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Georgia",
+                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cochin" ,
                         marginTop:"8vh"
                     }}>
                         Select a Verse
                 </div>
-                <div className='ChatRooms-VerseList'>
+                <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
                     {[1,1,1,1,1,1].map(verse=>{
                         return(
                             <div className='ChatRooms-VerseList-Verse'>
