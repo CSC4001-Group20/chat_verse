@@ -5,7 +5,7 @@ import './ChatRooms.css'
 
 const ChatRooms = () =>{
     const [ createRoomName, setCreateRoomName ] = React.useState("")
-
+    const [ existRoomName, setExistRoomName] = React.useState("")
 
     return(
         <div className='ChatRooms'>
@@ -17,10 +17,6 @@ const ChatRooms = () =>{
                         }}>
                             Create a Verse
                     </div>
-
-
-
-
                     <div >
                         <input placeholder="Room Name" id='createRoom-input' style={{fontFamily:"Cochin", height:'6vh', width:'24vw',
                         backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: '10px'}} value={createRoomName} onChange={e=>{
@@ -36,8 +32,6 @@ const ChatRooms = () =>{
                     </div>
 
 
-
-
                 </div>
                 <div style={{
                         "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
@@ -51,16 +45,16 @@ const ChatRooms = () =>{
                             <div className='ChatRooms-My-VerseList-Verse'>
                                 <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
                                     <div className='ChatRooms-My-VerseList-Verse-header'>
-                                        Lianhao Gao's Personal Verse
+                                        Lianhao Gao's Chat Room
                                     </div>
                                     <div className='ChatRooms-My-VerseList-Verse-content'>
                                         20 members active
                                     </div>
                                 </div>
                                 <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
-                                    <Button type="link">
-                                        Start Verse
-                                    </Button>
+                                    <Button type="link" onClick={()=>{
+                                    console.log(existRoomName) //这里获取了当前的roomname
+                                    }}>Start Verse</Button>
                                     <Button type="link">
                                         Delete Verse
                                     </Button>
@@ -92,6 +86,7 @@ const ChatRooms = () =>{
                     })}
                 </div>
             </div>
+            <div><a href="/login">Quit</a></div>
         </div>
     )
 }
