@@ -14,6 +14,8 @@ var VRMs = [];
 var transforms = [];
 var uids = []
 
+var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下载
+
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
 const renderer =  new THREE.WebGLRenderer({alpha:true});
@@ -30,7 +32,6 @@ function ChatRoom() {
     const [ videoElement, setVideoElement ] = React.useState(null);
     const [ camera, setCamera ] = React.useState(null)
     const [ holistic, setHolistic ] = React.useState(null)
-    const [ loader, setLoader ] = React.useState(null)
     const [ scene, setScene ] = React.useState(null)
 
     
@@ -63,13 +64,6 @@ function ChatRoom() {
         });
 
         holistic.onResults(onResults);
-    }
-
-    const newLoader = () => {
-        const _loader = new GLTFLoader();
-        _loader.crossOrigin = "anonymous";
-        // Import model from URL, add your own model here
-        setLoader(_loader)
     }
 
     const newCamera = () => setCamera(new Camera(videoElement, {
@@ -116,6 +110,13 @@ function ChatRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadVRM = (_uid) => {
 
+        if(!scene) { console.log("No scene, return");return}
+
+        uids_loading.push(_uid)
+
+        const loader = new GLTFLoader();
+        loader.crossOrigin = "anonymous";
+
         // TODO: 不同的UID从不同的URL获取
         // 需要查询Avatar数据库
         loader.load(
@@ -133,20 +134,23 @@ function ChatRoom() {
                         my_idx=idx
                         initControl()
                     }
-                    // VRMs[idx].scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
-                    // console.log("DEBUG 2")
+                    console.log("Loaded a new player",uid, idx)
+                    uids_loading.splice(uids_loading.indexOf(uid),1)
                 });
                 
             },
     
             progress =>
-                console.log(
-                    "Loading model...",
-                    100.0 * (progress.loaded / progress.total),
-                    "%"
-                ),
+                // console.log(
+                //     "Loading model...",
+                //     100.0 * (progress.loaded / progress.total),
+                //     "%"
+                // ),
     
-            error => console.error(error)
+            error => {
+                console.error(error)
+
+            }
         );
     }
 
@@ -474,12 +478,13 @@ function ChatRoom() {
             if(idx>=0){
                 applyMovements(data, idx)
             }else{
-                // 收到一个未知用户的信号
-                console.log("cannot found uid", uid)
-                loadVRM(uid)
-
+                if(!(uids_loading.indexOf(uid)>=0)){
+                    // 收到一个未知用户的信号
+                    console.log("cannot found uid", uid, uids_loading)
+                    loadVRM(uid)
+                }
             }
-        };
+        }.bind(scene)
         
     }
     
@@ -493,7 +498,6 @@ function ChatRoom() {
         getUid()
         newVideoElement()
         newHolistic()
-        newLoader()
         newScene()
         initRenderingPipeline()
         initSocket()
@@ -511,13 +515,10 @@ function ChatRoom() {
 
 
     React.useEffect(()=>{
-        if(loader && scene) loadVRM(uid);    
-    },[loader, scene])
-
-    React.useEffect(()=>{
         if(scene){
             newLight()
             animate()
+            loadVRM(uid);    
         }
     },[scene])
 
