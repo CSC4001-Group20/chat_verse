@@ -9,6 +9,7 @@ import { VRM, VRMSchema, VRMUtils } from '@pixiv/three-vrm';
 import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
+import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
 
 var VRMs = [];
 var transforms = [];
@@ -84,6 +85,11 @@ function ChatRoom() {
     const newLight = () => {
         const light = new THREE.DirectionalLight(0xffffff);
         light.position.set(1.0, 1.0, 1.0).normalize();
+        var loader = new FBXLoader();
+        loader.load( './InteriorTest.fbx', function ( object ) {
+            object.scale.set(0.01,0.01,0.01);//修改模型缩放系数(x,y,z)
+            scene.add( object );
+        } )
         scene.add(light);
     }
 
