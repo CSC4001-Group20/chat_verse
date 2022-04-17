@@ -35,7 +35,6 @@ def createRoom(request):
         except:
             pass
 
-
         # 验证用户名，密码是否正确
         # try:
         host_uid = request.COOKIES.get('uid', '')
@@ -60,3 +59,12 @@ def createRoom(request):
         # except:
         #     return HttpResponse("Create ChatRoom Fail", status=403)
 
+
+def joinRoom(request):
+    return HttpResponse(status=404)
+
+def startRoom(request):
+    if request.method == 'POST':
+        print(request.POST)
+        return HttpResponse(status=404)
+    return HttpResponse(status=404)

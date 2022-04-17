@@ -1,4 +1,3 @@
-from io import open_code
 from tkinter import CASCADE
 from turtle import Turtle
 from django.db import models
