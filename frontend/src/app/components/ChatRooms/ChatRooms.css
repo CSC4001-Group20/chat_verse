@@ -102,3 +102,23 @@
 .createRoom-submit{
     margin-top: 4vh;
 }
+
+.quit{
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 6vh;
+    width: 3vw;
+    left: 3vw;
+    top: 4vh;
+    display: flex;
+    position: absolute; 
+}
+
+.quit>a{
+    font-family: "Cochin";
+    justify-content: center;
+    align-items: center;
+}
+.quit:hover{
+    transform: scale(1.1, 1.1);
+}

@@ -86,7 +86,8 @@ const ChatRooms = () =>{
                     })}
                 </div>
             </div>
-            <div><a href="/login">Quit</a></div>
+            <div className='quit'><a href="/login" >QUIT</a></div>
+
         </div>
     )
 }
