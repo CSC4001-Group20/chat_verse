@@ -1,31 +1,36 @@
-from telnetlib import STATUS
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from py import code
 from . import models
 # Create your views here.
-import secrets
 
 def login(request):
-
-    if request.method == 'POST':
+    if request.method == 'GET':
+            username = request.COOKIES.get('username', '')
+            return render(request, 'user/login.html', locals())
+    elif request.method == 'POST':
         # 获取表单的数据
+        remember = request.POST.get('remember', '')
         username = request.POST.get('username', '')
         password = request.POST.get('password', '')
-        print(username, password)
-
         # 验证用户名，密码是否正确
         try:
             user = models.User.objects.get(name=username,password=password)
-            res = HttpResponse("Successfully Login",status=200)
-            token = secrets.token_bytes(16)
-            print('用户登录, 用户名称', user.username, '新token=',token)
-            res.set_cookie('token',token)
-            res.set_cookie('uid', user.uid)
-            return res
+            # 在当前连接的Session中记录当前用户的信息
+            request.session['userinfo'] = {
+                "username": user.name,
+                'id': user.id
+            }
         except:
-            return HttpResponse("Login Fail", status=403)
+            return HttpResponse("登陆失败")
+
+        # 处理COOKIES
+        resp = HttpResponse('登陆成功')
+        if remember:
+            resp.set_cookie('username', username, 7*24*60*60)
+        else:
+            resp.delete_cookie('username')
+        return resp
 
 
 

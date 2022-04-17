@@ -12,7 +12,9 @@ import ChatBar from './ChatBar';
 
 var VRMs = [];
 var transforms = [];
-var uids = []
+var uids = [];
+
+const theta = 2*Math.PI/9;
 
 var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下载
 
@@ -92,7 +94,7 @@ function ChatRoom() {
         // 下面这行可以禁用THREE的交互
         // renderer.domElement.style.pointerEvents = "none" 
 
-        orbitCamera = new THREE.PerspectiveCamera(35,window.innerWidth / window.innerHeight,0.1,1000);
+        orbitCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,0.1,1000);
         orbitCamera.position.set(0.0, 1.4, 0.7);
 
         orbitControls = new OrbitControls(orbitCamera, renderer.domElement);
@@ -165,18 +167,20 @@ function ChatRoom() {
                 if(transforms[my_idx]){
                     var e = e || window.event;
                     if(e.key == 'w'){
-                        transforms[my_idx].x += 0.1 * Math.sin(transforms[my_idx].r)
-                        transforms[my_idx].z += 0.1 * Math.cos(transforms[my_idx].r)
+                        transforms[my_idx].z -= 0.1 * Math.cos(transforms[my_idx].r*theta)
+                        transforms[my_idx].x -= 0.1 * Math.sin(transforms[my_idx].r*theta)
+                        console.log(transforms[my_idx].x, transforms[my_idx].z)
                     }
                     if(e.key == 's'){	
-                        transforms[my_idx].x -= 0.1 * Math.sin(transforms[my_idx].r)
-                        transforms[my_idx].z -= 0.1 * Math.cos(transforms[my_idx].r)
+                        transforms[my_idx].z += 0.1 * Math.cos(transforms[my_idx].r*theta)
+                        transforms[my_idx].x += 0.1 * Math.sin(transforms[my_idx].r*theta)
                     }
                     if(e.key == 'a'){
                         transforms[my_idx].r += 0.3
                     }
                     if(e.key == 'd'){	
                         transforms[my_idx].r -= 0.3
+                        console.log(transforms[my_idx].r)
                     }
                 }
             }) 
@@ -329,9 +333,8 @@ function ChatRoom() {
             riggedRightHand,
             riggedFace,
 
-            transform:transforms[0]
+            // transform:transforms[0]
         }
-        console.log("asdasdasd")
         motion_socket.send(JSON.stringify(my_data))
 
         // applyMovements( my_data, idx )
@@ -340,8 +343,6 @@ function ChatRoom() {
     const applyMovements = ( data, idx ) => {
 
         let {
-            uid,
-            transform,
             riggedPose,
             riggedLeftHand,
             riggedRightHand,
@@ -431,9 +432,6 @@ function ChatRoom() {
             rigRotation(idx, "RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
             rigRotation(idx, "RightLittleDistal", riggedRightHand.RightLittleDistal);
         }catch{}
-
-
-        transforms[idx] =  transform
 
         // 移动角色位置
         VRMs[idx].scene.position.x = transforms[idx].x
