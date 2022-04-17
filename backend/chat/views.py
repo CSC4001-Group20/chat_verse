@@ -8,9 +8,7 @@ from django.http import HttpResponse
 import json
 import secrets
 from . import models
-from django.shortcuts import render
-from django.db import ChatRoom
-from django.db import User
+
 
 
 def index(request):
@@ -69,7 +67,7 @@ def Manage_my_Verse(request):
     print(request.POST.get())
     print(request.body)
     result_rooms = {}
-    data_list = ChatRoom.objects.all()
+    data_list = models.User.objects.all()
     for room in data_list:
         if room.host_user.uid == uid:
             result = {}
@@ -80,7 +78,7 @@ def Manage_my_Verse(request):
 
 def Select_a_Verse(request):
     result_rooms = []
-    data_list = ChatRoom.objects.all()
+    data_list = models.ChatRoom.objects.all()
     for room in data_list:
         result = {}
         result["title"] = room.title
