@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.http import HttpResponse
 # Create your views here.
 
 from django.shortcuts import render
@@ -15,3 +15,8 @@ def room(request, room_name):
         'room_name': room_name
     })
 
+def createRoom(request):
+    
+
+
+    return HttpResponse("开房成功")

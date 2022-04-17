@@ -14,19 +14,24 @@ var Sign = () =>{
     const sign = () =>{
         if(SignPassword===SignPasswordConfir){
             let bodydata = {
-                name: Username,
+                username: Username,
                 password: SignPassword,
             }
             setCookie("update",new Date().toUTCString())
-            fetch(`/user/register/`,{
+            fetch(`/user/sign/`,{
                 method:'POST',
                 body: JSON.stringify(bodydata),
             })
             .then(response=>{
                 if (response.status===200) {
-                    message.success("成功注册，正在生成验证邮件")
+                    message.success("Sussessfully Sign! Return Login pagr to Login")
+                    setTimeout(() => {
+                        window.location.href="/login"
+                    }, 1000);
+                }else if (response.status===403){
+                    message.warn("Sign Fail! Try Again")
                 }else{
-                    message.warn("发生了未知错误，请稍后再重试！")
+                    message.warn("Unknown Error! Try Again!") 
                 }
             })
         }

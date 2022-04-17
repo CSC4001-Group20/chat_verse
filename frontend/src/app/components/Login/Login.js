@@ -20,14 +20,14 @@ var Login = () =>{
             })
         }).then(res=>{
             if(res.status===200){
-                message.success("登录成功")
+                message.success("Successfully Login!")
                 setTimeout(() => {
                     window.location.href="/chatrooms"
                 }, 1000);
             }else if (res.status===403){
-                message.warn("账号密码不正确，请重新登录！")
+                message.warn("Login Fail! Check Your Account, Password and Try Again!")
             }else{
-                message.warn("发生了未知错误，请稍后再重试！")
+                message.warn("Unknown Error! Try Again!")
             }
         }).then(data=>{
 
