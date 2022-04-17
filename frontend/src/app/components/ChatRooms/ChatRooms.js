@@ -1,4 +1,5 @@
-import { Input, Button } from 'antd'
+import { message, Input, Button } from 'antd'
+import { setCookie } from '../Login/cookie'
 import React from 'react'
 
 import './ChatRooms.css'
@@ -6,6 +7,34 @@ import './ChatRooms.css'
 const ChatRooms = () =>{
     const [ createRoomName, setCreateRoomName ] = React.useState("")
     const [ existRoomName, setExistRoomName] = React.useState("")
+
+    const createRoom = ()=>{
+        if (createRoomName===""){
+            message.warn("Room Name Cannot Be Empty!")
+        }else{
+            setCookie("update",new Date().toUTCString())
+            fetch(`/chat/createRoom/`,{
+                method:'POST',
+                body:JSON.stringify({
+                    roomname:createRoomName
+                })
+            }).then(res=>{
+                if(res.status===200){
+                    message.success("Succfssfully Create Room")
+                    setTimeout(() => {
+                        window.location.href="/chatroom/?roomNmae="+createRoomName
+                    }, 1000);
+                }else if (res.status===403){
+                    message.warn("Create Room Fail")
+                }else{
+                    message.warn("Create Room Fail")
+                }
+            }).then(data=>{
+            })
+        }
+    }
+
+
 
     return(
         <div className='ChatRooms'>
@@ -26,9 +55,8 @@ const ChatRooms = () =>{
 
                     <div className='createRoom-submit' style={{fontFamily:"Cochin"}}>
                         <button style={{fontFamily:"Cochin", width:'8vw', height:'6vh',                       
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '10px'}} onClick={()=>{
-                        console.log(createRoomName) // 这里获取了输入的roomname，接下来就是新建name
-                        }}>Create</button>
+                        backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '10px'}}  
+                        onClick={()=>{createRoom();console.log(createRoomName);}}>Create</button>
                     </div>
 
 

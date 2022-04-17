@@ -1,22 +1,15 @@
+from io import open_code
+from tkinter import CASCADE
 from django.db import models
 
 from user.models import User
 
 # Create your models here.
 class ChatRoom(models.Model):
-
+    title = models.TextField()
     room_name = models.CharField('room_name', max_length=30, unique=True)
-    host_user = models.CharField('host_user', max_length=40)   
-    guest_user = models.ForeignKey(User, on_delete=models.SET_NULL, db_column='guest_user', null=True)
+    host_user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    members = models.ManyToManyField('self')
     is_active = models.BooleanField('is_active', default=False)
-
-    def create_room(self, room_name, host_user):
-        self.room_name = room_name
-        self.host_user = host_user
-        self.is_active = False
-        return room_name + "create successfully"
-
-    def delete_room(self, room_name):
-        self.delete()
-        return room_name + "delete successfully"
+    is_delete = models.BooleanField('is_delete', default=False)
 
