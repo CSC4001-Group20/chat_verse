@@ -24,6 +24,7 @@ def login(request):
             print('用户登录, 用户名称', user.user_name, 'new token=',token)
             res.set_cookie('token',token)
             res.set_cookie('uid', user.uid)
+            print('uid', user.uid)
             return res
         except:
             return HttpResponse("Login Fail", status=403)

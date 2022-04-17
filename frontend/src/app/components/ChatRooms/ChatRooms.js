@@ -16,7 +16,7 @@ const ChatRooms = () =>{
             fetch(`/chat/createRoom/`,{
                 method:'POST',
                 body:JSON.stringify({
-                    roomname:createRoomName
+                    title:createRoomName
                 })
             }).then(res=>{
                 if(res.status===200){
@@ -26,6 +26,8 @@ const ChatRooms = () =>{
                     }, 1000);
                 }else if (res.status===403){
                     message.warn("Create Room Fail")
+                }else if (res.status===405){
+                    message.warn("Chat Room Already Exist")
                 }else{
                     message.warn("Create Room Fail")
                 }
