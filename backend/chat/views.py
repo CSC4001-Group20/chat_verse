@@ -3,7 +3,7 @@ from unittest import result
 from ctypes.wintypes import HPALETTE
 from statistics import mode
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
 import json
 import secrets
@@ -77,17 +77,19 @@ def Manage_my_Verse(request):
     return result
 
 def Select_a_Verse(request):
-    print(request.POST.get())
-    print(request.body)
+    # print(123)
+    # print(request.body)
+
     result_rooms = []
     data_list = models.ChatRoom.objects.all()
     for room in data_list:
         result = {}
         result["title"] = room.title
-        result["members"] = room.members
+        # result["members"] = room.members
         result_rooms.append(result)
-    
-    return result_rooms.json()
+    print(result_rooms)
+    # json_data = json.dumps(result_rooms)
+    return JsonResponse({'result':result_rooms})
 
 
 def joinRoom(request):
