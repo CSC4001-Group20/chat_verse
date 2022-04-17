@@ -9,6 +9,9 @@ const ChatRooms = () =>{
     const [ existRoomName, setExistRoomName] = React.useState("")
     const [selectAVerse, setSelectAVerse] = React.useState("")
 
+
+    const [ verse_list, setVerseList ] = React.useState([])
+
     const createRoom = ()=>{
         if (createRoomName===""){
             message.warn("Room Name Cannot Be Empty!")
@@ -74,6 +77,26 @@ const ChatRooms = () =>{
             }
         }).then(data=>{})
     }
+
+
+    const get_verse_list = ()=>{
+        fetch(`/chat/verse_list/`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
+            }else{
+                message.warn("Join Room Fail")
+            }
+        }).then(data=>{
+            setVerseList(data.result)
+        })
+    }
+
+
+    React.useEffect(()=>{
+        get_verse_list()
+    },[])
 
 
     return(
@@ -183,14 +206,14 @@ const ChatRooms = () =>{
                 </div> */}
 
                 <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
-                    {[{'title':'你爷爷的大恐龙', 'membersCount':'20'},{'title':'你爷爷的大货车', 'membersCount':'20'},{'title':'你爷爷的大飞机', 'membersCount':'20'}].map(verse=>{
+                    {verse_list.map(verse=>{
                         return(
                             <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.title);}}>
                                 <div className='ChatRooms-VerseList-Verse-header'>
-                                    {verse.title}'s Chat Room
+                                    {verse.title}
                                 </div>
                                 <div className='ChatRooms-VerseList-Verse-content'>
-                                    {verse.membersCount} members active
+                                    {verse.n_member} members active
                                 </div>
                             </div>
                         )

@@ -72,18 +72,18 @@ def Manage_my_Verse(request):
             result_rooms.append(room)
     return result
 
-def Select_a_Verse(request):
+def verse_list(request):
     # print(123)
     # print(request.body)
+    uid = request.COOKIES.get('uid')
 
     result_rooms = []
     data_list = models.ChatRoom.objects.all()
     for room in data_list:
         result = {}
         result["title"] = room.title
-        # result["members"] = room.members
+        result["n_member"] = room.members.count()
         result_rooms.append(result)
-    print(result_rooms)
     # json_data = json.dumps(result_rooms)
     return JsonResponse({'result':result_rooms})
 

@@ -1,6 +1,6 @@
 import { message, Input, Button } from 'antd'
 import React from 'react'
-import { setCookie } from './cookie'
+import { getCookie, setCookie } from './cookie'
 import './Login.css'
 
 import 'antd/dist/antd.css';
@@ -35,25 +35,7 @@ var Login = () =>{
         })
     }
 
-    const select_a_verse_enter = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/chat/Select_a_Verse/`,{
-            method:'POST',
-            body:JSON.stringify({
-                username: Username,
-                password: loginPassword,
-            })
-        }).then(res=>{
-            if(res.status===200){
-                message.success("Succfssfully Join Room")
-                setTimeout(() => {
-                    window.location.href="/chatroom/?roomNmae="+title
-                }, 1000);
-            }else{
-                message.warn("Join Room Fail")
-            }
-        }).then(data=>{})
-    }
+   
 
     const manage_my_verse_enter = (title)=>{
         setCookie("update",new Date().toUTCString())
@@ -94,7 +76,7 @@ var Login = () =>{
                         <Input style={{"height":"2rem"}} id='password' type="password" visibilityToggle value={loginPassword} onChange={e=>setLoginPassword(e.target.value)}/>
                     </div>
                     <div className='Login-form-submit' style={{fontFamily:"Cochin"}}>
-                        <Button id='submit' type='button' onClick={()=>{select_a_verse_enter();}}>Sign in</Button>
+                        <Button id='submit' type='button' onClick={()=>{login();}}>Sign in</Button>
                     </div>
                 </form>
                 <div className='Login-Sign-in'>
