@@ -91,11 +91,10 @@ def Select_a_Verse(request):
 
 
 def joinRoom(request):
-    return HttpResponse(status=404)
+    print(request.GET)
+    return HttpResponse("Cannot Join Chat Room", status=404)
 
 def startRoom(request):
-    if request.method == 'POST':
-        print(request.POST)
-        return HttpResponse(status=404)
-    return HttpResponse(status=404)
+    print()
+    return HttpResponse("Cannot Start Chat Room",status=404)
 

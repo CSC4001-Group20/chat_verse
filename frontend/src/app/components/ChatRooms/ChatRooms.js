@@ -76,47 +76,6 @@ const ChatRooms = () =>{
     }
 
 
-    const Manage_my_Verse = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/chat/Manage_my_Verse/`,{
-            method:'POST',
-            body:JSON.stringify({
-                title:createRoomName
-            })
-        }).then(res=>{
-            if(res.status===200){
-                message.success("Succfssfully Create Room")
-                // selectAVerse = res
-            }else if (res.status===403){
-                message.warn("Create Room Fail")
-            }else if (res.status===405){
-                message.warn("Chat Room Already Exist")
-            }else{
-                message.warn("Create Room Fail")
-            }
-        }).then(data=>{})
-    }
-
-    const Select_a_Verse = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/chat/Select_a_Verse/`,{
-            method:'GET',
-        }).then(res=>{
-            if(res.status===200){
-                message.success("Succfssfully Create Room")
-                // selectAVerse = res
-            }else if (res.status===403){
-                message.warn("Create Room Fail")
-            }else if (res.status===405){
-                message.warn("Chat Room Already Exist")
-            }else{
-                message.warn("Create Room Fail")
-            }
-        }).then(data=>{})
-    }
-
-
-
     return(
         <div className='ChatRooms'>
             <div className='ChatRooms-My'>
