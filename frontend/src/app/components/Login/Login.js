@@ -9,6 +9,7 @@ var Login = () =>{
 
     var [Username, setUsername] = React.useState("")
     var [loginPassword, setLoginPassword] = React.useState("")
+    var [title, setTitle] = React.useState("")
 
     const login = ()=>{
         setCookie("update",new Date().toUTCString())
@@ -34,6 +35,40 @@ var Login = () =>{
         })
     }
 
+    const select_a_verse_enter = ()=>{
+        setCookie("update",new Date().toUTCString())
+            fetch(`/chat/Select_a_Verse/`,{
+                method:'GET',
+            }).then(res=>{
+                if(res.status===200){
+                    message.success("Succfssfully Join Room")
+                    setTimeout(() => {
+                        window.location.href="/chatroom/?roomNmae="+title
+                    }, 1000);
+                }else{
+                    message.warn("Join Room Fail")
+                }
+            }).then(data=>{})
+    }
+
+    const manage_my_verse_enter = (title)=>{
+        setCookie("update",new Date().toUTCString())
+            fetch(`/chat/startRoom/`,{
+                method:'POST',
+                body:JSON.stringify({
+                    title:title
+                })
+            }).then(res=>{
+                if(res.status===200){
+                    message.success("Succfssfully Start Room")
+                    setTimeout(() => {
+                        window.location.href="/chatroom/?roomNmae="+title
+                    }, 1000);
+                }else{
+                    message.warn("Start Room Fail")
+                }
+            }).then(data=>{})
+    }
 
     return(
         <div className='Login'>
@@ -55,7 +90,7 @@ var Login = () =>{
                         <Input style={{"height":"2rem"}} id='password' type="password" visibilityToggle value={loginPassword} onChange={e=>setLoginPassword(e.target.value)}/>
                     </div>
                     <div className='Login-form-submit' style={{fontFamily:"Cochin"}}>
-                        <Button id='submit' type='button' onClick={()=>{login();}}>Sign in</Button>
+                        <Button id='submit' type='button' onClick={()=>{login();select_a_verse_enter();}}>Sign in</Button>
                     </div>
                 </form>
                 <div className='Login-Sign-in'>
