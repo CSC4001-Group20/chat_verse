@@ -5,19 +5,51 @@
     width: 100vw;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
     font-size: 1rem;
 }
 
 .ChatRooms-My{
-    
+    flex-direction: column;
+    height: 100vh;
+}
+
+.ChatRooms-My-Add{
+
+}
+
+.ChatRooms-My-VerseList{
+    margin-left: 50%;
+    transform: translateX(-200px);
+    max-height: 30%;
+    overflow-y: scroll;
+    width: 560px;
+    padding: 0px 0 20px 0;
+    align-items: center;
+}
+
+.ChatRooms-My-VerseList::-webkit-scrollbar{
+    display: none;
+}
+
+.ChatRooms-My-VerseList-Verse{
+    box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    max-width: 400px;
+    min-height: max-content;
+    padding: 10px 10px 10px 30px;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    align-self: center;
+    text-align: left;
+    flex-direction: row !important;
 }
 
 .ChatRooms-VerseList{
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    max-height: 60%;
+    max-height: 65%;
     width: 560px;
     padding: 0px 0 20px 0;
 }

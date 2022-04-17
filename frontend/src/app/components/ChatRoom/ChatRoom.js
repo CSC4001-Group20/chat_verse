@@ -62,7 +62,6 @@ function ChatRoom() {
             minTrackingConfidence: 0.7,
             refineFaceLandmarks: true,
         });
-
         holistic.onResults(onResults);
     }
 
@@ -231,8 +230,6 @@ function ChatRoom() {
         Part.position.lerp(vector, lerpAmount); // interpolate
     };
 
-
-
     const rigFace = (idx, riggedFace) => {
 
         let currentVrm = VRMs[idx]
@@ -277,9 +274,6 @@ function ChatRoom() {
         oldLookTarget.copy(lookTarget)
         currentVrm.lookAt.applyer.lookAt(lookTarget);
     }
-
-    
-
 
     const onResults = (results) => {
         // Animate model
@@ -334,7 +328,10 @@ function ChatRoom() {
             riggedLeftHand,
             riggedRightHand,
             riggedFace,
+
+            transform:transforms[0]
         }
+        console.log("asdasdasd")
         motion_socket.send(JSON.stringify(my_data))
 
         // applyMovements( my_data, idx )
@@ -343,6 +340,8 @@ function ChatRoom() {
     const applyMovements = ( data, idx ) => {
 
         let {
+            uid,
+            transform,
             riggedPose,
             riggedLeftHand,
             riggedRightHand,
@@ -432,6 +431,9 @@ function ChatRoom() {
             rigRotation(idx, "RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
             rigRotation(idx, "RightLittleDistal", riggedRightHand.RightLittleDistal);
         }catch{}
+
+
+        transforms[idx] =  transform
 
         // 移动角色位置
         VRMs[idx].scene.position.x = transforms[idx].x

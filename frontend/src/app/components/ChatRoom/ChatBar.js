@@ -79,13 +79,13 @@ const ChatBar = () => {
             </div>
 
             <div className="ChatBar-actions">
-                <input placeholder="打字" value={text} onChange={e=>{
+                <input placeholder="Massage" style={{fontFamily:"Cochin"}} value={text} onChange={e=>{
                     setText(e.target.value)
                 }}>
-                    
                 </input>
 
-                <button className="SendButton" onClick={()=>{
+
+                <button className="SendButton" style={{fontFamily:"Cochin"}} onClick={()=>{
                     console.log("Send")
                     if (!chat_socket) { console.log("error"); return }
                     chat_socket.send(JSON.stringify({
