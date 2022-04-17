@@ -9,10 +9,13 @@ import { VRM, VRMSchema, VRMUtils } from '@pixiv/three-vrm';
 import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
+import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
 
 var VRMs = [];
 var transforms = [];
 var uids = []
+
+var flag = false;
 
 const theta = 2*Math.PI/9;
 
@@ -82,6 +85,11 @@ function ChatRoom() {
     const newLight = () => {
         const light = new THREE.DirectionalLight(0xffffff);
         light.position.set(1.0, 1.0, 1.0).normalize();
+        var loader = new FBXLoader();
+        loader.load( './InteriorTest.fbx', function ( object ) {
+            object.scale.set(0.01,0.01,0.01);//修改模型缩放系数(x,y,z)
+            scene.add( object );
+        } )
         scene.add(light);
     }
 
@@ -110,6 +118,8 @@ function ChatRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadVRM = (_uid) => {
 
+        // console.log("1",uid, _uid)
+
         if(!scene) { console.log("No scene, return");return}
 
         uids_loading.push(_uid)
@@ -130,8 +140,10 @@ function ChatRoom() {
                     scene.add(vrm.scene);
                     VRMs[idx] = vrm
                     uids[idx] = _uid
-                    if(toString(_uid)===toString(uid)){
+                    // console.log("2",uid, _uid)
+                    if(_uid===uid){
                         my_idx=idx
+                        console.log("init control")
                         initControl()
                     }
                     console.log("Loaded a new player",uid, idx)
@@ -352,7 +364,8 @@ function ChatRoom() {
 
             transform:transforms[my_idx]
         }
-        motion_socket.send(JSON.stringify(my_data))
+        
+        if(flag) motion_socket.send(JSON.stringify(my_data))
 
         // applyMovements( my_data, idx )
     }
@@ -489,20 +502,21 @@ function ChatRoom() {
         // 建立webchat_socket连接时触发此方法
         motion_socket.onopen = function(e) {
             // Do nothing
+            flag = true;
         }
 
         // 从后台接收到数据时触发此方法
         motion_socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            let {uid} = data;
-            let idx = uids.indexOf(uid)
+            let {uid:_uid} = data;
+            let idx = uids.indexOf(_uid)
             if(idx>=0){
                 applyMovements(data, idx)
             }else{
-                if(!(uids_loading.indexOf(uid)>=0)){
+                if(!(uids_loading.indexOf(_uid)>=0)){
                     // 收到一个未知用户的信号
-                    console.log("cannot found uid", uid, uids_loading)
-                    loadVRM(uid)
+                    console.log("cannot found uid", _uid, uids_loading)
+                    loadVRM(_uid)
                 }
             }
         }
@@ -540,18 +554,18 @@ function ChatRoom() {
             animate()
             loadVRM(uid);  
             initSocket()  
-            var axisHelper = new THREE.AxisHelper(250);
-            scene.add(axisHelper);
+            // var axisHelper = new THREE.AxisHelper(250);
+            // scene.add(axisHelper);
             }
     },[scene])
 
-    React.useEffect(()=>{
-        setInterval(() => {
-            // console.log("position",orbitCamera.position)
-            console.log("target",orbitControls.target)
-            console.log("transforms",transforms[my_idx])
-        }, 500);
-    },[])
+    // React.useEffect(()=>{
+    //     setInterval(() => {
+    //         // console.log("position",orbitCamera.position)
+    //         console.log("target",orbitControls.target)
+    //         console.log("transforms",transforms[my_idx])
+    //     }, 500);
+    // },[])
 
     React.useEffect(()=>{
         if(holistic) initHolistic()
