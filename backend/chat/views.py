@@ -46,7 +46,7 @@ def createRoom(request):
             host_user = host_user
         )
         room.save()
-        # room.members.add(host_user)
+        room.members.add(host_user)
         room.save()
 
         res = HttpResponse("Successfully Create ChatRoom",status=200)
@@ -77,8 +77,17 @@ def verse_list(request):
     # print(request.body)
     uid = request.COOKIES.get('uid')
 
+    filter_uid = request.GET.get('filter_uid')=='true'
+
     result_rooms = []
     data_list = models.ChatRoom.objects.all()
+
+
+    print(filter_uid, request.GET.get('filter_uid'))
+
+    if filter_uid:
+        data_list = data_list.filter(host_user__uid=uid)
+
     for room in data_list:
         result = {}
         result["title"] = room.title

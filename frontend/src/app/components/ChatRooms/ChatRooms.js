@@ -11,6 +11,7 @@ const ChatRooms = () =>{
 
 
     const [ verse_list, setVerseList ] = React.useState([])
+    const [ P_verse_list, setP_VerseList ] = React.useState([])
 
     const createRoom = ()=>{
         if (createRoomName===""){
@@ -59,24 +60,24 @@ const ChatRooms = () =>{
         }).then(data=>{})
     }
 
-    const manage_my_verse_enter = (title)=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/chat/startRoom/`,{
-            method:'POST',
-            body:JSON.stringify({
-                title:title
-            })
-        }).then(res=>{
-            if(res.status===200){
-                message.success("Succfssfully Start Room")
-                setTimeout(() => {
-                    window.location.href="/chatroom/?roomNmae="+title
-                }, 1000);
-            }else{
-                message.warn("Start Room Fail")
-            }
-        }).then(data=>{})
-    }
+    // const manage_my_verse_enter = (title)=>{
+    //     setCookie("update",new Date().toUTCString())
+    //     fetch(`/chat/startRoom/`,{
+    //         method:'POST',
+    //         body:JSON.stringify({
+    //             title:title
+    //         })
+    //     }).then(res=>{
+    //         if(res.status===200){
+    //             message.success("Succfssfully Start Room")
+    //             setTimeout(() => {
+    //                 window.location.href="/chatroom/?roomNmae="+title
+    //             }, 1000);
+    //         }else{
+    //             message.warn("Start Room Fail")
+    //         }
+    //     }).then(data=>{})
+    // }
 
 
     const get_verse_list = ()=>{
@@ -93,9 +94,24 @@ const ChatRooms = () =>{
         })
     }
 
+    const get_personal_verse_list = (uid)=>{
+        fetch(`/chat/verse_list/?filter_uid=true`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
+            }else{
+                message.warn("Join Room Fail")
+            }
+        }).then(data=>{
+            setP_VerseList(data.result)
+        })
+    }
+
 
     React.useEffect(()=>{
         get_verse_list()
+        get_personal_verse_list()
     },[])
 
 
@@ -157,7 +173,7 @@ const ChatRooms = () =>{
                 </div> */}
 
                 <div className='ChatRooms-My-VerseList'>
-                    {[{'title':'你爷爷的大恐龙', 'membersCount':'20'},{'title':'你爷爷的大货车', 'membersCount':'20'},{'title':'你爷爷的大飞机', 'membersCount':'20'}].map(verse=>{
+                    {P_verse_list.map(verse=>{
                         return(
                             <div className='ChatRooms-My-VerseList-Verse'>
                                 <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
@@ -169,7 +185,7 @@ const ChatRooms = () =>{
                                     </div>
                                 </div>
                                 <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
-                                    <Button type="link" onClick={()=>{manage_my_verse_enter(verse.title);}}>Start Verse</Button>
+                                    <Button type="link" onClick={()=>{joinRoom(verse.title);}}>Start Verse</Button>
                                     <Button type="link">Delete Verse</Button>
                                 </div>
                             </div>
@@ -213,7 +229,7 @@ const ChatRooms = () =>{
                                     {verse.title}
                                 </div>
                                 <div className='ChatRooms-VerseList-Verse-content'>
-                                    {verse.n_member} members active
+                                    {verse.n_member} users joined.
                                 </div>
                             </div>
                         )
