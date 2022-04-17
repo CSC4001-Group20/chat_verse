@@ -1,7 +1,3 @@
-from turtle import title
-from unittest import result
-from ctypes.wintypes import HPALETTE
-from statistics import mode
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.

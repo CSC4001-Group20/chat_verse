@@ -37,7 +37,7 @@ var Login = () =>{
 
     const select_a_verse_enter = ()=>{
         setCookie("update",new Date().toUTCString())
-            fetch(`/chat/Select_a_Verse/`,{
+            fetch(`/chat/verse_list/`,{
                 method:'GET',
             }).then(res=>{
                 if(res.status===200){

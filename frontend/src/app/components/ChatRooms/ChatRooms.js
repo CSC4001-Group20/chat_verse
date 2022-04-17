@@ -37,42 +37,42 @@ const ChatRooms = () =>{
         }
     }
 
-    const select_a_verse_enter = (title)=>{
+    const joinRoom = (title)=>{
         setCookie("update",new Date().toUTCString())
-            fetch(`/chat/joinRoom/`,{
-                method:'POST',
-                body:JSON.stringify({
-                    title:title
-                })
-            }).then(res=>{
-                if(res.status===200){
-                    message.success("Succfssfully Join Room")
-                    setTimeout(() => {
-                        window.location.href="/chatroom/?roomNmae="+title
-                    }, 1000);
-                }else{
-                    message.warn("Join Room Fail")
-                }
-            }).then(data=>{})
+        fetch(`/chat/joinRoom/`,{
+            method:'POST',
+            body:JSON.stringify({
+                title:title
+            })
+        }).then(res=>{
+            if(res.status===200){
+                message.success("Succfssfully Join Room")
+                setTimeout(() => {
+                    window.location.href="/chatroom/?roomNmae="+title
+                }, 1000);
+            }else{
+                message.warn("Join Room Fail")
+            }
+        }).then(data=>{})
     }
 
     const manage_my_verse_enter = (title)=>{
         setCookie("update",new Date().toUTCString())
-            fetch(`/chat/startRoom/`,{
-                method:'POST',
-                body:JSON.stringify({
-                    title:title
-                })
-            }).then(res=>{
-                if(res.status===200){
-                    message.success("Succfssfully Start Room")
-                    setTimeout(() => {
-                        window.location.href="/chatroom/?roomNmae="+title
-                    }, 1000);
-                }else{
-                    message.warn("Start Room Fail")
-                }
-            }).then(data=>{})
+        fetch(`/chat/startRoom/`,{
+            method:'POST',
+            body:JSON.stringify({
+                title:title
+            })
+        }).then(res=>{
+            if(res.status===200){
+                message.success("Succfssfully Start Room")
+                setTimeout(() => {
+                    window.location.href="/chatroom/?roomNmae="+title
+                }, 1000);
+            }else{
+                message.warn("Start Room Fail")
+            }
+        }).then(data=>{})
     }
 
 
@@ -185,7 +185,7 @@ const ChatRooms = () =>{
                 <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
                     {[{'title':'你爷爷的大恐龙', 'membersCount':'20'},{'title':'你爷爷的大货车', 'membersCount':'20'},{'title':'你爷爷的大飞机', 'membersCount':'20'}].map(verse=>{
                         return(
-                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{select_a_verse_enter(verse.title);}}>
+                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.title);}}>
                                 <div className='ChatRooms-VerseList-Verse-header'>
                                     {verse.title}'s Chat Room
                                 </div>
