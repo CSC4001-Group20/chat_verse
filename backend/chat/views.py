@@ -77,6 +77,8 @@ def Manage_my_Verse(request):
     return result
 
 def Select_a_Verse(request):
+    print(request.POST.get())
+    print(request.body)
     result_rooms = []
     data_list = models.ChatRoom.objects.all()
     for room in data_list:
@@ -84,7 +86,8 @@ def Select_a_Verse(request):
         result["title"] = room.title
         result["members"] = room.members
         result_rooms.append(result)
-    return result_rooms
+    
+    return result_rooms.json()
 
 
 def joinRoom(request):
