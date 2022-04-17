@@ -350,7 +350,7 @@ function ChatRoom() {
             riggedRightHand,
             riggedFace,
 
-            // transform:transforms[0]
+            transform:transforms[my_idx]
         }
         motion_socket.send(JSON.stringify(my_data))
 
@@ -364,6 +364,7 @@ function ChatRoom() {
             riggedLeftHand,
             riggedRightHand,
             riggedFace,
+            transform,
         } = data
 
 
@@ -451,11 +452,11 @@ function ChatRoom() {
         }catch{}
 
 
-        // transforms[idx] =  transform
+        
 
         // 移动角色位置
-        VRMs[idx].scene.position.x = transforms[idx].x
-        VRMs[idx].scene.position.z = transforms[idx].z
+        VRMs[idx].scene.position.x = transform.x
+        VRMs[idx].scene.position.z = transform.z
     }
 
 
@@ -546,8 +547,9 @@ function ChatRoom() {
 
     React.useEffect(()=>{
         setInterval(() => {
-            console.log("position",orbitCamera.position)
+            // console.log("position",orbitCamera.position)
             console.log("target",orbitControls.target)
+            console.log("transforms",transforms[my_idx])
         }, 500);
     },[])
 
