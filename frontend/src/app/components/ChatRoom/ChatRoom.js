@@ -548,8 +548,8 @@ function ChatRoom() {
             animate()
             loadVRM(uid);  
             initSocket()  
-            var axisHelper = new THREE.AxisHelper(250);
-            scene.add(axisHelper);
+            // var axisHelper = new THREE.AxisHelper(250);
+            // scene.add(axisHelper);
             }
     },[scene])
 
