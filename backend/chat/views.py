@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 from turtle import title
 from unittest import result
-=======
 from ctypes.wintypes import HPALETTE
 from statistics import mode
->>>>>>> abe6160c98d712b0de694fe523a25f46bea3e8e7
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
@@ -42,7 +39,6 @@ def createRoom(request):
         except:
             pass
 
-
         # 验证用户名，密码是否正确
         # try:
         host_uid = request.COOKIES.get('uid', '')
@@ -66,8 +62,6 @@ def createRoom(request):
         return res
         # except:
         #     return HttpResponse("Create ChatRoom Fail", status=403)
-
-<<<<<<< HEAD
     return HttpResponse("开房成功")
 
 def Manage_my_Verse(request):
@@ -93,5 +87,14 @@ def Select_a_Verse(request):
         result["members"] = room.members
         result_rooms.append(result)
     return result_rooms
-=======
->>>>>>> abe6160c98d712b0de694fe523a25f46bea3e8e7
+
+
+def joinRoom(request):
+    return HttpResponse(status=404)
+
+def startRoom(request):
+    if request.method == 'POST':
+        print(request.POST)
+        return HttpResponse(status=404)
+    return HttpResponse(status=404)
+
