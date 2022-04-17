@@ -484,7 +484,7 @@ function ChatRoom() {
                     loadVRM(uid)
                 }
             }
-        }.bind(scene)
+        }
         
     }
     
@@ -500,7 +500,6 @@ function ChatRoom() {
         newHolistic()
         newScene()
         initRenderingPipeline()
-        initSocket()
     },[])
 
     // When videoElement is found, new "@mediapipe/camera_utils".Camera
@@ -518,7 +517,8 @@ function ChatRoom() {
         if(scene){
             newLight()
             animate()
-            loadVRM(uid);    
+            loadVRM(uid);  
+            initSocket()  
         }
     },[scene])
 
