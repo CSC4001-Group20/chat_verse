@@ -1,8 +1,5 @@
-from pyexpat import model
-import django
 from django.db import models
 
-from chat.views import room
 from user.models import User
 
 # Create your models here.
@@ -18,4 +15,8 @@ class ChatRoom(models.Model):
         self.host_user = host_user
         self.is_active = False
         return room_name + "create successfully"
+
+    def delete_room(self, room_name):
+        self.delete()
+        return room_name + "delete successfully"
 
