@@ -12,7 +12,7 @@ var Login = () =>{
 
     const login = ()=>{
         setCookie("update",new Date().toUTCString())
-        fetch(`/user/login/?`,{
+        fetch(`/user/login/`,{
             method:'POST',
             body:JSON.stringify({
                 username: Username,
@@ -24,6 +24,8 @@ var Login = () =>{
                 setTimeout(() => {
                     window.location.href="/chatrooms"
                 }, 1000);
+            }else if (res.status===403){
+                message.warn("账号密码不正确，请重新登录！")
             }else{
                 message.warn("发生了未知错误，请稍后再重试！")
             }
