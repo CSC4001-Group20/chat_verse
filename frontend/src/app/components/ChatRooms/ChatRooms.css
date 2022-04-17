@@ -116,8 +116,10 @@
 
 .quit>a{
     font-family: "Cochin";
-    justify-content: center;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    color: white;
 }
 .quit:hover{
     transform: scale(1.1, 1.1);

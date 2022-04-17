@@ -14,6 +14,8 @@ var VRMs = [];
 var transforms = [];
 var uids = []
 
+const theta = 2*Math.PI/9;
+
 var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下载
 
 var oldLookTarget = new THREE.Euler();
@@ -91,8 +93,7 @@ function ChatRoom() {
 
         // 下面这行可以禁用THREE的交互
         // renderer.domElement.style.pointerEvents = "none" 
-
-        orbitCamera = new THREE.PerspectiveCamera(35,window.innerWidth / window.innerHeight,0.1,1000);
+        orbitCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         orbitCamera.position.set(0.0, 1.4, 0.7);
 
         orbitControls = new OrbitControls(orbitCamera, renderer.domElement);
@@ -165,12 +166,32 @@ function ChatRoom() {
                 if(transforms[my_idx]){
                     var e = e || window.event;
                     if(e.key == 'w'){
-                        transforms[my_idx].x += 0.1 * Math.sin(transforms[my_idx].r)
-                        transforms[my_idx].z += 0.1 * Math.cos(transforms[my_idx].r)
+                        transforms[my_idx].x -= 0.1 * Math.sin(transforms[my_idx].r*theta)
+                        transforms[my_idx].z -= 0.1 * Math.cos(transforms[my_idx].r*theta)
+                        orbitControls.target.set(
+                            transforms[my_idx].x,
+                            1.4,
+                            transforms[my_idx].z
+                        )
+                        orbitCamera.position.set(
+                            -0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
+                            orbitCamera.position.y,
+                            -0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
+                        )
                     }
                     if(e.key == 's'){	
-                        transforms[my_idx].x -= 0.1 * Math.sin(transforms[my_idx].r)
-                        transforms[my_idx].z -= 0.1 * Math.cos(transforms[my_idx].r)
+                        transforms[my_idx].x += 0.1 * Math.sin(transforms[my_idx].r*theta)
+                        transforms[my_idx].z += 0.1 * Math.cos(transforms[my_idx].r*theta)
+                        orbitControls.target.set(
+                            transforms[my_idx].x,
+                            1.4,
+                            transforms[my_idx].z
+                        )
+                        orbitCamera.position.set(
+                            -0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
+                            orbitCamera.position.y,
+                            -0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
+                        )
                     }
                     if(e.key == 'a'){
                         transforms[my_idx].r += 0.3
@@ -329,9 +350,8 @@ function ChatRoom() {
             riggedRightHand,
             riggedFace,
 
-            transform:transforms[0]
+            // transform:transforms[0]
         }
-        console.log("asdasdasd")
         motion_socket.send(JSON.stringify(my_data))
 
         // applyMovements( my_data, idx )
@@ -340,8 +360,6 @@ function ChatRoom() {
     const applyMovements = ( data, idx ) => {
 
         let {
-            uid,
-            transform,
             riggedPose,
             riggedLeftHand,
             riggedRightHand,
@@ -433,7 +451,7 @@ function ChatRoom() {
         }catch{}
 
 
-        transforms[idx] =  transform
+        // transforms[idx] =  transform
 
         // 移动角色位置
         VRMs[idx].scene.position.x = transforms[idx].x
@@ -521,8 +539,17 @@ function ChatRoom() {
             animate()
             loadVRM(uid);  
             initSocket()  
-        }
+            var axisHelper = new THREE.AxisHelper(250);
+            scene.add(axisHelper);
+            }
     },[scene])
+
+    React.useEffect(()=>{
+        setInterval(() => {
+            console.log("position",orbitCamera.position)
+            console.log("target",orbitControls.target)
+        }, 500);
+    },[])
 
     React.useEffect(()=>{
         if(holistic) initHolistic()
