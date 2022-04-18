@@ -15,9 +15,8 @@ class ChatRoom(models.Model):
 class Avatar(models.Model):
     title = models.TextField(unique=True)
     src = models.TextField(unique=True, null=True)
-    cteator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="contirbuted_avatar")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="contirbuted_avatar")
     owning_users = models.ManyToManyField(User, related_name="collected_avatars")
     using_users = models.ManyToManyField(User, related_name="avatar")
-    is_active = models.BooleanField('is_active', default=False)
     is_delete = models.BooleanField('is_delete', default=False)
 
