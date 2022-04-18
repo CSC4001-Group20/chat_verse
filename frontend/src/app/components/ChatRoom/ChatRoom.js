@@ -218,7 +218,7 @@ function ChatRoom() {
         // TODO: 不同的UID从不同的URL获取
         // 需要查询Avatar数据库
         loader.load(
-            avatar?avatar:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
+            avatar?avatar.src:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
     
             gltf => {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
