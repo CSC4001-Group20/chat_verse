@@ -7,20 +7,20 @@
     flex-direction: row;
     justify-content: space-evenly;
     font-size: 1rem;
+    padding-right: 8vw;
 }
 
 .ChatRooms-My{
     flex-direction: column;
     height: 100vh;
+    width: max-content;
 }
 
 .ChatRooms-My-Add{
-
+    flex-direction: column;
 }
 
 .ChatRooms-My-VerseList{
-    margin-left: 50%;
-    transform: translateX(-200px);
     max-height: 37%;
     overflow-y: scroll;
     width: 560px;
@@ -31,39 +31,42 @@
 .ChatRooms-My-VerseList::-webkit-scrollbar{
     display: none;
 }
-
+/* 
 .ChatRooms-My-VerseList-Verse{
     box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
-    border-radius: 5px;
-    max-width: 400px;
+    border-radius: 5px !important;
+    width: 400px !important;
     min-height: max-content;
     padding: 10px 10px 10px 30px;
     margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-self: center;
-    text-align: left;
-    flex-direction: row !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .ChatRooms-My-VerseList-Verse:hover{
     cursor: pointer;
-    box-shadow: 5px 5px 6px 4px rgba(0,0,0,0.3);
-    transition: all .2s ease-in-out;
-    border-radius: 10px;
-    min-width: 30px;
+    box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
+    border-radius: 5px !important;
+    width: 400px !important;
     min-height: max-content;
     padding: 10px 10px 10px 30px;
     margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-self: center;
-    text-align: left;
-    /* transform: scale(1.1, 1.1); */
-    transform: translate(0%, 4%);
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transition: all .2s ease-in-out;
+    transform: scale(1.1, 1.1);
 }
 
+.ChatRooms-My-VerseList-Verse-header{
+    font-size: calc(1vh + 13px);
+    min-width: 88%;
+    height: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
+.ChatRooms-My-VerseList-Verse-button{
 
-
+} */
 
 .ChatRooms-VerseList{
     display: flex;
@@ -80,89 +83,89 @@
 
 .ChatRooms-VerseList-Verse{
     box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    min-width: 480px;
+    border-radius: 5px !important;
+    width: 480px;
     min-height: max-content;
     padding: 10px 10px 10px 30px;
     margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-self: center;
-    text-align: left;
+    background-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .ChatRooms-VerseList-Verse:hover{
     cursor: pointer;
     box-shadow: 5px 5px 6px 4px rgba(0,0,0,0.3);
     transition: all .2s ease-in-out;
-    border-radius: 10px;
+    border-radius: 5px;
     min-width: 480px;
     min-height: max-content;
     padding: 10px 10px 10px 30px;
     margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-self: center;
-    text-align: left;
+    background-color: rgba(255, 255, 255, 0.9);
     transform: scale(1.1, 1.1);
+}
+
+#spe:hover{
+    cursor: auto;
 }
 
 .ChatRooms-VerseList-Verse-header{
     font-size: calc(1vh + 13px);
-    /* font-weight: 400; */
+    min-width: 88%;
+    height: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* color: blueviolet; */
 }
 
 .ChatRooms-VerseList-Verse-content{
-    font-size: small;
-}
-
-.createRoom-input{
-    background-color: #777;
-    box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
-}
-
-.createRoom-submit{
-    margin-top: 4vh;
-}
-
-.quit{
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.4);
-    height: 6vh;
-    width: 3vw;
-    left: 3vw;
-    top: 4vh;
+    font-size: calc(1vh + 13px);
+    height: 2rem;
+    width: max-content;
     display: flex;
-    position: absolute; 
-}
-
-.quit>a{
-    font-family: "Cochin";
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    color: white;
-}
-.quit:hover{
-    transform: scale(1.1, 1.1);
 }
 
+.ChatRooms-VerseList-Verse-content-2{
+    font-size: calc(1vh + 13px);
+    height: 2rem;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
+.ChatRooms-VerseList-Verse-content-2:hover{
+    cursor: pointer;
+    font-size: calc(1vh + 13px);
+    height: 2rem;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: red;
+}
 
 .quit{
+    position: absolute; 
     width: 50px;
     height: 50px;
-    left:30px;
+    right:30px;
     top:30px;
     border-radius: 100%;
+    border: solid white;
     font-family: "Cochin";
-    color: white;
+    color: blueviolet;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    opacity:0.8;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
 }
 
 .quit:hover{
     cursor: pointer;
     transform: scale(1.1, 1.1);
+    transition: all .2s ease-in-out;
 }

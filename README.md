@@ -23,3 +23,38 @@ $ cd /backend
 $ python3 manage.py runserver
 ```
 Open your browser and get in http://127.0.0.1:8000/chat/chatroom1 which means you enter a chatroom called chatroom1
+
+
+
+HOW TO RUN
+
+This program require serval package, detail packages show above
+If you want to test on your own computer, you need 'nginx'
+
+```
+$ brew install nginx
+```
+
+after you installed nginx, you are required to modify the nginx config file to achieve port listen and transfer, go to your local nginx.conf(usually in ./etc/nginx/), add an statement in nginx.conf
+
+```
+include /Your own path/chat_verse/nginx.conf;
+```
+
+After you finished above steps, you can check the result soon
+
+```
+cd backend
+python3 manage.py makemigrations user
+python3 manage.py makemigrations chat
+python3 manage.py migrate
+python3 manage.py runserver
+```
+
+```
+cd frontend
+yarn install
+yarn start
+```
+
+You can check localhost:666 to see the result

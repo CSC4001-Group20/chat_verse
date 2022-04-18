@@ -77,10 +77,6 @@ def avatar(request):
             # TODO 将 Avatar内关键信息提取进 Avatar Info
 
 
-
-
-
-
             avatar_info = {}
             return JsonResponse({'result':avatar_info})
         elif request.GET.get('uid_collected'):
@@ -88,8 +84,6 @@ def avatar(request):
             cookie_uid = request.COOKIES.get('uid')
             if (uid != cookie_uid):
                 return HttpResponse("用户错误",status=404)
-
-
 
 
             user = User.objects.get(uid=uid)
@@ -136,8 +130,6 @@ def collect_avatar(request):
     if request.method=='POST':
         uid = request.COOKIES.get('uid')
         # uid = 0 # TODO
-
-
 
 
         avatar_id = 0 #TODO

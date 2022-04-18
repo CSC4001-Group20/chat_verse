@@ -11,6 +11,9 @@ import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
 import "./ChatRoom.css"
+import { PoweroffOutlined } from '@ant-design/icons';
+import { ImportOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 
 var VRMs = [];
@@ -274,9 +277,9 @@ function ChatRoom() {
                             transforms[my_idx].z
                         )
                         orbitCamera.position.set(
-                            -0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
+                            +0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
                             orbitCamera.position.y,
-                            -0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
+                            +0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
                         )
                     }
                     if(e.key == 'a'){
@@ -659,14 +662,14 @@ function ChatRoom() {
             ></video>  
 
             <button className="quit_button" style={{ position:"absolute", left:30,top:30,}} 
-            onClick={()=>{window.location.href="/chatrooms"}}>
-                Quit
+                onClick={()=>{window.location.href="/chatrooms"}}>
+                <ImportOutlined />
             </button>
 
-            <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
+            {/* <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
             onClick={()=>{window.location.href="/shop"}}>
-                Shop
-            </button>
+                <ShoppingCartOutlined />
+            </button> */}
 
 
             <ChatBar />     

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/holistic": "^0.5.1635989137",
     "@pixiv/three-vrm": "^0.6.10",

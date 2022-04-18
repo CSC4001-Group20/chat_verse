@@ -1,26 +1,74 @@
+body::-webkit-scrollbar{
+    display: none !important;
+}
+
 .quit_button{
+    position: absolute; 
     width: 50px;
     height: 50px;
+    left:30px !important;
+    top:70px;
     border-radius: 100%;
+    border: solid white;
     font-family: "Cochin";
-    background-color: rgba(255, 255, 255, 0.5);
-    opacity:0.8;
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
 }
 .quit_button:hover{
     cursor: pointer;
+    position: absolute; 
+    width: 50px;
+    height: 50px;
+    left:30px !important;
+    top:70px;
+    border-radius: 100%;
+    border: solid white;
+    font-family: "Cochin";
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
     transform: scale(1.1, 1.1);
 }
 
 .shop_button{
+    position: absolute; 
     width: 50px;
     height: 50px;
+    left:30px;
+    top:30px;
     border-radius: 100%;
+    border: solid white;
     font-family: "Cochin";
-    background-color: rgba(255, 255, 255, 0.5);
-    opacity:0.8;
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
 }
 
 .shop_button:hover{
     cursor: pointer;
+    position: absolute; 
+    width: 50px;
+    height: 50px;
+    left:30px;
+    top:30px;
+    border-radius: 100%;
+    border: solid white;
+    font-family: "Cochin";
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
     transform: scale(1.1, 1.1);
 }
