@@ -33,6 +33,8 @@ If you want to test on your own computer, you need 'nginx'
 
 ```
 $ brew install nginx
+$ pip install -U cos-python-sdk-v5
+$ yarn add cos-js-sdk-v5
 ```
 
 after you installed nginx, you are required to modify the nginx config file to achieve port listen and transfer, go to your local nginx.conf(usually in ./etc/nginx/), add an statement in nginx.conf

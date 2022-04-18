@@ -1,5 +1,5 @@
-import { ImportOutlined } from '@ant-design/icons'
-import { Input, Button, message } from 'antd'
+import { AccountBookFilled, ImportOutlined } from '@ant-design/icons'
+import { Input, Button, message, Upload } from 'antd'
 
 import React from 'react'
 import { setCookie } from '../Login/cookie'
@@ -48,19 +48,24 @@ var Shop = () =>{
                 }
             });
             if (cos){
+                console.log("hdouqwhdiuowqhfdoiwqiofdqwdfwqdwqdqw")
                 cos.putObject({
                     Bucket: Bucket, /* 必须 */
                     Region: Region,     /* 存储桶所在地域，必须字段 */
                     Key: img_id,//result.key,              /* 必须 */
                     StorageClass: 'STANDARD',
                     Body: file, // 上传文件对象
+                    onProgress: function (progressData) {
+                        console.log("Progress: ",JSON.stringify(progressData));
+                        message.loading("Progress: "+progressData.percent)
+                    }
                 }, function(err, data) {
                     console.log(err || "http://"+data.Location);
                     if(data){
                         let url = "http://"+data.Location;
                         //resolve("http://"+data.Location);
                         let bodyData={
-                            title:'New Avatar', //TODO
+                            title:'New Avatar 2', //TODO
                             url:url,
                         }
                         console.log(url)
@@ -96,6 +101,10 @@ var Shop = () =>{
 
     const [ avatar_list, setAvatarList ] = React.useState([])
     
+    const [ title, setAvatarTitle ] = React.useState("")
+    const [ src, setAvatarSrc ] = React.useState("")
+
+
     //TODO
     const getAvatarList = ()=>{
         setCookie("update",new Date().toUTCString())
@@ -158,11 +167,30 @@ var Shop = () =>{
                     { window.history.back(-1)}}><ImportOutlined />
                 </button>
                 <h1>Avatar Shop</h1>
+
+
+
+
+
+
+
+                <Upload
+                    showUploadList={false}
+                    action={createAvatar}
+                >
+                    <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
+                        onClick={()=>{createAvatar()}}
+                    />
+                </Upload>
+
+
+
+
+
             <div className='shop-window'>
                 <div className='shop-choice-container'>
                     <Button type='primary' onClick={()=>{getAvatarList();console.log("----");}}>Avatar</Button>
                     <Button type='primary'>Mine</Button>
-                    <Button type='primary' onClick={()=>{}}>Upload</Button>
                 </div>
                 <div className='shop-items-container'>
                     {avatar_list.map(verse=>{
@@ -179,7 +207,33 @@ var Shop = () =>{
                         })}
                 </div>
             </div>
-
+            <div>
+                <div style={{flexDirection:"row", justifyContent:"center", width:"100%", marginTop:"20px"}}>
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }} value={title} onChange={e=>{setAvatarTitle(e.target.value)}}/>
+                        
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }} value={src} onChange={e=>{setAvatarSrc(e.target.value)}}/>
+                        
+                        <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary" onClick={()=>{createAvatar()}}>Upload</Button>
+                </div>
+            </div>
 
         </div>
     )

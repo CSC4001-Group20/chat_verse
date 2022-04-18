@@ -14,6 +14,7 @@ import "./ChatRoom.css"
 import { PoweroffOutlined } from '@ant-design/icons';
 import { ImportOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 
 var VRMs = [];
@@ -43,9 +44,24 @@ function ChatRoom() {
     const [ camera, setCamera ] = React.useState(null)
     const [ holistic, setHolistic ] = React.useState(null)
     const [ scene, setScene ] = React.useState(null)
+    const [ avatar, setAvatar ] = React.useState(null)
 
     
     /* Initalizing Functions */
+
+    const getAvatar = () =>{
+        fetch("/user/avatar", {
+            method: "GET",
+        }).then(resp=>{
+            if(resp.status===200){
+                return resp.json
+            }else{
+                message.error("Avatar Error!")
+            }
+        }).then(data=>{
+            
+        })
+    }
 
     const getUid = () => {
         // 从 URL Params 获取 roon name
@@ -207,7 +223,7 @@ function ChatRoom() {
         // TODO: 不同的UID从不同的URL获取
         // 需要查询Avatar数据库
         loader.load(
-            "https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
+            avatar?avatar:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
     
             gltf => {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
@@ -661,15 +677,15 @@ function ChatRoom() {
                 }}
             ></video>  
 
-            <button className="quit_button" style={{ position:"absolute", left:30,top:30,}} 
+            <button className="quit_button" style={{ position:"absolute", right:30,top:30,}} 
                 onClick={()=>{window.location.href="/chatrooms"}}>
                 <ImportOutlined />
             </button>
 
-            {/* <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
+            <button className="shop_button" style={{ position:"absolute", right:30,top:30,}} 
             onClick={()=>{window.location.href="/shop"}}>
                 <ShoppingCartOutlined />
-            </button> */}
+            </button>
 
 
             <ChatBar />     

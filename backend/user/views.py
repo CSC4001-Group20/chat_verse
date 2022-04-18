@@ -100,10 +100,9 @@ def avatar(request):
                 result = {}
                 result['title'] = avatar.title
                 result['src'] = avatar.src
-                result['cteator'] = avatar.cteator
-                result['owning_users'] = avatar.owning_users
-                result['using_users'] = avatar.using_users
-                result['is_active'] = avatar.is_active
+                result['creator'] = avatar.creator.user_name
+                result['n_owning_users'] = avatar.owning_users.count()
+                result['n_using_users'] = avatar.using_users.count()
                 result['is_delete'] = avatar.is_delete
                 avatar_info.append(result)
 
@@ -130,12 +129,14 @@ def collect_avatar(request):
     if request.method=='POST':
         uid = request.COOKIES.get('uid')
         # uid = 0 # TODO
+        body_dict = json.loads(request.body.decode('utf-8'))
+        avatar_title = body_dict.get('title', '')
 
-
-        avatar_id = 0 #TODO
+        # avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
-        avatar = Avatar.objects.get(pk=avatar_id)
+        avatar = Avatar.objects.get(title=avatar_title)
         user.collected_avatar.add(avatar)
+        user.save()
         return HttpResponse(status=200)
 
 def use_avatar(request):
