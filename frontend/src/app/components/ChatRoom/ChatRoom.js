@@ -25,9 +25,7 @@ var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下�
 
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
-const renderer =  new THREE.WebGLRenderer({
-    // canvas: document.querySelector("#cc"), antialias: true, 
-    alpha:true});
+const renderer =  new THREE.WebGLRenderer({alpha:true});
 var orbitCamera;
 var orbitControls
 

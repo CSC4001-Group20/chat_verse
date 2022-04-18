@@ -46,7 +46,10 @@ class ChatConsumer(WebsocketConsumer):
 
     # 从频道组接收到消息后执行方法
     def chat_message(self, event):
-        message = event['message']
+        try:
+            message = event['message']
+        except:
+            return
         datetime_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # 通过websocket发送消息到客户端
@@ -96,7 +99,10 @@ class MotionConsumer(WebsocketConsumer):
 
     # 从频道组接收到消息后执行方法
     def chat_message(self, event):
-        data_json_str = event['data_json_str']
-
+        try: 
+            data_json_str = event['data_json_str']
+        except:
+            return
+        
         # 通过websocket发送消息到客户端
         self.send(text_data=data_json_str)
