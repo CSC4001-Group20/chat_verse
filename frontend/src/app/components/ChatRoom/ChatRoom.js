@@ -274,9 +274,9 @@ function ChatRoom() {
                             transforms[my_idx].z
                         )
                         orbitCamera.position.set(
-                            -0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
+                            +0.1 * Math.sin(transforms[my_idx].r*theta) + orbitCamera.position.x,
                             orbitCamera.position.y,
-                            -0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
+                            +0.1 * Math.cos(transforms[my_idx].r*theta) + orbitCamera.position.z
                         )
                     }
                     if(e.key == 'a'){

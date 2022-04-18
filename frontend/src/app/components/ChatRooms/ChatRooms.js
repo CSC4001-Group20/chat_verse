@@ -3,6 +3,10 @@ import { setCookie } from '../Login/cookie'
 import React from 'react'
 
 import './ChatRooms.css'
+import { PoweroffOutlined } from '@ant-design/icons'
+import { SendOutlined } from '@ant-design/icons'
+import { UserOutlined } from '@ant-design/icons'
+import { RestOutlined } from '@ant-design/icons'
 
 const ChatRooms = () =>{
     const [ createRoomName, setCreateRoomName ] = React.useState("")
@@ -94,6 +98,7 @@ const ChatRooms = () =>{
                 message.warn("get verse list Fail")
             }
         }).then(data=>{
+            console.log(data.result)
             setVerseList(data.result)
         })
     }
@@ -128,20 +133,22 @@ const ChatRooms = () =>{
                         }}>
                             Create a Verse
                     </div>
-                    <div >
-                        <input placeholder="Room Name" id='createRoom-input' style={{fontFamily:"Cochin", height:'6vh', width:'24vw',
-                        backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: '10px'}} value={createRoomName} onChange={e=>{
-                        setCreateRoomName(e.target.value)}}>
-                        </input>
+                    <div style={{flexDirection:"row", justifyContent:"center", width:"100%", marginTop:"20px"}}>
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }}/>
+                        <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary">Create</Button>
                     </div>
-
-                    <div className='createRoom-submit' style={{fontFamily:"Cochin"}}>
-                        <button style={{fontFamily:"Cochin", width:'8vw', height:'6vh',                       
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '10px'}}  
-                        onClick={()=>{createRoom();console.log(createRoomName);}}>Create</button>
-                    </div>
-
-
                 </div>
                 <div style={{
                         "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
@@ -151,21 +158,19 @@ const ChatRooms = () =>{
                 </div>
 
 
-                <div className='ChatRooms-My-VerseList'>
+                <div className='ChatRooms-VerseList'>
                     {P_verse_list.map(verse=>{
                         return(
-                            <div className='ChatRooms-My-VerseList-Verse' onClick={()=>{joinRoom(verse.room_name);}}>
-                                <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
-                                    <div className='ChatRooms-My-VerseList-Verse-header' >
-                                        {verse.title}'s Chat Room
-                                    </div>
-                                    {/* <div className='ChatRooms-My-VerseList-Verse-content'>
-                                        {verse.membersCount} members active
-                                    </div> */}
+                            <div className='ChatRooms-VerseList-Verse' id="spe" onClick={()=>{}} style={{
+                                display:"flex",
+                                flexDirection:"row",
+                                justifyContent:"stretch",
+                            }}>
+                                <div className='ChatRooms-VerseList-Verse-header' style={{minWidth:"80%"}}>
+                                    <div><SendOutlined style={{}}/>&nbsp;&nbsp;&nbsp;{verse.title}</div>
                                 </div>
-                                <div style={{"flexDirection":"column" , fontFamily:"Cohina", width:'100px'}}>
-                                    {/* <Button type="link" onClick={()=>{startRoom(verse.room_name);}}>Start Verse</Button> */}
-                                    <Button type="link" onClick={()=>{deleteRoom(verse.room_name);}}>Delete Verse</Button>
+                                <div className='ChatRooms-VerseList-Verse-content-2'>
+                                    <div><RestOutlined onClick={()=>{deleteRoom(verse.room_name);}}/>Delete</div>
                                 </div>
                             </div>
                         )
@@ -189,12 +194,16 @@ const ChatRooms = () =>{
                 <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
                     {verse_list.map(verse=>{
                         return(
-                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.room_name);}}>
+                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.room_name);}} style={{
+                                display:"flex",
+                                flexDirection:"row",
+                                justifyContent:"stretch",
+                            }}>
                                 <div className='ChatRooms-VerseList-Verse-header'>
-                                    {verse.title}
+                                    <div><SendOutlined style={{}}/>&nbsp;&nbsp;&nbsp;{verse.title}</div>
                                 </div>
                                 <div className='ChatRooms-VerseList-Verse-content'>
-                                    {verse.n_member} users visited.
+                                    <div><UserOutlined />&nbsp;{verse.n_member}</div>
                                 </div>
                             </div>
                         )
@@ -207,7 +216,7 @@ const ChatRooms = () =>{
 
             <button className="quit" 
                 onClick={()=>{window.location.href="/login"}}>
-                    Quit
+                <PoweroffOutlined />
             </button>
 
 
