@@ -30,4 +30,8 @@
     /* padding: 5px; */
     background-color: white;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 10px;
 }
