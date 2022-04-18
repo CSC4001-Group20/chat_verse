@@ -25,7 +25,7 @@ var Shop = () =>{
     const createAvatar = (file) => new Promise(resolve => {
         if(file){
             var timestamp = new Date().getTime();
-            var img_id = "post-img-"+timestamp
+            var img_id = "Avatar-VRM-"+timestamp
             var Bucket = 'ciwk-1301216399';
             var Region = 'ap-guangzhou';     /* 存储桶所在地域，必须字段 */
             console.log(file)
@@ -51,7 +51,6 @@ var Shop = () =>{
                 }
             });
             if (cos){
-                console.log("hdouqwhdiuowqhfdoiwqiofdqwdfwqdwqdqw")
                 cos.putObject({
                     Bucket: Bucket, /* 必须 */
                     Region: Region,     /* 存储桶所在地域，必须字段 */
@@ -68,8 +67,8 @@ var Shop = () =>{
                         let url = "http://"+data.Location;
                         //resolve("http://"+data.Location);
                         let bodyData={
-                            title:'New Avatar 2', //TODO
-                            url:url,
+                            title:'Avatar-'+title, //TODO
+                            src:url,
                         }
                         console.log(url)
                         fetch("/user/avatar/",{
@@ -135,24 +134,7 @@ var Shop = () =>{
     }
 
     //TODO
-    const uploadAvatarList = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/user/avatar/`,{
-            method:'POST',
-            body:JSON.stringify({
-                // title: title,
-                // src: src,
-            })
-        }).then(res=>{
-            if(res.status===200){
-                return res.json()
-            }else{
-                message.warn("get Avatar list Fail")
-            }
-        }).then(data=>{
-            setAvatarList(data.result)
-        })
-    }
+    
     React.useEffect(()=>{
         // getAvatarList()
     },[])
