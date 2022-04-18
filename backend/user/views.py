@@ -114,6 +114,8 @@ def avatar(request):
         # TODO Create A Single Avatar
         user = User.objects.get(uid=uid)
 
+        print(body_dict)
+
         avatar = Avatar.objects.create(
             title = body_dict.get('title', ''),
             src = body_dict.get('src', ''),
@@ -123,7 +125,7 @@ def avatar(request):
         avatar.owning_users.add(user)
         avatar.save()
 
-        return HttpResponse(status=404)
+        return HttpResponse(status=200)
 
 def collect_avatar(request):
     if request.method=='POST':
