@@ -182,7 +182,7 @@ var Shop = () =>{
     const createAvatar = (file) => new Promise(resolve => {
 
         if(!cover || !src || !title){
-            message.info("Fuck your mother!")
+            message.info("Cannot Upload, Missing Fileld!")
             return
         }
         let bodyData = {
