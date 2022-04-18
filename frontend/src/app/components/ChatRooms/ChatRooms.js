@@ -91,7 +91,7 @@ const ChatRooms = () =>{
             if(res.status===200){
                 return res.json()
             }else{
-                message.warn("Join Room Fail")
+                message.warn("get verse list Fail")
             }
         }).then(data=>{
             setVerseList(data.result)
@@ -105,7 +105,7 @@ const ChatRooms = () =>{
             if(res.status===200){
                 return res.json()
             }else{
-                message.warn("Join Room Fail")
+                message.warn("get personal verse list Fail")
             }
         }).then(data=>{
             setP_VerseList(data.result)

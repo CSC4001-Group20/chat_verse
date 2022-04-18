@@ -113,30 +113,58 @@ function ChatRoom() {
         scene.add(Sun);
     }
 
+    const loadSky = () => {
+        const pictures = ["/models/right.jpg", "/models/left.jpg", "/models/top.jpg", "/models/bottom.jpg", "/models/front.jpg", "/models/back.jpg"];
+        var textureCube = new THREE.CubeTextureLoader().load(pictures);
+        scene.background = textureCube;
+    }
+
+    const loadBase = () => {
+        let textureLoader = new THREE.TextureLoader()
+        let texture = textureLoader.load("/models/base.jpg")
+        // THREE.RepeatWrapping：平铺重复。
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping; 
+        // 设置重复次数
+        texture.repeat.set(100, 100)
+        let geometry = new THREE.PlaneGeometry(1000, 1000, 32);
+        let material = new THREE.MeshBasicMaterial({
+                map: texture,  // 使用纹理贴图
+                side: THREE.DoubleSide  // 两面都渲染
+            });
+        let plane = new THREE.Mesh(geometry, material);
+        plane.rotateX(Math.PI / 2)
+        scene.add(plane);
+    }
+
     const loadFBX = () => {
         var loader = new FBXLoader();
-        loader.load('models/bedroom.fbx', (object) => {
+        loader.load('/models/Cottage/Cottage_FREE.fbx', (object) => {
             console.log(object)
+            const list = [
+                '/models/Cottage/Cottage_Clean_Base_Color.png',
+                '/models/Cottage/Cottage_Clean_AO.png',
+                '/models/Cottage/Cottage_Clean_Height.png',
+                '/models/Cottage/Cottage_Clean_Metallic.png',
+                '/models/Cottage/Cottage_Clean_MetallicSmoothness.png',
+                '/models/Cottage/Cottage_Clean_Normal.png',
+                '/models/Cottage/Cottage_Clean_Roughness.png',
+                '/models/Cottage/Cottage_Clean_Opacity.png'
+            ]
             const textureLoader = new THREE.TextureLoader();
-            const textureNormal = textureLoader.load(
-                'models/Cottage_Clean_Base_Color.png'
-            );
             object.traverse( function ( child ) {
                 if ( child.isMesh ) {
+                    console.log(child)
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    child.material.map = textureNormal
+                    child.material.map = textureLoader.load(list[0])
+                    child.material.aoMap = textureLoader.load(list[1])
+                    child.material.alphaMap = textureLoader.load(list[2])
                 }
-                // if(child instanceof THREE.Mesh){
-                //     child.material.emissive=new THREE.Color(1,1,1);;
-                //     child.material.emissiveIntensity=1;
-                //     child.material.emissiveMap=child.material.map;
-                // }
             } );
             //缩放
-            object.scale.set(0.05,0.05,0.05);
+            object.scale.set(0.01,0.01,0.01);
             //位置
-            object.position.set(0,0,0);
+            object.position.set(-30,0,-30);
             scene.add( object ); 
         },null,(e)=>{console.log(e)})
     }
@@ -600,6 +628,8 @@ function ChatRoom() {
         if(scene){
             newLight()
             loadFBX()
+            loadBase()
+            loadSky()
             animate()
             loadVRM(uid);  
             initSocket()  
