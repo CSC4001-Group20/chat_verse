@@ -12,78 +12,68 @@
     flex-direction: column;
     font-size: 1rem;
     font-family: 'Cochin';
-    justify-content: center;
-    align-items: center;
 }
 
-.shop-window{
-    height: 75vh;
-    width: 55vw;
+.Shop-Up{
+    height: 30%;
+    width: 100%;
     display: flex;
     flex-direction: row;
-    /* background-color: rgba(255, 255, 255, 0.4); */
-    border-radius: 10px;
-    justify-content: space-around;
-    align-items: center;
 }
 
-.shop-choice-container{
-    height: 65vh;
-    width: 10vw;
-    justify-content: center;
+.Shop-My{
+    width: 50%;
+}
+
+.Shop-Upload{
+    width: 50%;
+}
+
+.Shop-Down{
+    padding-left: 80px;
+    height: 70%;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    /* background-color: rgba(255, 255, 255, 0.4); */
-    /* background-color: blue; */
-}
-.shop-choice-container>button{
-    width: 130px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.4);
-    color: white;
 }
 
-.shop-choice-container>button:hover{
-    transform: scale(1.1, 1.1);
-}
-
-.shop-items-container{
-    height: 65vh;
-    width: 50vw;
-    /* background-color: rgba(255, 255, 255, 0.4); */
-    border-radius: 10px;
-    box-shadow: 5px 5px 6px 4px rgba(0,0,0,0.3);
-}
-
-
-.shop-items-container{
+.Shop-Avatar-List{
+    padding-top: 10px;
+    margin-top: 50px;
+    height: 140px;
     display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    max-height: 65%;
-    width: 580px;
-    padding: 0px 0 20px 0;
+    flex-direction: row;
+    width: 90%;
+    overflow-x: scroll;
 }
 
-.ChatRooms-VerseList::-webkit-scrollbar {
-    display: none;
-}
+.Shop-Avatar-List::-webkit-scrollbar {     width: 10px; height: 10px;   } 
+.Shop-Avatar-List::-webkit-scrollbar-track {     background: rgb(179, 177, 177);     border-radius: 10px; } 
+.Shop-Avatar-List::-webkit-scrollbar-thumb {     background: rgb(136, 136, 136);     border-radius: 10px;   } 
+.Shop-Avatar-List::-webkit-scrollbar-thumb:hover {     background: rgb(100, 100, 100);     border-radius: 10px;   } 
+.Shop-Avatar-List::-webkit-scrollbar-thumb:active {     background: rgb(68, 68, 68);     border-radius: 10px;   }
 
-.ChatRooms-VerseList-Verse{
+.Avatar{
+    min-width: 100px;
+    height: 100px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
     box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    min-width: 480px;
-    min-height: max-content;
-    padding: 10px 10px 10px 30px;
-    margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.5);
-    align-self: center;
-    text-align: left;
+    margin-left: 100px;
 }
 
-
+.Avatar:hover{
+    min-width: 100px;
+    height: 100px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 5px 5px 3px 2px rgba(0,0,0,0.1);
+    margin-left: 100px;
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+    transition: all .2s ease-in-out;
+}
 
 .back{
     position: absolute; 
