@@ -44,6 +44,7 @@
     flex-direction: row;
     width: 90%;
     overflow-x: scroll;
+    padding-right: 100px;
 }
 
 .Shop-Avatar-List::-webkit-scrollbar {     width: 10px; height: 10px;   } 
