@@ -140,14 +140,18 @@ def collect_avatar(request):
         return HttpResponse(status=200)
 
 def use_avatar(request):
-    if request.method=='POST':
+    if request.method=='GET':
         uid = request.COOKIES.get('uid')
         # uid = 0 # TODO
-
-
-        avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
-        avatar = Avatar.objects.get(pk=avatar_id)
-        user.avatar.clear()
-        user.avatar.add(avatar)
-        return HttpResponse(status=200)
+        data_list = Avatar.objects.all()
+
+        data_list = data_list.filter(using_users=user)
+        
+        # avatar_id = 0 #TODO
+
+        avatar = data_list[0]
+        # user.avatar.clear()
+        # user.avatar.add(avatar)
+        res = JsonResponse({'result_title':avatar.title, 'result_src':avatar.src}, status=200)
+        return res
