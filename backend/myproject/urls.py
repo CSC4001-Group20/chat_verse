@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 from chat import views
+from .views import get_cos_credential
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('chat/', include('chat.urls')),
     path('user/', include('user.urls')),
     path('admin/', admin.site.urls),
+    path('user/get_cos_credential/', get_cos_credential),
 ]
