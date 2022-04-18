@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.http import HttpResponseRedirect
+from matplotlib.pyplot import get
 from .models import *
 from chat.models import *
 # Create your views here.
@@ -63,6 +64,9 @@ def sign(request):
         #except:
         #return HttpResponse("Sign Fail", status=403)
 
+
+
+
 def avatar(request):
     if request.method=='GET':
         if request.GET.get('uid'):
@@ -71,10 +75,23 @@ def avatar(request):
             avatar = user.avatar.all()[0]
             print(avatar)
             # TODO 将 Avatar内关键信息提取进 Avatar Info
+
+
+
+
+
+
             avatar_info = {}
-            return JsonResponse(avatar_info)
+            return JsonResponse({'result':avatar_info})
         elif request.GET.get('uid_collected'):
             uid = request.GET.get('uid_collected')
+            cookie_uid = request.COOKIES.get('uid')
+            if (uid != cookie_uid):
+                return HttpResponse("用户错误",status=404)
+
+
+
+
             user = User.objects.get(uid=uid)
             avatars = user.collected_avatar.all()
             # TODO  
@@ -84,13 +101,45 @@ def avatar(request):
             # Get All Avatars
             avatars = Avatar.objects.all()
             #TODO 
+            avatar_info =[]
+            for avatar in avatars:
+                result = {}
+                result['title'] = avatar.title
+                result['src'] = avatar.src
+                result['cteator'] = avatar.cteator
+                result['owning_users'] = avatar.owning_users
+                result['using_users'] = avatar.using_users
+                result['is_active'] = avatar.is_active
+                result['is_delete'] = avatar.is_delete
+                avatar_info.append(result)
+
+            return JsonResponse({'result':avatar_info})
+
     elif request.method=='POST':
+        uid = request.COOKIES.get('uid')
+        body_dict = json.loads(request.body.decode('utf-8'))
         # TODO Create A Single Avatar
-        return HttpResponse(status=200)
+        user = User.objects.get(uid=uid)
+
+        avatar = Avatar.objects.create(
+            title = body_dict.get('title', ''),
+            src = body_dict.get('src', ''),
+            creator = user,
+        )
+        avatar.save()
+        avatar.owning_users.add(user)
+        avatar.save()
+
+        return HttpResponse(status=404)
 
 def collect_avatar(request):
     if request.method=='POST':
-        uid = 0 # TODO
+        uid = request.COOKIES.get('uid')
+        # uid = 0 # TODO
+
+
+
+
         avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
         avatar = Avatar.objects.get(pk=avatar_id)
@@ -99,7 +148,10 @@ def collect_avatar(request):
 
 def use_avatar(request):
     if request.method=='POST':
-        uid = 0 # TODO
+        uid = request.COOKIES.get('uid')
+        # uid = 0 # TODO
+
+
         avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
         avatar = Avatar.objects.get(pk=avatar_id)
