@@ -31,7 +31,7 @@ var Sign = () =>{
                 }else if (response.status===403){
                     message.warn("Sign Fail! Try Again")
                 }else{
-                    message.warn("Unknown Error! Try Again!") 
+                    message.warn("User already exists") 
                 }
             })
         }
