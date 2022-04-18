@@ -197,6 +197,7 @@ var Shop = () =>{
         })
         .then(response=>{
             if (response.status===200) {
+                getUsingAvatar()
                 return response.json()
             } else if (response.status!==200){
                 message.error("提交失败？")
@@ -291,7 +292,7 @@ var Shop = () =>{
                     <div style={{width:"100%",display:"flex", flexDirection:"row",justifyContent:"center"}}>
                         {avatar&&
                             <div className='Avatar' style={{width:"100px", height:"100px", marginRight:"70px", marginTop:"20px"}}>
-                                {avatar.title}
+                                {/* {avatar.title} */}
                                 <img style={{width:"100%", height:"100%", borderRadius:"5px"}} src={avatar.cover} alt={avatar.title}></img>
                             </div>
                         }
@@ -308,13 +309,27 @@ var Shop = () =>{
                 <div className='Shop-Avatar-List'>
                     {avatar_list.map(a=>{
                         return(
-                            <div>
-                                <div>
+                            <div style={{marginLeft:"100px"}} onClick={()=>{
+                                fetch(`/user/use_avatar/`,{
+                                    method:'POST',
+                                    body:JSON.stringify({
+                                        uid: uid,
+                                        avatar_id: a.id,
+                                    })
+                                })
+                                .then(res=>{if(res.status===200){
+                                    getAvatarList()
+                                    getUsingAvatar()
+                                }})
+                            }}>
+                                {/* <div style={{width:"100%", textAlign:"center"}}>
                                     {a.title}
-                                </div>
+                                </div> */}
                                 <div className='Avatar'>
-                                    <img style={{width:"100%", height:"100%", borderRadius:"5px"}} src={avatar.cover} alt={avatar.title}></img>
+                                    <img style={{width:"100%", height:"100%", borderRadius:"5px"}} src={a.cover} alt={a.title}></img>
                                 </div>
+
+                                
                             </div>
                         )
                     })}

@@ -113,6 +113,7 @@ def avatar(request):
             avatar_info =[]
             for avatar in avatars:
                 result = {}
+                result['id'] = avatar.id
                 result['title'] = avatar.title
                 result['src'] = avatar.src
                 result['cover'] = avatar.cover
@@ -161,19 +162,15 @@ def collect_avatar(request):
         return HttpResponse(status=200)
 
 def use_avatar(request):
-    if request.method=='GET':
+    if request.method=='POST':
         body_dict = json.loads(request.body.decode('utf-8'))
-        uid = body_dict.get('dui', '')
-        password = body_dict.get('password', '')
-        # avatar_id = 0 #TODO
+        uid = body_dict.get('uid', '')
+        avatar_id = body_dict.get('avatar_id', '')
+
+        avatar = Avatar.objects.get(pk=avatar_id)
         user = User.objects.get(uid=uid)
-        data_list = Avatar.objects.all()
 
-        data_list = data_list.filter(using_users=user)
-        
-        
-
-        avatar = data_list[0]
         user.avatar.clear()
         user.avatar.add(avatar)
-        return res
+        user.save()
+        return HttpResponse(status=200)
