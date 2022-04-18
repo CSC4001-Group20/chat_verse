@@ -21,6 +21,7 @@ var Shop = () =>{
 
                 <div className='shop-choice-container'>
                     <button>Avatar</button>
+
                     <button>Mine</button>
                 </div>
                 <div className='shop-items-container'>
