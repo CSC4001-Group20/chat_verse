@@ -1,7 +1,7 @@
+import { ImportOutlined } from '@ant-design/icons'
 import { Input, Button, message } from 'antd'
 
 import React from 'react'
-import { API } from '../../App'
 import { setCookie } from '../Login/cookie'
 
 import './Shop.css'
@@ -68,17 +68,14 @@ const Shop = () =>{
     return(
         <div className='Shop'>
                 <button className='back' onClick={()=>
-                    { window.history.back(-1)}}>Back
+                    { window.history.back(-1)}}><ImportOutlined />
                 </button>
-
-                <h1>Avatar's Control</h1>
+                <h1>Avatar Shop</h1>
             <div className='shop-window'>
-
                 <div className='shop-choice-container'>
-                    <button onClick={()=>{getAvatarList();console.log("----");}}>Avatar</button>
-
-                    <button>Mine</button>
-                    <button onClick={()=>{}}>Upload</button>
+                    <Button type='primary' onClick={()=>{getAvatarList();console.log("----");}}>Avatar</Button>
+                    <Button type='primary'>Mine</Button>
+                    <Button type='primary' onClick={()=>{}}>Upload</Button>
                 </div>
                 <div className='shop-items-container'>
                     {avatar_list.map(verse=>{

@@ -21,10 +21,9 @@
     width: 55vw;
     display: flex;
     flex-direction: row;
-    opacity: 0.8;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    justify-content: center;
+    /* background-color: rgba(255, 255, 255, 0.4); */
+    border-radius: 10px;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -87,19 +86,24 @@
 
 
 .back{
+    position: absolute; 
     width: 50px;
     height: 50px;
-    left:30px;
+    right:30px;
     top:30px;
     border-radius: 100%;
-    position: absolute;
-    
+    border: solid white;
     font-family: "Cochin";
-    background-color: rgba(255, 255, 255, 0.5);
-    opacity:0.8;
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    font-size: large;
 }
 
 .back:hover{
     cursor: pointer;
     transform: scale(1.1, 1.1);
+    transition: all .2s ease-in-out;
 }
