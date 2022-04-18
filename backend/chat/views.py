@@ -1,6 +1,5 @@
 from cmath import exp
 from email.policy import HTTP
-from pyexpat import model
 from turtle import end_fill
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -22,6 +21,17 @@ def room(request, room_name):
     return render(request, 'chat/room.html', {
         'room_name': room_name
     })
+
+def initSocketCheck(request):
+    if request.method == 'GET':
+        uid = request.COOKIES.get('uid')
+        user = models.User.objects.get(uid=uid)
+        user_name = user.user_name
+        res = JsonResponse({'user_name':user_name}, status=200)
+        return res
+    else:
+        return HttpResponse(status=404)
+
 
 def createRoom(request):
     if request.method == 'GET':
@@ -96,7 +106,6 @@ def verse_list(request):
     # print(result)
     return JsonResponse({'result':result_rooms})
 
-
 def joinRoom(request):
     if (request.method == 'GET'):
         return HttpResponse("Cannot Join Chat Room", status=404)
@@ -111,7 +120,6 @@ def joinRoom(request):
 
         print(room_name)
         return HttpResponse(status=200)
-
 
 def deleteRoom(request):
     if (request.method == 'GET'):
