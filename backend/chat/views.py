@@ -68,9 +68,9 @@ def Manage_my_Verse(request):
         if room.host_user.uid == uid:
             result = {}
             result["title"] = data_list.title
-            result["members"] = data_list.members
+            result["n_members"] = data_list.members.count()
             result_rooms.append(room)
-    return result
+    return JsonResponse({'result':result_rooms})
 
 def verse_list(request):
     # print(123)
