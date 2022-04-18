@@ -1,5 +1,4 @@
 # chat/urls.py
-from tkinter.tix import Select
 from django.urls import path
 from . import views
 
