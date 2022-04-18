@@ -1,4 +1,4 @@
-from turtle import Turtle, ondrag
+
 from django.db import models
 
 from user.models import User
