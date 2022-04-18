@@ -13,7 +13,7 @@ export function getCookie(name)
 {
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
  
-    if(arr==document.cookie.match(reg))
+    if(arr=document.cookie.match(reg))
  
         return unescape(arr[2]);
     else
@@ -22,7 +22,50 @@ export function getCookie(name)
 
 var Shop = () =>{
     
-    const createAvatar = (file) => new Promise(resolve => {
+    const [ avatar_list, setAvatarList ] = React.useState([])
+    const [ avatar, setAvatar ] = React.useState(null)
+    const [ title, setTitle ] = React.useState("")
+    const [ uid, setUid ] = React.useState(undefined)
+
+    const [ src, setAvatarSrc ] = React.useState("")
+    const [ cover, setAvatarCover ] = React.useState("")
+
+    
+
+
+    //TODO
+    const getAvatarList = ()=>{
+        setCookie("update",new Date().toUTCString())
+        fetch(`/user/avatar/`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
+            }else{
+                message.warn("get Avatar list Fail")
+            }
+        }).then(data=>{
+            setAvatarList(data.result)
+        })
+    }
+
+    // //TODO
+    const getUsingAvatar = ()=>{
+        setCookie("update",new Date().toUTCString())
+        fetch(`/user/avatar/?uid=${uid}`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
+            }else{
+                message.warn("get Avatar list Fail")
+            }
+        }).then(data=>{
+            setAvatar(data.result)
+        }) 
+    }
+
+    const uploadVRM = (file) => new Promise(resolve => {
         if(file){
             var timestamp = new Date().getTime();
             var img_id = "Avatar-VRM-"+timestamp
@@ -65,23 +108,7 @@ var Shop = () =>{
                     console.log(err || "http://"+data.Location);
                     if(data){
                         let url = "http://"+data.Location;
-                        //resolve("http://"+data.Location);
-                        let bodyData={
-                            title:'Avatar-'+title, //TODO
-                            src:url,
-                        }
-                        console.log(url)
-                        fetch("/user/avatar/",{
-                            method:"POST",
-                            body:JSON.stringify(bodyData)
-                        })
-                        .then(response=>{
-                            if (response.status===200) {
-                                return response.json()
-                            } else if (response.status!==200){
-                                message.error("提交失败？")
-                            }
-                        })
+                        setAvatarSrc(url)
                     }else{
                         //当上传失败时
                     }
@@ -95,49 +122,100 @@ var Shop = () =>{
         }
     })
 
-    const [ avatar_list, setAvatarList ] = React.useState([])
-    const [ avatar, setavatar ] = React.useState(null)
-    const [ title, setAvatarTitle ] = React.useState("")
-    const [ src, setAvatarSrc ] = React.useState("")
+    const uploadCover = (file) => new Promise(resolve => {
+        if(file){
+            var timestamp = new Date().getTime();
+            var img_id = "Avatar-VRM-"+timestamp
+            var Bucket = 'ciwk-1301216399';
+            var Region = 'ap-guangzhou';     /* 存储桶所在地域，必须字段 */
+            console.log(file)
 
-
-    //TODO
-    const getAvatarList = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/user/avatar/`,{
-            method:'GET',
-        }).then(res=>{
-            if(res.status===200){
-                return res.json()
+            var COS = require('cos-js-sdk-v5');
+            
+            // 初始化实例
+            var cos = new COS({
+                getAuthorization: function (options, callback) {
+                    fetch('/user/get_cos_credential')
+                    .then(res => res.json())
+                    .then(data => {
+                        var credentials = data && data.credentials;
+                        if (!data || !credentials) return console.error('credentials invalid');
+                        callback({
+                            TmpSecretId: credentials.tmpSecretId,
+                            TmpSecretKey: credentials.tmpSecretKey,
+                            XCosSecurityToken: credentials.sessionToken,
+                            StartTime: data.startTime,
+                            ExpiredTime: data.expiredTime,
+                        });
+                    })
+                }
+            });
+            if (cos){
+                cos.putObject({
+                    Bucket: Bucket, /* 必须 */
+                    Region: Region,     /* 存储桶所在地域，必须字段 */
+                    Key: img_id,//result.key,              /* 必须 */
+                    StorageClass: 'STANDARD',
+                    Body: file, // 上传文件对象
+                    onProgress: function (progressData) {
+                        console.log("Progress: ",JSON.stringify(progressData));
+                        message.loading("Progress: "+progressData.percent)
+                    }
+                }, function(err, data) {
+                    console.log(err || "http://"+data.Location);
+                    if(data){
+                        let url = "http://"+data.Location;
+                        setAvatarCover(url)
+                    }else{
+                        //当上传失败时
+                    }
+                })
             }else{
-                message.warn("get Avatar list Fail")
+                //当建立cos对象失败时
+                console.log("Fail")
             }
-        }).then(data=>{
-            setAvatarList(data.result)
+        }else{
+            resolve(false)
+        }
+    })
+
+    const createAvatar = (file) => new Promise(resolve => {
+
+        if(!cover || !src || !title){
+            message.info("你他妈缺啊")
+            return
+        }
+        let bodyData = {
+            cover,
+            src,
+            title,
+        }
+
+        fetch("/user/avatar/",{
+            method:"POST",
+            body:JSON.stringify(bodyData)
         })
-    }
-
-    //TODO
-    const getMineList = ()=>{
-        setCookie("update",new Date().toUTCString())
-        fetch(`/user/avatar/`,{
-            method:'GET',
-        }).then(res=>{
-            if(res.status===200){
-                return res.json()
-            }else{
-                message.warn("get Avatar list Fail")
+        .then(response=>{
+            if (response.status===200) {
+                return response.json()
+            } else if (response.status!==200){
+                message.error("提交失败？")
             }
-        }).then(data=>{
-            setAvatarList(data.result)
-        }) 
-    }
+        })
+    })
 
     //TODO
-    
     React.useEffect(()=>{
-        // getAvatarList()
+        console.log(getCookie('uid'))
+        setUid(getCookie('uid'))
     },[])
+
+    React.useEffect(()=>{
+        if(uid){
+            getAvatarList()
+            getUsingAvatar()
+        }
+    },[uid])
 
 
     return(
@@ -160,7 +238,29 @@ var Shop = () =>{
                             borderRadius: "5px",
                             borderTopRightRadius:"0px",
                             borderBottomRightRadius:"0px",
-                        }} value={avatar} onChange={e=>{setavatar(e.target.value)}}/>
+                        }} value={title} onChange={e=>{setTitle(e.target.value)}}/>
+
+                        <Upload
+                            showUploadList={false}
+                            action={uploadVRM}
+                        >
+                            <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
+                                onClick={uploadVRM}
+                            >
+                                {src?'VRM File OK':'Upload VRM'}
+                            </Button>
+                        </Upload>
+
+                        <Upload
+                            showUploadList={false}
+                            action={uploadCover}
+                        >
+                            <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
+                                onClick={uploadCover}
+                            >
+                                {cover?'Cover Image OK':'Upload Image'}
+                            </Button>
+                        </Upload>
 
                         <Button style={{
                             backgroundColor:"blueviolet",
@@ -179,9 +279,12 @@ var Shop = () =>{
                         My Avatar
                     </div>
                     <div style={{width:"100%",display:"flex", flexDirection:"row",justifyContent:"center"}}>
-                        <div className='Avatar' style={{width:"100px", height:"100px", marginRight:"70px", marginTop:"20px"}}>
-                        
-                        </div>
+                        {avatar&&
+                            <div className='Avatar' style={{width:"100px", height:"100px", marginRight:"70px", marginTop:"20px"}}>
+                                {avatar.title}
+                                <img src={avatar.cover} alt={avatar.title}></img>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -193,10 +296,10 @@ var Shop = () =>{
                     Select Avatar
                 </div> 
                 <div className='Shop-Avatar-List'>
-                    {[1,1,1,1,1,1,1,1,1,1,1].map(a=>{
+                    {avatar_list.map(a=>{
                         return(
                             <div className='Avatar'>
-                                
+                                {a.title}
                             </div>
                         )
                     })}

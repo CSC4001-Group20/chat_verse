@@ -72,25 +72,40 @@ def avatar(request):
         if request.GET.get('uid'):
             uid = request.GET.get('uid')
             user = User.objects.get(uid=uid)
-            avatar = user.avatar.all()[0]
+            try:
+                avatar = user.avatar.all()[0]
+            except:
+                try:
+                    avatar = Avatar.objects.all()[0]
+                    user.avatar.add(avatar)
+                except:
+                    avatar = Avatar.objects.get_or_create(
+                        title='Default Avatar',
+                        src="https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2FAshtra.vrm?v=1630342336981",
+                        cover='https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/Screen%20Shot%202022-04-18%20at%208.46.20%20PM.png'
+                    )
+                    avatar.save()
+                    user.avatar.add(avatar)
+                    user.save()
             print(avatar)
-            # TODO 将 Avatar内关键信息提取进 Avatar Info
-
-
-            avatar_info = {}
+            avatar_info = {
+                'title':avatar.title,
+                'src':avatar.src,
+                'cover':avatar.cover
+            }
             return JsonResponse({'result':avatar_info})
-        elif request.GET.get('uid_collected'):
-            uid = request.GET.get('uid_collected')
-            cookie_uid = request.COOKIES.get('uid')
-            if (uid != cookie_uid):
-                return HttpResponse("用户错误",status=404)
+        # elif request.GET.get('uid_collected'):
+        #     uid = request.GET.get('uid_collected')
+        #     cookie_uid = request.COOKIES.get('uid')
+        #     if (uid != cookie_uid):
+        #         return HttpResponse("用户错误",status=404)
 
 
-            user = User.objects.get(uid=uid)
-            avatars = user.collected_avatar.all()
-            # TODO  
-            avatar_info_list = []
-            return JsonResponse({'result':avatar_info})
+        #     user = User.objects.get(uid=uid)
+        #     avatars = user.collected_avatar.all()
+        #     # TODO  
+        #     avatar_info_list = []
+        #     return JsonResponse({'result':avatar_info})
         else:
             # Get All Avatars
             avatars = Avatar.objects.all()
@@ -100,6 +115,7 @@ def avatar(request):
                 result = {}
                 result['title'] = avatar.title
                 result['src'] = avatar.src
+                result['cover'] = avatar.cover
                 result['creator'] = avatar.creator.user_name
                 result['n_owning_users'] = avatar.owning_users.count()
                 result['n_using_users'] = avatar.using_users.count()
@@ -123,7 +139,9 @@ def avatar(request):
             creator = user,
         )
         avatar.save()
-        avatar.owning_users.add(user)
+        # avatar.owning_users.add(user)
+        user.avatar.clear()
+        user.avatar.add(avatar)
         avatar.save()
 
         return HttpResponse(status=200)
