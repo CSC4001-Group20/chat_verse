@@ -100,10 +100,9 @@ def avatar(request):
                 result = {}
                 result['title'] = avatar.title
                 result['src'] = avatar.src
-                result['cteator'] = avatar.cteator
-                result['owning_users'] = avatar.owning_users
-                result['using_users'] = avatar.using_users
-                result['is_active'] = avatar.is_active
+                result['creator'] = avatar.creator.user_name
+                result['n_owning_users'] = avatar.owning_users.count()
+                result['n_using_users'] = avatar.using_users.count()
                 result['is_delete'] = avatar.is_delete
                 avatar_info.append(result)
 
