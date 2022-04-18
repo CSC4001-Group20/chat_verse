@@ -70,12 +70,12 @@ var Shop = () =>{
             var timestamp = new Date().getTime();
             var img_id = "Avatar-VRM-"+timestamp
             var Bucket = 'ciwk-1301216399';
-            var Region = 'ap-guangzhou';     /* 存储桶所在地域，必须字段 */
+            var Region = 'ap-guangzhou';     /* store the location,must be in string */
             console.log(file)
 
             var COS = require('cos-js-sdk-v5');
             
-            // 初始化实例
+            // init instance
             var cos = new COS({
                 getAuthorization: function (options, callback) {
                     fetch('/user/get_cos_credential')
@@ -95,11 +95,11 @@ var Shop = () =>{
             });
             if (cos){
                 cos.putObject({
-                    Bucket: Bucket, /* 必须 */
-                    Region: Region,     /* 存储桶所在地域，必须字段 */
-                    Key: img_id,//result.key,              /* 必须 */
+                    Bucket: Bucket, /* must */
+                    Region: Region,     /* store the location, mudt be in string */
+                    Key: img_id,//result.key,              /* must */
                     StorageClass: 'STANDARD',
-                    Body: file, // 上传文件对象
+                    Body: file, // upload the object
                     onProgress: function (progressData) {
                         console.log("Progress: ",JSON.stringify(progressData));
                         message.loading("Progress: "+progressData.percent)
@@ -110,11 +110,11 @@ var Shop = () =>{
                         let url = "http://"+data.Location;
                         setAvatarSrc(url)
                     }else{
-                        //当上传失败时
+                        //when upload failed
                     }
                 })
             }else{
-                //当建立cos对象失败时
+                //when construct cos object failed
                 console.log("Fail")
             }
         }else{
@@ -127,12 +127,12 @@ var Shop = () =>{
             var timestamp = new Date().getTime();
             var img_id = "Avatar-VRM-"+timestamp
             var Bucket = 'ciwk-1301216399';
-            var Region = 'ap-guangzhou';     /* 存储桶所在地域，必须字段 */
+            var Region = 'ap-guangzhou';     /* store the location, mudt be in string */
             console.log(file)
 
             var COS = require('cos-js-sdk-v5');
             
-            // 初始化实例
+            // init indtance
             var cos = new COS({
                 getAuthorization: function (options, callback) {
                     fetch('/user/get_cos_credential')
@@ -152,11 +152,11 @@ var Shop = () =>{
             });
             if (cos){
                 cos.putObject({
-                    Bucket: Bucket, /* 必须 */
-                    Region: Region,     /* 存储桶所在地域，必须字段 */
-                    Key: img_id,//result.key,              /* 必须 */
+                    Bucket: Bucket, /* must */
+                    Region: Region,    /* store the location, mudt be in string */
+                    Key: img_id,//result.key,              /* must */
                     StorageClass: 'STANDARD',
-                    Body: file, // 上传文件对象
+                    Body: file, // upload file obkect
                     onProgress: function (progressData) {
                         console.log("Progress: ",JSON.stringify(progressData));
                         message.loading("Progress: "+progressData.percent)
@@ -167,11 +167,11 @@ var Shop = () =>{
                         let url = "http://"+data.Location;
                         setAvatarCover(url)
                     }else{
-                        //当上传失败时
+                        //when upload failed
                     }
                 })
             }else{
-                //当建立cos对象失败时
+                //when construct cos object failed
                 console.log("Fail")
             }
         }else{
@@ -182,7 +182,7 @@ var Shop = () =>{
     const createAvatar = (file) => new Promise(resolve => {
 
         if(!cover || !src || !title){
-            message.info("你他妈缺啊")
+            message.info("Fuck your mother!")
             return
         }
         let bodyData = {
@@ -200,7 +200,7 @@ var Shop = () =>{
                 getUsingAvatar()
                 // return response.json()
             } else if (response.status!==200){
-                message.error("提交失败？")
+                message.error("Submit failed")
             }
         })
     })

@@ -19,29 +19,29 @@
 
  
 <script>
-        // 获取房间名
+        // get room_name
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
  
-        // 根据roomName拼接websocket请求地址，建立长连接
-        //  请求url地址为/ws/chat/<room_name>/
+        // According to roomName, splicing websocket request address，construct long connection
+        //  request url address of /ws/chat/<room_name>/
         const wss_protocol = (window.location.protocol == 'https:') ? 'wss://': 'ws://';
         const chatSocket = new WebSocket(
              wss_protocol + window.location.host + '/ws/motion/'  + roomName + '/'
              );
  
-        // 建立websocket连接时触发此方法，展示欢迎提示
+        // triggered when websocket connected，showed the message of welcome
         chatSocket.onopen = function(e) {
-             document.querySelector('#chat-log').value += ('[公告]欢迎来到' + roomName + '讨论群。请文明发言!\n')
+             document.querySelector('#chat-log').value += ('[Notification]Welcome to' + roomName + 'chat group。Please be civilized!\n')
          }
  
-        // 从后台接收到数据时触发此方法
-        // 接收到后台数据后对其解析，并加入到聊天记录chat-log
+        // This method is triggered when data is received from the backend
+        // After receiving the backend data, analyze it and add it to the chat record chat-log
          chatSocket.onmessage = function(e) {
              const data = JSON.parse(e.data);
              document.querySelector('#chat-log').value += (JSON.stringify(data) + '\n');
          };
  
-         // websocket连接断开时触发此方法
+         // websocket. This method is triggered when the connection is disconnected
          chatSocket.onclose = function(e) {
              console.error('Chat socket closed unexpectedly');
          };
@@ -53,12 +53,12 @@
              }
          };
          
-         // 每当点击发送消息按钮，通过websocket的send方法向后台发送信息。
+         // Whenever you click the send message button, you can send information to the background through the send method of websocket.
          document.querySelector('#chat-message-submit').onclick = function(e) {
              const messageInputDom = document.querySelector('#chat-message-input');
              const message = messageInputDom.value;
              
-             //注意这里:先把文本数据转成json格式,然后调用send方法发送。
+             //Base note: first convert text data into JSON format and then send it by calling send method.
              chatSocket.send(JSON.stringify({
                  'message': message
              }));

@@ -26,7 +26,7 @@ var flag = false;
 
 const theta = 2*Math.PI/9;
 
-var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下载
+var uids_loading = [] // It is used to record the players who are downloading VRM to avoid repeated downloading
 
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
@@ -67,7 +67,7 @@ function ChatRoom() {
     }
 
     const getUid = () => {
-        // 从 URL Params 获取 roon name
+        // get room_name from URL Params
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         uid = urlParams.get('uid');
@@ -113,22 +113,22 @@ function ChatRoom() {
         let Ambient = new THREE.AmbientLight(0x404040, 2);
         scene.add(Ambient);
 
-        //给场景添加太阳光
+        //add sunlight to the scene
         let Sun = new THREE.DirectionalLight(0xffffff, 1);
         Sun.position.set(1, 1, 1);
         Sun.castShadow = true;
 
-        //设置相机渲染面积
+        //set the render area of camera
         Sun.shadow.camera.near = 0.01;
         Sun.shadow.camera.far = 60;
         Sun.shadow.camera.top = 22;
         Sun.shadow.camera.bottom = -22;
         Sun.shadow.camera.left = -35;
         Sun.shadow.camera.right = 35;
-        // //设置阴影分辨率
+        // //set Shadow resolution
         Sun.shadow.mapSize.width = 2048;  // default
         Sun.shadow.mapSize.height = 2048; // default
-        //阴影限制
+        //Shadow limit
         Sun.shadow.radius = 1;
         scene.add(Sun);
     }
@@ -142,14 +142,14 @@ function ChatRoom() {
     const loadBase = () => {
         let textureLoader = new THREE.TextureLoader()
         let texture = textureLoader.load("/models/base.jpg")
-        // THREE.RepeatWrapping：平铺重复。
+        // THREE.RepeatWrapping：Tile repeat.
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping; 
-        // 设置重复次数
+        // set the time for repeat
         texture.repeat.set(100, 100)
         let geometry = new THREE.PlaneGeometry(1000, 1000, 32);
         let material = new THREE.MeshBasicMaterial({
-                map: texture,  // 使用纹理贴图
-                side: THREE.DoubleSide  // 两面都渲染
+                map: texture,  // Using texture maps
+                side: THREE.DoubleSide  // Render both sides
             });
         let plane = new THREE.Mesh(geometry, material);
         plane.rotateX(Math.PI / 2)
@@ -181,9 +181,9 @@ function ChatRoom() {
                     child.material.alphaMap = textureLoader.load(list[2])
                 }
             } );
-            //缩放
+            //zoom
             object.scale.set(0.01,0.01,0.01);
-            //位置
+            //location
             object.position.set(-30,0,-30);
             scene.add( object ); 
         },null,(e)=>{console.log(e)})
@@ -195,7 +195,7 @@ function ChatRoom() {
         renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
 
-        // 下面这行可以禁用THREE的交互
+        // The following line can disable the interaction of three
         // renderer.domElement.style.pointerEvents = "none" 
         orbitCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         orbitCamera.position.set(0.0, 1.4, 0.7);
@@ -224,8 +224,8 @@ function ChatRoom() {
         loader.crossOrigin = "anonymous";
 
         getUsingAvatar(_uid, (avatar)=>{
-            // TODO: 不同的UID从不同的URL获取
-            // 需要查询Avatar数据库
+            // Different UIDs are obtained from different URLs
+            // Need to query avatar database
             loader.load(
                 (avatar&&avatar.src)?avatar.src:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
         
@@ -267,7 +267,7 @@ function ChatRoom() {
     }
 
     /* SHOULD DEBUG */
-    // 不想思考角度换算了，谁来思考一下
+
     const initControl = () => {
 
         if(my_idx!==undefined){
@@ -567,7 +567,7 @@ function ChatRoom() {
 
         
 
-        // 移动角色位置
+        // remove the location of avatar
         VRMs[idx].scene.position.x = transform.x
         VRMs[idx].scene.position.z = transform.z
     }
@@ -591,7 +591,7 @@ function ChatRoom() {
     /* Network (Socket) */
 
     const initSocket = () => {
-        // 从 URL Params 获取 roon name
+        // get room_name from URL Params
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const roomName = urlParams.get('roomname');
@@ -599,13 +599,13 @@ function ChatRoom() {
         motion_socket = new WebSocket(
             wss_protocol + window.location.host + '/ws/motion/'  + roomName + '/'
         );
-        // 建立webchat_socket连接时触发此方法
+        // Triggered when connect webchat_socket
         motion_socket.onopen = function(e) {
             // Do nothing
             flag = true;
         }
 
-        // 从后台接收到数据时触发此方法
+        // Trigger when receive the data from backend
         motion_socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             let {uid:_uid} = data;
@@ -614,7 +614,7 @@ function ChatRoom() {
                 applyMovements(data, idx)
             }else{
                 if(!(uids_loading.indexOf(_uid)>=0)){
-                    // 收到一个未知用户的信号
+                    // receive an unknown sign
                     console.log("cannot found uid", _uid, uids_loading)
                     loadVRM(_uid)
                 }

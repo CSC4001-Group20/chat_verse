@@ -16,7 +16,7 @@ const ChatBar = () => {
     const [ messages, setMessages ] = React.useState([])
 
     const initSocket = () => {
-        // 从 URL Params 获取 roon name
+        // getroom_name from URL Params
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const roomName = urlParams.get('roomname');
@@ -26,12 +26,12 @@ const ChatBar = () => {
         );
 
         console.log(wss_protocol + window.location.host + '/ws/chat/'  + roomName + '/')
-        // 建立webchat_socket连接时触发此方法
+        // Establish webchat_ This method is triggered when a socket is connected
         chat_socket.onopen = function(e) {
             // Do nothing
         }
 
-        // 从后台接收到数据时触发此方法
+        // This method is triggered when data is received from the background
         chat_socket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             console.log(messages)
@@ -51,7 +51,7 @@ const ChatBar = () => {
             timeout = setTimeout(()=>{
                 setMessages([])
                 clearTimeout(timeout)
-            },5000,idx_max) // 5秒后全部消息消失
+            },5000,idx_max) // All message disappears after 5 seconds
             
         };
         
