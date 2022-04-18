@@ -140,14 +140,15 @@ const ChatRooms = () =>{
                             borderRadius: "5px",
                             borderTopRightRadius:"0px",
                             borderBottomRightRadius:"0px",
-                        }}/>
+                        }} value={createRoomName} onChange={e=>{setCreateRoomName(e.target.value)}}/>
+
                         <Button style={{
                             backgroundColor:"blueviolet",
                             borderColor:"blueviolet",
                             borderRadius: "5px",
                             borderTopLeftRadius:"0px",
                             borderBottomLeftRadius:"0px",
-                        }} type="primary">Create</Button>
+                        }} type="primary" onClick={()=>{createRoom()}}>Create</Button>
                     </div>
                 </div>
                 <div style={{
@@ -170,7 +171,7 @@ const ChatRooms = () =>{
                                     <div><SendOutlined style={{}}/>&nbsp;&nbsp;&nbsp;{verse.title}</div>
                                 </div>
                                 <div className='ChatRooms-VerseList-Verse-content-2'>
-                                    <div><RestOutlined onClick={()=>{deleteRoom(verse.room_name);}}/>Delete</div>
+                                    <div onClick={()=>{deleteRoom(verse.room_name);}}><RestOutlined />Delete</div>
                                 </div>
                             </div>
                         )

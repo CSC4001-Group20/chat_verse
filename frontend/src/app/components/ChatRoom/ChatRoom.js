@@ -661,15 +661,15 @@ function ChatRoom() {
                 }}
             ></video>  
 
-            <button className="quit_button" style={{ position:"absolute", left:30,top:30,}} 
+            <button className="quit_button" style={{ position:"absolute", right:30,top:30,}} 
                 onClick={()=>{window.location.href="/chatrooms"}}>
                 <ImportOutlined />
             </button>
 
-            {/* <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
+            <button className="shop_button" style={{ position:"absolute", right:30,top:30,}} 
             onClick={()=>{window.location.href="/shop"}}>
                 <ShoppingCartOutlined />
-            </button> */}
+            </button>
 
 
             <ChatBar />     

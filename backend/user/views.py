@@ -130,12 +130,14 @@ def collect_avatar(request):
     if request.method=='POST':
         uid = request.COOKIES.get('uid')
         # uid = 0 # TODO
+        body_dict = json.loads(request.body.decode('utf-8'))
+        avatar_title = body_dict.get('title', '')
 
-
-        avatar_id = 0 #TODO
+        # avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
-        avatar = Avatar.objects.get(pk=avatar_id)
+        avatar = Avatar.objects.get(title=avatar_title)
         user.collected_avatar.add(avatar)
+        user.save()
         return HttpResponse(status=200)
 
 def use_avatar(request):

@@ -6,7 +6,7 @@ body::-webkit-scrollbar{
     position: absolute; 
     width: 50px;
     height: 50px;
-    left:30px !important;
+    right:30px;
     top:70px;
     border-radius: 100%;
     border: solid white;
@@ -18,12 +18,13 @@ body::-webkit-scrollbar{
     background-color: rgb(255, 255, 255);
     font-size: large;
 }
+
 .quit_button:hover{
     cursor: pointer;
     position: absolute; 
     width: 50px;
     height: 50px;
-    left:30px !important;
+    right:30px;
     top:70px;
     border-radius: 100%;
     border: solid white;
