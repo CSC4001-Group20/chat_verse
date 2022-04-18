@@ -23,9 +23,7 @@ var uids_loading = [] // 用于记录正在下载VRM的玩家，避免重复下�
 
 var oldLookTarget = new THREE.Euler();
 const clock = new THREE.Clock();
-const renderer =  new THREE.WebGLRenderer({
-    // canvas: document.querySelector("#cc"), antialias: true, 
-    alpha:true});
+const renderer =  new THREE.WebGLRenderer({alpha:true});
 var orbitCamera;
 var orbitControls
 
@@ -85,58 +83,14 @@ function ChatRoom() {
     }
 
     const newLight = () => {
-        // const light = new THREE.DirectionalLight(0xffffff);
-        // light.position.set(1.0, 1.0, 1.0).normalize();
-        // scene.add(light);
-        let Ambient = new THREE.AmbientLight(0x404040, 2);
-        scene.add(Ambient);
-
-        //给场景添加太阳光
-        let Sun = new THREE.DirectionalLight(0xffffff, 1);
-        Sun.position.set(1, 1, 1);
-        Sun.castShadow = true;
-
-        //设置相机渲染面积
-        Sun.shadow.camera.near = 0.01;
-        Sun.shadow.camera.far = 60;
-        Sun.shadow.camera.top = 22;
-        Sun.shadow.camera.bottom = -22;
-        Sun.shadow.camera.left = -35;
-        Sun.shadow.camera.right = 35;
-        // //设置阴影分辨率
-        Sun.shadow.mapSize.width = 2048;  // default
-        Sun.shadow.mapSize.height = 2048; // default
-        //阴影限制
-        Sun.shadow.radius = 1;
-        scene.add(Sun);
-    }
-
-    const loadFBX = () => {
+        const light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(1.0, 1.0, 1.0).normalize();
         var loader = new FBXLoader();
-        loader.load('models/bedroom.fbx', (object) => {
-            console.log(object)
-            const textureLoader = new THREE.TextureLoader();
-            const textureNormal = textureLoader.load(
-                'models/Cottage_Clean_Base_Color.png'
-            );
-            object.traverse( function ( child ) {
-                if ( child.isMesh ) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                    child.material.map = textureNormal
-                }
-                // if(child instanceof THREE.Mesh){
-                //     child.material.emissive=new THREE.Color(1,1,1);;
-                //     child.material.emissiveIntensity=1;
-                //     child.material.emissiveMap=child.material.map;
-                // }
-            } );
-            //缩放
-            object.scale.set(0.05,0.05,0.05);
-            //位置
-            object.position.set(0,0,0);
-            scene.add( object ); 
-        },null,(e)=>{console.log(e)})
+        loader.load( './InteriorTest.fbx', function ( object ) {
+            object.scale.set(0.01,0.01,0.01);//修改模型缩放系数(x,y,z)
+            scene.add( object );
+        } )
+        scene.add(light);
     }
 
     const initRenderingPipeline = () => {
@@ -597,7 +551,6 @@ function ChatRoom() {
     React.useEffect(()=>{
         if(scene){
             newLight()
-            loadFBX()
             animate()
             loadVRM(uid);  
             initSocket()  
