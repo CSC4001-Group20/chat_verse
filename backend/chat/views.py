@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 # Create your views here.
 import json
 import secrets
+
 from . import models
 
 
@@ -59,7 +60,7 @@ def createRoom(request):
         #     return HttpResponse("Create ChatRoom Fail", status=403)
 
 def verse_list(request):
-
+    
     uid = request.COOKIES.get('uid')
     filter_uid = request.GET.get('filter_uid')=='true'
 
@@ -89,7 +90,10 @@ def joinRoom(request):
         body_dict = json.loads(request.body.decode('utf-8'))
         room_name = body_dict.get('room_name', '')
         chat_room = models.ChatRoom.objects.get(room_name=room_name)
-        chat_room.members.add()
+        
+        uid = request.COOKIES.get('uid')
+        user = models.User.objects.get(uid=uid)
+        chat_room.members.add(user)
 
         print(room_name)
         return HttpResponse(status=200)

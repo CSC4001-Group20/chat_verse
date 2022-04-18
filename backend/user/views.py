@@ -83,9 +83,10 @@ def avatar(request):
         else:
             # Get All Avatars
             avatars = Avatar.objects.all()
+            #TODO 
     elif request.method=='POST':
         # TODO Create A Single Avatar
-        return HttpResponse()
+        return HttpResponse(status=200)
 
 def collect_avatar(request):
     if request.method=='POST':
