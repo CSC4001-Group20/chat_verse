@@ -29,7 +29,7 @@ var Sign = () =>{
                         window.location.href="/login"
                     }, 1000);
                 }else if (response.status===403){
-                    message.warn("Sign Fail! Try Again")
+                    message.warn("User Already Exist, Please Change Your Username")
                 }else{
                     message.warn("Unknown Error! Try Again!") 
                 }

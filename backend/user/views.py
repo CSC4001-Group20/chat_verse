@@ -1,4 +1,5 @@
 
+from cmath import exp
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -20,7 +21,7 @@ def login(request):
         try:
             user = models.User.objects.get(user_name=username,password=password)
             res = HttpResponse("Successfully Login",status=200)
-            token = secrets.token_bytes(16)
+            token = secrets.token_urlsafe(16)
             print('用户登录, 用户名称', user.user_name, 'new token=',token)
             res.set_cookie('token',token)
             res.set_cookie('uid', user.uid)
@@ -46,6 +47,12 @@ def sign(request):
             return HttpResponse("password is not empty", status=405)
     
         print("username", username, "password", password)
+
+        try:
+            user1 = models.User.objects.get(user_name=username)
+            return HttpResponse("Successfully Sign", status=403)
+        except:
+            pass
 
         # 开始注册功能
         #try:

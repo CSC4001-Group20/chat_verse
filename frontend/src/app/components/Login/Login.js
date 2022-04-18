@@ -37,24 +37,6 @@ var Login = () =>{
 
    
 
-    const manage_my_verse_enter = (title)=>{
-        setCookie("update",new Date().toUTCString())
-            fetch(`/chat/startRoom/`,{
-                method:'POST',
-                body:JSON.stringify({
-                    title:title
-                })
-            }).then(res=>{
-                if(res.status===200){
-                    message.success("Succfssfully Start Room")
-                    setTimeout(() => {
-                        window.location.href="/chatroom/?roomNmae="+title
-                    }, 1000);
-                }else{
-                    message.warn("Start Room Fail")
-                }
-            }).then(data=>{})
-    }
 
     return(
         <div className='Login'>
