@@ -15,6 +15,7 @@ import { PoweroffOutlined } from '@ant-design/icons';
 import { ImportOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { message } from 'antd';
+import { setCookie } from '../Login/cookie';
 
 
 var VRMs = [];
@@ -49,25 +50,19 @@ function ChatRoom() {
     
     /* Initalizing Functions */
 
-    const getAvatar = () =>{
-        fetch("/user/avatar", {
-            method: "GET",
-        }).then(resp=>{
-            if(resp.status===200){
-                return resp.json
+    const getUsingAvatar = ()=>{
+        setCookie("update",new Date().toUTCString())
+        fetch(`/user/avatar/?uid=${uid}`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
             }else{
-                message.error("Avatar Error!")
+                message.warn("get Avatar list Fail")
             }
         }).then(data=>{
-            
-        })
-    }
-
-    const getUid = () => {
-        // 从 URL Params 获取 roon name
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        uid = urlParams.get('uid');
+            setAvatar(data.result)
+        }) 
     }
 
     const newVideoElement = () => setVideoElement(document.querySelector(".input_video"));
@@ -223,7 +218,7 @@ function ChatRoom() {
         // TODO: 不同的UID从不同的URL获取
         // 需要查询Avatar数据库
         loader.load(
-            avatar?avatar:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
+            avatar?avatar.src:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
     
             gltf => {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
