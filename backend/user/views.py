@@ -79,7 +79,7 @@ def avatar(request):
                     avatar = Avatar.objects.all()[0]
                     user.avatar.add(avatar)
                 except:
-                    avatar = Avatar.objects.get_or_create(
+                    avatar, c = Avatar.objects.get_or_create(
                         title='Default Avatar',
                         src="https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2FAshtra.vrm?v=1630342336981",
                         cover='https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/Screen%20Shot%202022-04-18%20at%208.46.20%20PM.png'
@@ -117,7 +117,7 @@ def avatar(request):
                 result['title'] = avatar.title
                 result['src'] = avatar.src
                 result['cover'] = avatar.cover
-                result['creator'] = avatar.creator.user_name
+                # result['creator'] = avatar.creator.user_name
                 result['n_owning_users'] = avatar.owning_users.count()
                 result['n_using_users'] = avatar.using_users.count()
                 result['is_delete'] = avatar.is_delete

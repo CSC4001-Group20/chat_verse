@@ -1,5 +1,5 @@
 import { message, Input, Button } from 'antd'
-import { setCookie } from '../Login/cookie'
+import { getCookie, setCookie } from '../Login/cookie'
 import React from 'react'
 
 import './ChatRooms.css'
@@ -60,7 +60,7 @@ const ChatRooms = () =>{
         }).then(res=>{
             if(res.status===200){
                 message.success("Succfssfully Join Room")
-                window.location.href="/chatroom/?room_name="+room_name
+                window.location.href="/chatroom/?room_name="+room_name+'&uid='+getCookie('uid')
             }else{
                 message.warn("Join Room Fail")
             }

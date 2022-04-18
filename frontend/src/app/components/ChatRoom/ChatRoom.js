@@ -45,12 +45,12 @@ function ChatRoom() {
     const [ camera, setCamera ] = React.useState(null)
     const [ holistic, setHolistic ] = React.useState(null)
     const [ scene, setScene ] = React.useState(null)
-    const [ avatar, setAvatar ] = React.useState(null)
+    // const [ avatar, setAvatar ] = React.useState(null)
 
     
     /* Initalizing Functions */
 
-    const getUsingAvatar = ()=>{
+    const getUsingAvatar = (uid, next)=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/user/avatar/?uid=${uid}`,{
             method:'GET',
@@ -61,8 +61,16 @@ function ChatRoom() {
                 message.warn("get Avatar list Fail")
             }
         }).then(data=>{
-            setAvatar(data.result)
+            // setAvatar(data.result)
+            next(data.result)
         }) 
+    }
+
+    const getUid = () => {
+        // 从 URL Params 获取 roon name
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        uid = urlParams.get('uid');
     }
 
     const newVideoElement = () => setVideoElement(document.querySelector(".input_video"));
@@ -215,43 +223,47 @@ function ChatRoom() {
         const loader = new GLTFLoader();
         loader.crossOrigin = "anonymous";
 
-        // TODO: 不同的UID从不同的URL获取
-        // 需要查询Avatar数据库
-        loader.load(
-            avatar?avatar.src:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
-    
-            gltf => {
-                VRMUtils.removeUnnecessaryJoints(gltf.scene);
-    
-                VRM.from(gltf).then(vrm => {
-                    let idx = VRMs.length
-                    scene.add(vrm.scene);
-                    VRMs[idx] = vrm
-                    uids[idx] = _uid
-                    // console.log("2",uid, _uid)
-                    if(_uid===uid){
-                        my_idx=idx
-                        console.log("init control")
-                        initControl()
-                    }
-                    console.log("Loaded a new player",uid, idx)
-                    uids_loading.splice(uids_loading.indexOf(uid),1)
-                });
-                
-            },
-    
-            progress =>
-                // console.log(
-                //     "Loading model...",
-                //     100.0 * (progress.loaded / progress.total),
-                //     "%"
-                // ),
-    
-            error => {
-                console.error(error)
+        getUsingAvatar(_uid, (avatar)=>{
+            // TODO: 不同的UID从不同的URL获取
+            // 需要查询Avatar数据库
+            loader.load(
+                (avatar&&avatar.src)?avatar.src:"https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
+        
+                gltf => {
+                    VRMUtils.removeUnnecessaryJoints(gltf.scene);
+        
+                    VRM.from(gltf).then(vrm => {
+                        let idx = VRMs.length
+                        scene.add(vrm.scene);
+                        VRMs[idx] = vrm
+                        uids[idx] = _uid
+                        // console.log("2",uid, _uid)
+                        if(_uid===uid){
+                            my_idx=idx
+                            console.log("init control")
+                            initControl()
+                        }
+                        console.log("Loaded a new player",uid, idx)
+                        uids_loading.splice(uids_loading.indexOf(uid),1)
+                    });
+                    
+                },
+        
+                progress =>
+                    // console.log(
+                    //     "Loading model...",
+                    //     100.0 * (progress.loaded / progress.total),
+                    //     "%"
+                    // ),
+        
+                error => {
+                    console.error(error)
 
-            }
-        );
+                }
+            );
+        })
+
+        
     }
 
     /* SHOULD DEBUG */

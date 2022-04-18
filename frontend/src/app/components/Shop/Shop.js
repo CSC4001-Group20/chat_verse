@@ -198,7 +198,7 @@ var Shop = () =>{
         .then(response=>{
             if (response.status===200) {
                 getUsingAvatar()
-                return response.json()
+                // return response.json()
             } else if (response.status!==200){
                 message.error("提交失败？")
             }
