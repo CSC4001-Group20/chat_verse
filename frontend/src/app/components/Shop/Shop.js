@@ -212,8 +212,8 @@ var Shop = () =>{
 
     React.useEffect(()=>{
         if(uid){
-            getAvatarList()
-            getUsingAvatar()
+            // getAvatarList()
+            // getUsingAvatar()
         }
     },[uid])
 
@@ -240,12 +240,25 @@ var Shop = () =>{
                             borderBottomRightRadius:"0px",
                         }} value={title} onChange={e=>{setTitle(e.target.value)}}/>
 
+                        <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary" onClick={()=>{createAvatar()}}>Create</Button>
+                    </div>
+                    <div style={{width:"100%", display:"flex", flexDirection:"row",justifyContent:"center", marginTop:"20px"}}>
                         <Upload
                             showUploadList={false}
                             action={uploadVRM}
                         >
-                            <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
-                                onClick={uploadVRM}
+                            <Button type="primary" icon={<AccountBookFilled/>} 
+                                onClick={uploadVRM}style={{
+                                    backgroundColor:"blueviolet",
+                                    borderColor:"blueviolet",
+                                    borderRadius: "5px",
+                                }}
                             >
                                 {src?'VRM File OK':'Upload VRM'}
                             </Button>
@@ -255,20 +268,17 @@ var Shop = () =>{
                             showUploadList={false}
                             action={uploadCover}
                         >
-                            <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
-                                onClick={uploadCover}
+                            <Button type="primary" icon={<AccountBookFilled/>} 
+                                onClick={uploadCover}style={{
+                                    backgroundColor:"blueviolet",
+                                    borderColor:"blueviolet",
+                                    borderRadius: "5px",
+                                    marginLeft:"100px"
+                                }}
                             >
                                 {cover?'Cover Image OK':'Upload Image'}
                             </Button>
                         </Upload>
-
-                        <Button style={{
-                            backgroundColor:"blueviolet",
-                            borderColor:"blueviolet",
-                            borderRadius: "5px",
-                            borderTopLeftRadius:"0px",
-                            borderBottomLeftRadius:"0px",
-                        }} type="primary" onClick={()=>{createAvatar()}}>Create</Button>
                     </div>
                 </div>
                 <div className='Shop-My'>
@@ -282,7 +292,7 @@ var Shop = () =>{
                         {avatar&&
                             <div className='Avatar' style={{width:"100px", height:"100px", marginRight:"70px", marginTop:"20px"}}>
                                 {avatar.title}
-                                <img src={avatar.cover} alt={avatar.title}></img>
+                                <img style={{width:"100%", height:"100%", borderRadius:"5px"}} src={avatar.cover} alt={avatar.title}></img>
                             </div>
                         }
                     </div>
@@ -298,8 +308,13 @@ var Shop = () =>{
                 <div className='Shop-Avatar-List'>
                     {avatar_list.map(a=>{
                         return(
-                            <div className='Avatar'>
-                                {a.title}
+                            <div>
+                                <div>
+                                    {a.title}
+                                </div>
+                                <div className='Avatar'>
+                                    <img style={{width:"100%", height:"100%", borderRadius:"5px"}} src={avatar.cover} alt={avatar.title}></img>
+                                </div>
                             </div>
                         )
                     })}
