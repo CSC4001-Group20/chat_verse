@@ -212,8 +212,8 @@ var Shop = () =>{
 
     React.useEffect(()=>{
         if(uid){
-            // getAvatarList()
-            // getUsingAvatar()
+            getAvatarList()
+            getUsingAvatar()
         }
     },[uid])
 
@@ -320,66 +320,6 @@ var Shop = () =>{
                     })}
                 </div>
             </div>
-                {/* <button className='back' onClick={()=>
-                    { window.history.back(-1)}}><ImportOutlined />
-                </button>
-                <h1>Avatar Shop</h1>
-                <Upload
-                    showUploadList={false}
-                    action={createAvatar}
-                >
-                    <Button type="primary" shape="circle" icon={<AccountBookFilled/>} 
-                        onClick={()=>{createAvatar()}}
-                    />
-                </Upload>
-            <div className='shop-window'>
-                <div className='shop-choice-container'>
-                    <Button type='primary' onClick={()=>{getAvatarList()}}>Avatar</Button>
-                    <Button type='primary'>Mine</Button>
-                </div>
-                <div className='shop-items-container'>
-                    {avatar_list.map(verse=>{
-                            return(
-                                <div className='ChatRooms-VerseList-Verse' >
-                                    <div className='ChatRooms-VerseList-Verse-header'>
-                                        Avatar's Name {verse.title}
-                                    </div>
-                                    <div className='ChatRooms-VerseList-Verse-content'>
-                                        Click {verse.src} to Download
-                                    </div>
-                                </div>
-                            )
-                        })}
-                </div>
-            </div>
-            <div>
-                <div style={{flexDirection:"row", justifyContent:"center", width:"100%", marginTop:"20px"}}>
-                        <Input style={{
-                            width:"50%",
-                            borderColor:"white",
-                            borderRadius: "5px",
-                            borderTopRightRadius:"0px",
-                            borderBottomRightRadius:"0px",
-                        }} value={title} onChange={e=>{setAvatarTitle(e.target.value)}}/>
-                        
-                        <Input style={{
-                            width:"50%",
-                            borderColor:"white",
-                            borderRadius: "5px",
-                            borderTopRightRadius:"0px",
-                            borderBottomRightRadius:"0px",
-                        }} value={src} onChange={e=>{setAvatarSrc(e.target.value)}}/>
-                        
-                        <Button style={{
-                            backgroundColor:"blueviolet",
-                            borderColor:"blueviolet",
-                            borderRadius: "5px",
-                            borderTopLeftRadius:"0px",
-                            borderBottomLeftRadius:"0px",
-                        }} type="primary" onClick={()=>{createAvatar()}}>Upload</Button>
-                </div>
-            </div> */}
-
         </div>
     )
 }
