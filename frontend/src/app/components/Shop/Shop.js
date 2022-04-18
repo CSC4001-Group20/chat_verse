@@ -1,4 +1,5 @@
 import { Input, Button, message } from 'antd'
+
 import React from 'react'
 import { API } from '../../App'
 import { setCookie } from '../Login/cookie'
@@ -13,7 +14,7 @@ var Shop = () =>{
 
     return(
         <div className='Shop'>
-                <button className='back' onClick={()=>{window.location.href="/chatrooms"}}>Back</button>
+                <button className='back' onClick={()=>{ window.history.back(-1)}}>Back</button>
 
 
                 <h1>Avatar's Shop</h1>
