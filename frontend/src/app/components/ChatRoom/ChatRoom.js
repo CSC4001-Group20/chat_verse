@@ -10,6 +10,8 @@ import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
+import "./ChatRoom.css"
+
 
 var VRMs = [];
 var transforms = [];
@@ -624,9 +626,19 @@ function ChatRoom() {
                 className="input_video" width="300px" height="200px"  autoPlay muted
                 style={{
                     position:"absolute",
-                    left:10,top:10,
+                    left:8,bottom:20,
                 }}
             ></video>  
+
+            <button className="quit_button" style={{ position:"absolute", left:30,top:30,}} 
+            onClick={()=>{window.location.href="/chatrooms"}}>
+                Quit
+            </button>
+
+            <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
+            onClick={()=>{window.location.href="/shop"}}>
+                Shop
+            </button>
 
 
             <ChatBar />     

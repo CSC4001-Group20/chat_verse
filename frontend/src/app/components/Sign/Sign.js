@@ -47,7 +47,7 @@ var Sign = () =>{
         <div className='Sign'>
             <div style={{display:"flex", flexDirection:"column"}}>
                 <div style={{
-                    "fontSize":"calc(4vh + 25px)", color:"white", fontFamily:"Georgia",
+                    "fontSize":"calc(4vh + 25px)", color:"white", fontFamily:"Cochin",
                     marginTop:"10vh", fontFamily:"Cochin"
                 }}>Sign up</div>
                 <div>

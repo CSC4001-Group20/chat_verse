@@ -204,10 +204,14 @@ const ChatRooms = () =>{
 
 
             </div>
-            <div className='quit'>
-                <a href="/login" >QUIT</a>
-            </div>
 
+            <button className="quit" 
+                onClick={()=>{window.location.href="/login"}}>
+                    Quit
+            </button>
+
+
+            
         </div>
     )
 }
