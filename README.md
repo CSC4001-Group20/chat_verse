@@ -60,4 +60,4 @@ yarn install
 yarn start
 ```
 
-You can check localhost:666 to see the result
+You can check localhost:666 to see the result, btw windows system may have some trouble on download package cos-python-sdk-v5
