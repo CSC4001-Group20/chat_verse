@@ -1,3 +1,6 @@
+import { UserOutlined } from '@ant-design/icons'
+import { RestOutlined } from '@ant-design/icons'
+import { SendOutlined } from '@ant-design/icons'
 import { AccountBookFilled, ImportOutlined } from '@ant-design/icons'
 import { Input, Button, message, Upload } from 'antd'
 
@@ -93,7 +96,7 @@ var Shop = () =>{
     })
 
     const [ avatar_list, setAvatarList ] = React.useState([])
-    
+    const [ avatar, setavatar ] = React.useState(null)
     const [ title, setAvatarTitle ] = React.useState("")
     const [ src, setAvatarSrc ] = React.useState("")
 
@@ -133,23 +136,76 @@ var Shop = () =>{
     //TODO
     
     React.useEffect(()=>{
-        getAvatarList()
+        // getAvatarList()
     },[])
 
 
     return(
         <div className='Shop'>
-                <button className='back' onClick={()=>
+            <button className='back' onClick={()=>
+                { window.history.back(-1)}}><ImportOutlined />
+            </button>
+            <div className='Shop-Up'>
+                <div className='Shop-Upload'>
+                    <div style={{
+                            "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
+                            marginTop:"8vh"
+                        }}>
+                            Upload Avatar
+                    </div>
+                    <div style={{flexDirection:"row", justifyContent:"center", width:"100%", marginTop:"20px"}}>
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }} value={avatar} onChange={e=>{setavatar(e.target.value)}}/>
+
+                        <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary" onClick={()=>{createAvatar()}}>Create</Button>
+                    </div>
+                </div>
+                <div className='Shop-My'>
+                    <div style={{
+                            "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
+                            marginTop:"8vh"
+                        }}>
+                        My Avatar
+                    </div>
+                    <div style={{width:"100%",display:"flex", flexDirection:"row",justifyContent:"center"}}>
+                        <div className='Avatar' style={{width:"100px", height:"100px", marginRight:"70px", marginTop:"20px"}}>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='Shop-Down'>
+                <div style={{
+                        "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
+                        marginTop:"8vh"
+                    }}>
+                    Select Avatar
+                </div> 
+                <div className='Shop-Avatar-List'>
+                    {[1,1,1,1,1,1,1,1,1,1,1].map(a=>{
+                        return(
+                            <div className='Avatar'>
+                                
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+                {/* <button className='back' onClick={()=>
                     { window.history.back(-1)}}><ImportOutlined />
                 </button>
                 <h1>Avatar Shop</h1>
-
-
-
-
-
-
-
                 <Upload
                     showUploadList={false}
                     action={createAvatar}
@@ -158,14 +214,9 @@ var Shop = () =>{
                         onClick={()=>{createAvatar()}}
                     />
                 </Upload>
-
-
-
-
-
             <div className='shop-window'>
                 <div className='shop-choice-container'>
-                    <Button type='primary' onClick={()=>{getAvatarList();console.log("----");}}>Avatar</Button>
+                    <Button type='primary' onClick={()=>{getAvatarList()}}>Avatar</Button>
                     <Button type='primary'>Mine</Button>
                 </div>
                 <div className='shop-items-container'>
@@ -209,7 +260,7 @@ var Shop = () =>{
                             borderBottomLeftRadius:"0px",
                         }} type="primary" onClick={()=>{createAvatar()}}>Upload</Button>
                 </div>
-            </div>
+            </div> */}
 
         </div>
     )
