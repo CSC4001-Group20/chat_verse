@@ -58,7 +58,6 @@ def createRoom(request):
         # except:s
         #     return HttpResponse("Create ChatRoom Fail", status=403)
 
-
 def verse_list(request):
 
     uid = request.COOKIES.get('uid')
@@ -91,7 +90,7 @@ def joinRoom(request):
         room_name = body_dict.get('room_name', '')
         chat_room = models.ChatRoom.objects.get(room_name=room_name)
         chat_room.members.add()
-        
+
         print(room_name)
         return HttpResponse(status=200)
 
