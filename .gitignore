@@ -1,4 +1,4 @@
-publish.md
+ publish.md
 
 # React
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
@@ -29,7 +29,6 @@ yarn.lock
 # Django
 *.cnf
 settings_local.py
-cos.json
 migrations/
 *.log.*
 # Byte-compiled / optimized / DLL files
