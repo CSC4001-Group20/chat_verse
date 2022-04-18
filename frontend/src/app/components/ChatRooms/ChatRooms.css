@@ -45,6 +45,26 @@
     flex-direction: row !important;
 }
 
+.ChatRooms-My-VerseList-Verse:hover{
+    cursor: pointer;
+    box-shadow: 5px 5px 6px 4px rgba(0,0,0,0.3);
+    transition: all .2s ease-in-out;
+    border-radius: 10px;
+    min-width: 30px;
+    min-height: max-content;
+    padding: 10px 10px 10px 30px;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.5);
+    align-self: center;
+    text-align: left;
+    /* transform: scale(1.1, 1.1); */
+    transform: translate(0%, 4%);
+}
+
+
+
+
+
 .ChatRooms-VerseList{
     display: flex;
     flex-direction: column;

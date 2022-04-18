@@ -91,7 +91,7 @@ const ChatRooms = () =>{
             if(res.status===200){
                 return res.json()
             }else{
-                message.warn("Join Room Fail")
+                message.warn("get verse list Fail")
             }
         }).then(data=>{
             setVerseList(data.result)
@@ -105,7 +105,7 @@ const ChatRooms = () =>{
             if(res.status===200){
                 return res.json()
             }else{
-                message.warn("Join Room Fail")
+                message.warn("get personal verse list Fail")
             }
         }).then(data=>{
             setP_VerseList(data.result)
@@ -147,23 +147,23 @@ const ChatRooms = () =>{
                         "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
                         marginTop:"4vh"
                     }}>
-                        Verse Created By Me
+                        My Verse
                 </div>
 
 
                 <div className='ChatRooms-My-VerseList'>
                     {P_verse_list.map(verse=>{
                         return(
-                            <div className='ChatRooms-My-VerseList-Verse'>
+                            <div className='ChatRooms-My-VerseList-Verse' onClick={()=>{joinRoom(verse.room_name);}}>
                                 <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
-                                    <div className='ChatRooms-My-VerseList-Verse-header'>
+                                    <div className='ChatRooms-My-VerseList-Verse-header' >
                                         {verse.title}'s Chat Room
                                     </div>
                                     {/* <div className='ChatRooms-My-VerseList-Verse-content'>
                                         {verse.membersCount} members active
                                     </div> */}
                                 </div>
-                                <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
+                                <div style={{"flexDirection":"column" , fontFamily:"Cohina", width:'100px'}}>
                                     {/* <Button type="link" onClick={()=>{startRoom(verse.room_name);}}>Start Verse</Button> */}
                                     <Button type="link" onClick={()=>{deleteRoom(verse.room_name);}}>Delete Verse</Button>
                                 </div>
