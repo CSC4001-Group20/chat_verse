@@ -1,0 +1,26 @@
+.quit_button{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    font-family: "Cochin";
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity:0.8;
+}
+.quit_button:hover{
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+}
+
+.shop_button{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    font-family: "Cochin";
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity:0.8;
+}
+
+.shop_button:hover{
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+}

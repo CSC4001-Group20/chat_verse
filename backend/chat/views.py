@@ -58,6 +58,20 @@ def createRoom(request):
         return res
         # except:s
         #     return HttpResponse("Create ChatRoom Fail", status=403)
+    return HttpResponse("开房成功")
+
+def get_personal_verse_list(request):
+    uid = 0
+    print(request.POST.get())
+    result_rooms = {}
+    data_list = models.User.objects.all()
+    for room in data_list:
+        if room.host_user.uid == uid:
+            result = {}
+            result["title"] = data_list.title
+            result["n_members"] = data_list.members.count()
+            result_rooms.append(room)
+    return JsonResponse({'result':result_rooms})
 
 def verse_list(request):
     

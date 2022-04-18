@@ -144,3 +144,25 @@
 .quit:hover{
     transform: scale(1.1, 1.1);
 }
+
+
+
+.quit{
+    width: 50px;
+    height: 50px;
+    left:30px;
+    top:30px;
+    border-radius: 100%;
+    font-family: "Cochin";
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity:0.8;
+}
+
+.quit:hover{
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+}

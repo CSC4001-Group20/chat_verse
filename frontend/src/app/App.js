@@ -11,6 +11,7 @@ import ChatRoom from './components/ChatRoom/ChatRoom';
 import Login from './components/Login/Login';
 import Sign from './components/Sign/Sign';
 import ChatRooms from './components/ChatRooms/ChatRooms';
+import Shop from './components/Shop/Shop';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
                     <Route path='/chatroom' element={<ChatRoom />}/>
                     <Route path='/login' element={<Login />} />
                     <Route path='/sign' element={<Sign />} />
+                    <Route path='shop' element={<Shop />} />
                     <Route path='/' element={<Login />} />
                 </Routes>
             </Router>

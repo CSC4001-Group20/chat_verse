@@ -10,6 +10,8 @@ import * as THREE from 'three';
 import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
+import "./ChatRoom.css"
+
 
 var VRMs = [];
 var transforms = [];
@@ -83,14 +85,86 @@ function ChatRoom() {
     }
 
     const newLight = () => {
-        const light = new THREE.DirectionalLight(0xffffff);
-        light.position.set(1.0, 1.0, 1.0).normalize();
+        // const light = new THREE.DirectionalLight(0xffffff);
+        // light.position.set(1.0, 1.0, 1.0).normalize();
+        // scene.add(light);
+        let Ambient = new THREE.AmbientLight(0x404040, 2);
+        scene.add(Ambient);
+
+        //给场景添加太阳光
+        let Sun = new THREE.DirectionalLight(0xffffff, 1);
+        Sun.position.set(1, 1, 1);
+        Sun.castShadow = true;
+
+        //设置相机渲染面积
+        Sun.shadow.camera.near = 0.01;
+        Sun.shadow.camera.far = 60;
+        Sun.shadow.camera.top = 22;
+        Sun.shadow.camera.bottom = -22;
+        Sun.shadow.camera.left = -35;
+        Sun.shadow.camera.right = 35;
+        // //设置阴影分辨率
+        Sun.shadow.mapSize.width = 2048;  // default
+        Sun.shadow.mapSize.height = 2048; // default
+        //阴影限制
+        Sun.shadow.radius = 1;
+        scene.add(Sun);
+    }
+
+    const loadSky = () => {
+        const pictures = ["/models/right.jpg", "/models/left.jpg", "/models/top.jpg", "/models/bottom.jpg", "/models/front.jpg", "/models/back.jpg"];
+        var textureCube = new THREE.CubeTextureLoader().load(pictures);
+        scene.background = textureCube;
+    }
+
+    const loadBase = () => {
+        let textureLoader = new THREE.TextureLoader()
+        let texture = textureLoader.load("/models/base.jpg")
+        // THREE.RepeatWrapping：平铺重复。
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping; 
+        // 设置重复次数
+        texture.repeat.set(100, 100)
+        let geometry = new THREE.PlaneGeometry(1000, 1000, 32);
+        let material = new THREE.MeshBasicMaterial({
+                map: texture,  // 使用纹理贴图
+                side: THREE.DoubleSide  // 两面都渲染
+            });
+        let plane = new THREE.Mesh(geometry, material);
+        plane.rotateX(Math.PI / 2)
+        scene.add(plane);
+    }
+
+    const loadFBX = () => {
         var loader = new FBXLoader();
-        loader.load( './InteriorTest.fbx', function ( object ) {
-            object.scale.set(0.01,0.01,0.01);//修改模型缩放系数(x,y,z)
-            scene.add( object );
-        } )
-        scene.add(light);
+        loader.load('/models/Cottage/Cottage_FREE.fbx', (object) => {
+            console.log(object)
+            const list = [
+                '/models/Cottage/Cottage_Clean_Base_Color.png',
+                '/models/Cottage/Cottage_Clean_AO.png',
+                '/models/Cottage/Cottage_Clean_Height.png',
+                '/models/Cottage/Cottage_Clean_Metallic.png',
+                '/models/Cottage/Cottage_Clean_MetallicSmoothness.png',
+                '/models/Cottage/Cottage_Clean_Normal.png',
+                '/models/Cottage/Cottage_Clean_Roughness.png',
+                '/models/Cottage/Cottage_Clean_Opacity.png'
+            ]
+            const textureLoader = new THREE.TextureLoader();
+            object.traverse( function ( child ) {
+                if ( child.isMesh ) {
+                    console.log(child)
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material.map = textureLoader.load(list[0])
+                    child.material.aoMap = textureLoader.load(list[1])
+                    child.material.alphaMap = textureLoader.load(list[2])
+                }
+            } );
+            //缩放
+            object.scale.set(0.01,0.01,0.01);
+            //位置
+            object.position.set(-30,0,-30);
+            scene.add( object ); 
+        },null,(e)=>{console.log(e)})
     }
 
     const initRenderingPipeline = () => {
@@ -551,6 +625,9 @@ function ChatRoom() {
     React.useEffect(()=>{
         if(scene){
             newLight()
+            loadFBX()
+            loadBase()
+            loadSky()
             animate()
             loadVRM(uid);  
             initSocket()  
@@ -577,9 +654,19 @@ function ChatRoom() {
                 className="input_video" width="300px" height="200px"  autoPlay muted
                 style={{
                     position:"absolute",
-                    left:10,top:10,
+                    left:8,bottom:20,
                 }}
             ></video>  
+
+            <button className="quit_button" style={{ position:"absolute", left:30,top:30,}} 
+            onClick={()=>{window.location.href="/chatrooms"}}>
+                Quit
+            </button>
+
+            <button className="shop_button" style={{ position:"absolute", right:30,bottom:30,}} 
+            onClick={()=>{window.location.href="/shop"}}>
+                Shop
+            </button>
 
 
             <ChatBar />     

@@ -85,14 +85,14 @@ const ChatBar = () => {
                 </input>
 
 
-                <button className="SendButton" style={{fontFamily:"Cochin",borderRadius: '10px'}} onClick={()=>{
+                <button className="SendButton" style={{fontFamily:"Cochin",borderRadius: '10px',opacity:'0.8',backgroundColor:'rgba(255, 255, 255, 0.5);'}} onClick={()=>{
                     console.log("Send")
                     if (!chat_socket) { console.log("error"); return }
                     chat_socket.send(JSON.stringify({
                         'message': text
                     }));
                 }}>Send</button>
-            </div>
+            </div> 
         </div>
     )
 }
