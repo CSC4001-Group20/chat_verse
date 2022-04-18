@@ -119,6 +119,7 @@ def avatar(request):
         avatar = Avatar.objects.create(
             title = body_dict.get('title', ''),
             src = body_dict.get('src', ''),
+            cover = body_dict.get('cover', ''),
             creator = user,
         )
         avatar.save()
@@ -143,17 +144,18 @@ def collect_avatar(request):
 
 def use_avatar(request):
     if request.method=='GET':
-        uid = request.COOKIES.get('uid')
-        # uid = 0 # TODO
+        body_dict = json.loads(request.body.decode('utf-8'))
+        uid = body_dict.get('dui', '')
+        password = body_dict.get('password', '')
+        # avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
         data_list = Avatar.objects.all()
 
         data_list = data_list.filter(using_users=user)
         
-        # avatar_id = 0 #TODO
+        
 
         avatar = data_list[0]
-        # user.avatar.clear()
-        # user.avatar.add(avatar)
-        res = JsonResponse({'result_title':avatar.title, 'result_src':avatar.src}, status=200)
+        user.avatar.clear()
+        user.avatar.add(avatar)
         return res
