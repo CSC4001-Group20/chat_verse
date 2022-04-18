@@ -76,14 +76,8 @@ var Shop = () =>{
                         .then(response=>{
                             if (response.status===200) {
                                 return response.json()
-                            } else if (response.status===500){
-                                message.error("您处于未登录状态？")
-                            } else if (response.status===404){
-                                message.error("您修改的用户已经不存在了！")
-                            } else if (response.status===502){
-                                message.error("服务器被马虎的技术仔关闭了！是不是正在进行后台升级呢？")
-                            } else {
-                                message.error("对不起，似乎发生了未知的错误，快联系技术仔来修复吧！")
+                            } else if (response.status!==200){
+                                message.error("提交失败？")
                             }
                         })
                     }else{
