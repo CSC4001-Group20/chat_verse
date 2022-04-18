@@ -71,13 +71,14 @@ const Shop = () =>{
                     { window.history.back(-1)}}>Back
                 </button>
 
-                <h1>Avatar's Shop</h1>
+                <h1>Avatar's Control</h1>
             <div className='shop-window'>
 
                 <div className='shop-choice-container'>
                     <button onClick={()=>{getAvatarList();console.log("----");}}>Avatar</button>
 
                     <button>Mine</button>
+                    <button onClick={()=>{}}>Upload</button>
                 </div>
                 <div className='shop-items-container'>
                     {avatar_list.map(verse=>{
