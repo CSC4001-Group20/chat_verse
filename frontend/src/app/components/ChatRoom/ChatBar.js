@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { setCookie } from '../Login/cookie'
+import {Input, Button} from 'antd'
 import "./ChatBar.css"
 
 var idx_max = 0
@@ -99,20 +100,32 @@ const ChatBar = () => {
             </div>
 
             <div className="ChatBar-actions">
-                <input placeholder="Massage" style={{fontFamily:"Cochin", borderRadius: '10px'}} value={text} onChange={e=>{
+                <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }}value={text} onChange={e=>{
                     setText(e.target.value)
                 }}>
-                </input>
+                </Input>
 
 
-                <button className="SendButton" style={{fontFamily:"Cochin",borderRadius: '10px',opacity:'0.8',backgroundColor:'rgba(255, 255, 255, 0.5)'}} onClick={()=>{
+                <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary" onClick={()=>{
                     console.log("Send")
                     if (!chat_socket) { console.log("error"); return }
                     chat_socket.send(JSON.stringify({
                         'message': text,
                         'user_name': user_name
                     }));
-                }}>Send</button>
+                }}>Send</Button>
             </div> 
         </div>
     )
