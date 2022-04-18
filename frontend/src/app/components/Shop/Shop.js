@@ -96,6 +96,10 @@ var Shop = () =>{
 
     const [ avatar_list, setAvatarList ] = React.useState([])
     
+    const [ title, setAvatarTitle ] = React.useState("")
+    const [ src, setAvatarSrc ] = React.useState("")
+
+
     //TODO
     const getAvatarList = ()=>{
         setCookie("update",new Date().toUTCString())
@@ -162,7 +166,6 @@ var Shop = () =>{
                 <div className='shop-choice-container'>
                     <Button type='primary' onClick={()=>{getAvatarList();console.log("----");}}>Avatar</Button>
                     <Button type='primary'>Mine</Button>
-                    <Button type='primary' onClick={()=>{}}>Upload</Button>
                 </div>
                 <div className='shop-items-container'>
                     {avatar_list.map(verse=>{
@@ -179,7 +182,33 @@ var Shop = () =>{
                         })}
                 </div>
             </div>
-
+            <div>
+                <div style={{flexDirection:"row", justifyContent:"center", width:"100%", marginTop:"20px"}}>
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }} value={title} onChange={e=>{setAvatarTitle(e.target.value)}}/>
+                        
+                        <Input style={{
+                            width:"50%",
+                            borderColor:"white",
+                            borderRadius: "5px",
+                            borderTopRightRadius:"0px",
+                            borderBottomRightRadius:"0px",
+                        }} value={src} onChange={e=>{setAvatarSrc(e.target.value)}}/>
+                        
+                        <Button style={{
+                            backgroundColor:"blueviolet",
+                            borderColor:"blueviolet",
+                            borderRadius: "5px",
+                            borderTopLeftRadius:"0px",
+                            borderBottomLeftRadius:"0px",
+                        }} type="primary" onClick={()=>{createAvatar()}}>Upload</Button>
+                </div>
+            </div>
 
         </div>
     )
