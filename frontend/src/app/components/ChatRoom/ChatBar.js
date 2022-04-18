@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { setCookie } from '../Login/cookie'
 import "./ChatBar.css"
 
 var idx_max = 0
@@ -10,13 +11,7 @@ var timeout
 const ChatBar = () => {
 
     const [ text, setText ] = React.useState("")
-
-
-
-    React.useEffect(()=>{
-        initSocket()
-    },[])
-
+    const [ user_name, setUser_Name] = React.useState("")
     const [ messages, setMessages ] = React.useState([])
 
     const initSocket = () => {
@@ -61,19 +56,44 @@ const ChatBar = () => {
         
     }
 
+    const getName = () => {
+        setCookie("update",new Date().toUTCString())
+        fetch(`/chat/initSocketCheck/`,{
+            method:'GET',
+        }).then(res=>{
+            if(res.status===200){
+                return res.json()
+            }
+        }).then(data=>{ 
+            setUser_Name(data.user_name)
+        })
+    }
     // const removeMsg = (idx) => {
     //     let msgs = []
     //     messages.forEach(m=>{if(idx===m.idx)msgs.push(m)})
     //     setMessages(msgs)
     // }
 
+    const handleEnterKey = (e) => {
+        if(e.keyCode === 13){
+            //do somethings
+        }
+    }
+
+
+
+    React.useEffect(()=>{
+        initSocket()
+        getName()
+    },[])
 
     return (
         <div className="ChatBar">
             <div className="ChatBar-messages">
                 {messages.map(m=>(
                     <div key={Math.random()} className="ChatBar-message">
-                        {m.idx}: {m.message}
+                        {/* {m.idx}: {m.message} */}
+                        {m.message}
                     </div>
                 ))}
             </div>
@@ -89,7 +109,8 @@ const ChatBar = () => {
                     console.log("Send")
                     if (!chat_socket) { console.log("error"); return }
                     chat_socket.send(JSON.stringify({
-                        'message': text
+                        'message': text,
+                        'user_name': user_name
                     }));
                 }}>Send</button>
             </div> 

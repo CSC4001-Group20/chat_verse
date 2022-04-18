@@ -47,8 +47,8 @@ const Shop = () =>{
         fetch(`/user/avatar/`,{
             method:'POST',
             body:JSON.stringify({
-                title: title,
-                src: src,
+                // title: title,
+                // src: src,
             })
         }).then(res=>{
             if(res.status===200){
