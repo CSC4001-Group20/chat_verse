@@ -1,8 +1,13 @@
+from cmath import exp
+from email.policy import HTTP
+from pyexpat import model
+from turtle import end_fill
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 # Create your views here.
 import json
 import secrets
+
 from . import models
 
 
@@ -25,7 +30,7 @@ def createRoom(request):
     # 获取表单的数据
         body_dict = json.loads(request.body.decode('utf-8'))
         title = body_dict.get('title', '')
-        print("title", title)
+        # print("title", title)
 
         try:
             room = models.ChatRoom.objects.get(title=title)
@@ -36,9 +41,8 @@ def createRoom(request):
         # 验证用户名，密码是否正确
         # try:
         host_uid = request.COOKIES.get('uid', '')
-        token = secrets.token_bytes(16)
-        print("uid", host_uid, 'room_name', token)
-
+        token = secrets.token_urlsafe(16)
+        # print("uid", host_uid, 'room_name', token)
         host_user = models.User.objects.get(uid=host_uid)
         room = models.ChatRoom.objects.create(
             title=title,
@@ -49,12 +53,10 @@ def createRoom(request):
         room.members.add(host_user)
         room.save()
 
-        res = HttpResponse("Successfully Create ChatRoom",status=200)
-
-        print('title ', title, 'room_id', token)
-    
+        res = JsonResponse({'room_name':token}, status=200)
+        print('title: ', title, 'room_name: ', token)
         return res
-        # except:
+        # except:s
         #     return HttpResponse("Create ChatRoom Fail", status=403)
     return HttpResponse("开房成功")
 
@@ -72,17 +74,13 @@ def get_personal_verse_list(request):
     return JsonResponse({'result':result_rooms})
 
 def verse_list(request):
-    # print(123)
-    # print(request.body)
+    
     uid = request.COOKIES.get('uid')
-
     filter_uid = request.GET.get('filter_uid')=='true'
 
     result_rooms = []
     data_list = models.ChatRoom.objects.all()
-
-
-    print(filter_uid, request.GET.get('filter_uid'))
+    # print(filter_uid, request.GET.get('filter_uid'))
 
     if filter_uid:
         data_list = data_list.filter(host_user__uid=uid)
@@ -90,17 +88,43 @@ def verse_list(request):
     for room in data_list:
         result = {}
         result["title"] = room.title
+        result["room_name"] = room.room_name
         result["n_member"] = room.members.count()
         result_rooms.append(result)
+
     # json_data = json.dumps(result_rooms)
+    # print(result)
     return JsonResponse({'result':result_rooms})
 
 
 def joinRoom(request):
-    print(request.GET)
-    return HttpResponse("Cannot Join Chat Room", status=404)
+    if (request.method == 'GET'):
+        return HttpResponse("Cannot Join Chat Room", status=404)
+    elif (request.method == 'POST'):
+        body_dict = json.loads(request.body.decode('utf-8'))
+        room_name = body_dict.get('room_name', '')
+        chat_room = models.ChatRoom.objects.get(room_name=room_name)
+        
+        uid = request.COOKIES.get('uid')
+        user = models.User.objects.get(uid=uid)
+        chat_room.members.add(user)
 
-def startRoom(request):
-    print()
-    return HttpResponse("Cannot Start Chat Room",status=404)
+        print(room_name)
+        return HttpResponse(status=200)
+
+
+def deleteRoom(request):
+    if (request.method == 'GET'):
+        return HttpResponse(status=404)
+    elif (request.method == 'POST'):
+        body_dict = json.loads(request.body.decode('utf-8'))
+        room_name = body_dict.get('room_name', '')  
+        try:
+            models.ChatRoom.objects.filter(room_name=room_name).delete()
+            return HttpResponse(status=200)
+        except:
+            return HttpResponse(status=404)
+
+
+
 

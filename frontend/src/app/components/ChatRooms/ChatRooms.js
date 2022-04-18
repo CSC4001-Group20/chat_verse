@@ -6,12 +6,9 @@ import './ChatRooms.css'
 
 const ChatRooms = () =>{
     const [ createRoomName, setCreateRoomName ] = React.useState("")
-    const [ existRoomName, setExistRoomName] = React.useState("")
-    const [selectAVerse, setSelectAVerse] = React.useState("")
-
-
     const [ verse_list, setVerseList ] = React.useState([])
     const [ P_verse_list, setP_VerseList ] = React.useState([])
+
 
     const createRoom = ()=>{
         if (createRoomName===""){
@@ -26,9 +23,11 @@ const ChatRooms = () =>{
             }).then(res=>{
                 if(res.status===200){
                     message.success("Succfssfully Create Room")
-                    setTimeout(() => {
-                        window.location.href="/chatroom/?roomNmae="+createRoomName
-                    }, 1000);
+                    return res.json()
+                    // setTimeout(() => {
+                    //     console.log(res)
+                    //     window.location.href="/chatroom/?room_name="+res.json()['room_name']
+                    // }, 1000);
                 }else if (res.status===403){
                     message.warn("Create Room Fail")
                 }else if (res.status===405){
@@ -37,48 +36,53 @@ const ChatRooms = () =>{
                     message.warn("Create Room Fail")
                 }
             }).then(data=>{
+                if (data){
+                    // window.location.href="/chatroom/?room_name="+data.room_name
+                    window.location.reload()
+                }
+                
             })
         }
     }
 
-    const joinRoom = (title)=>{
+    const joinRoom = (room_name)=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/chat/joinRoom/`,{
             method:'POST',
             body:JSON.stringify({
-                title:title
+                room_name:room_name
             })
         }).then(res=>{
             if(res.status===200){
                 message.success("Succfssfully Join Room")
-                setTimeout(() => {
-                    window.location.href="/chatroom/?roomNmae="+title
-                }, 1000);
+                window.location.href="/chatroom/?room_name="+room_name
             }else{
                 message.warn("Join Room Fail")
             }
-        }).then(data=>{})
+        }).then(data=>{
+            if(data){
+            }
+        })
     }
 
-    // const manage_my_verse_enter = (title)=>{
-    //     setCookie("update",new Date().toUTCString())
-    //     fetch(`/chat/startRoom/`,{
-    //         method:'POST',
-    //         body:JSON.stringify({
-    //             title:title
-    //         })
-    //     }).then(res=>{
-    //         if(res.status===200){
-    //             message.success("Succfssfully Start Room")
-    //             setTimeout(() => {
-    //                 window.location.href="/chatroom/?roomNmae="+title
-    //             }, 1000);
-    //         }else{
-    //             message.warn("Start Room Fail")
-    //         }
-    //     }).then(data=>{})
-    // }
+    const deleteRoom = (room_name)=>{
+        setCookie("update",new Date().toUTCString())
+        fetch(`/chat/deleteRoom/`,{
+            method:'POST',
+            body:JSON.stringify({
+                room_name:room_name
+            })
+        }).then(res=>{
+            if(res.status===200){
+                message.success("Succfssfully delete Room")
+                window.location.reload()
+            }else{
+                message.warn("delete Room Fail")
+            }
+        }).then(data=>{
 
+        })
+    }
 
     const get_verse_list = ()=>{
         fetch(`/chat/verse_list/`,{
@@ -107,7 +111,6 @@ const ChatRooms = () =>{
             setP_VerseList(data.result)
         })
     }
-
 
     React.useEffect(()=>{
         get_verse_list()
@@ -144,49 +147,25 @@ const ChatRooms = () =>{
                         "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cohina",
                         marginTop:"4vh"
                     }}>
-                        Manage my Verse
+                        My Verse
                 </div>
 
-                {/* <div className='ChatRooms-My-VerseList'>
-                    {[1,1,1,1,1,1].map(verse=>{
-                        return(
-                            <div className='ChatRooms-My-VerseList-Verse'>
-                                <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
-                                    <div className='ChatRooms-My-VerseList-Verse-header'>
-                                        Lianhao Gao's Chat Room
-                                    </div>
-                                    <div className='ChatRooms-My-VerseList-Verse-content'>
-                                        20 members active
-                                    </div>
-                                </div>
-                                <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
-                                    <Button type="link" onClick={()=>{
-                                    console.log(existRoomName) //这里获取了当前的roomname
-                                    }}>Start Verse</Button>
-                                    <Button type="link">
-                                        Delete Verse
-                                    </Button>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div> */}
 
                 <div className='ChatRooms-My-VerseList'>
                     {P_verse_list.map(verse=>{
                         return(
-                            <div className='ChatRooms-My-VerseList-Verse'>
+                            <div className='ChatRooms-My-VerseList-Verse' onClick={()=>{joinRoom(verse.room_name);}}>
                                 <div  style={{"flexDirection":"column", fontFamily:"Cohina"}}>
-                                    <div className='ChatRooms-My-VerseList-Verse-header'>
+                                    <div className='ChatRooms-My-VerseList-Verse-header' >
                                         {verse.title}'s Chat Room
                                     </div>
-                                    <div className='ChatRooms-My-VerseList-Verse-content'>
+                                    {/* <div className='ChatRooms-My-VerseList-Verse-content'>
                                         {verse.membersCount} members active
-                                    </div>
+                                    </div> */}
                                 </div>
-                                <div style={{"flexDirection":"column" , fontFamily:"Cohina"}}>
-                                    <Button type="link" onClick={()=>{joinRoom(verse.title);}}>Start Verse</Button>
-                                    <Button type="link">Delete Verse</Button>
+                                <div style={{"flexDirection":"column" , fontFamily:"Cohina", width:'100px'}}>
+                                    {/* <Button type="link" onClick={()=>{startRoom(verse.room_name);}}>Start Verse</Button> */}
+                                    <Button type="link" onClick={()=>{deleteRoom(verse.room_name);}}>Delete Verse</Button>
                                 </div>
                             </div>
                         )
@@ -202,34 +181,20 @@ const ChatRooms = () =>{
                         "fontSize":"calc(3vh + 25px)", color:"white", fontFamily:"Cochin" ,
                         marginTop:"8vh"
                     }}>
-                        Select a Verse
+                        The Verse World
                 </div>
 
 
-                {/* <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
-                    {[1,1,1,1,1,1].map(verse=>{
-                        return(
-                            <div className='ChatRooms-VerseList-Verse'>
-                                <div className='ChatRooms-VerseList-Verse-header'>
-                                    Lianhao Gao's Personal Verse
-                                </div>
-                                <div className='ChatRooms-VerseList-Verse-content'>
-                                    20 members active
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div> */}
 
                 <div className='ChatRooms-VerseList' style={{fontFamily:"Cochin"}}>
                     {verse_list.map(verse=>{
                         return(
-                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.title);}}>
+                            <div className='ChatRooms-VerseList-Verse'  onClick={()=>{joinRoom(verse.room_name);}}>
                                 <div className='ChatRooms-VerseList-Verse-header'>
                                     {verse.title}
                                 </div>
                                 <div className='ChatRooms-VerseList-Verse-content'>
-                                    {verse.n_member} users joined.
+                                    {verse.n_member} users visited.
                                 </div>
                             </div>
                         )
