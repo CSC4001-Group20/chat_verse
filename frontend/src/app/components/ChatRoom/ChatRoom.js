@@ -207,7 +207,7 @@ function ChatRoom() {
         // TODO: 不同的UID从不同的URL获取
         // 需要查询Avatar数据库
         loader.load(
-            "https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2FAshtra.vrm?v=1630342336981",
+            "https://cd-1302933783.cos.ap-guangzhou.myqcloud.com/chatverse/demo.vrm",
     
             gltf => {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
@@ -466,7 +466,7 @@ function ChatRoom() {
 
         try{
             
-            rigRotation(idx, "Hips", {...riggedPose.Hips.rotation, y: riggedPose.Hips.rotation.y + transforms[my_idx].r}, 0.7);
+            rigRotation(idx, "Hips", {...riggedPose.Hips.rotation, y: riggedPose.Hips.rotation.y + transform.r}, 0.7);
             rigPosition(
                 "Hips",
                 {
