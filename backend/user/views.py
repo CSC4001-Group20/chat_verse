@@ -132,8 +132,6 @@ def collect_avatar(request):
         # uid = 0 # TODO
 
 
-
-
         avatar_id = 0 #TODO
         user = User.objects.get(uid=uid)
         avatar = Avatar.objects.get(pk=avatar_id)
