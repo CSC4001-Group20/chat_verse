@@ -10,6 +10,12 @@ var Sign = () =>{
     var [Username, setUsername] = React.useState()
     var [SignPassword, setSignPassword] = React.useState()
     var [SignPasswordConfir, setSignPasswordConfir] = React.useState()
+    var [Email, setEmail] = React.useState()
+
+    // eamil validation
+    const emailValidation = () =>{
+        // to do 
+    }
 
     const sign = () =>{
         if(SignPassword===SignPasswordConfir){
@@ -48,13 +54,17 @@ var Sign = () =>{
             <div style={{display:"flex", flexDirection:"column"}}>
                 <div style={{
                     "fontSize":"calc(4vh + 25px)", color:"white", fontFamily:"Cochin",
-                    marginTop:"10vh", fontFamily:"Cochin"
+                    marginTop:"10vh"
                 }}>Sign up</div>
                 <div>
                     <form className='Sign-form'>
                         <div className='Sign-form-username'>
                             <div style={{textAlign:"left", fontFamily:"Cochin"}}>Username</div>
                             <Input style={{"height":"2rem"}} id='username' type="text" value={Username} onChange={e=>setUsername(e.target.value)}/>
+                        </div>
+                        <div className='Sign-form-password'>
+                            <div style={{textAlign:"left", fontFamily:"Cochin"}}>Email Address</div>
+                            <Input style={{"height":"2rem"}} id='username' type="text" value={Email} onChange={e=>setEmail(e.target.value)}/>
                         </div>
                         <div className='Sign-form-password'>
                             <div style={{textAlign:"left", fontFamily:"Cochin"}}>Password</div>
@@ -65,7 +75,7 @@ var Sign = () =>{
                             <Input style={{"height":"2rem"}} id='passwordConfir' type="password" value={SignPasswordConfir} onChange={e=>setSignPasswordConfir(e.target.value)}/>
                         </div>
                         <div className='Sign-form-submit'>
-                            <Button style={{cursor:"pointer", fontFamily:"Cochin"}} id='submit' type="button" onClick={sign}>Sign up</Button>
+                            <Button style={{cursor:"pointer", fontFamily:"Cochin"}} id='submit' type="button" onClick={()=>{sign();emailValidation()}}>Sign up</Button>
                         </div>
                         <div className='Sign-Sign-in'>
                             <a href="/login" style={{color:"blueviolet", fontFamily:"Cochin"}}><u>Sign in ChatVerse</u></a>

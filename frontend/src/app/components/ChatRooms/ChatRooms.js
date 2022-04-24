@@ -7,13 +7,21 @@ import { PoweroffOutlined } from '@ant-design/icons'
 import { SendOutlined } from '@ant-design/icons'
 import { UserOutlined } from '@ant-design/icons'
 import { RestOutlined } from '@ant-design/icons'
+import { KeyOutlined } from '@ant-design/icons'
+import { Modal } from 'antd'
 
 
 const ChatRooms = () =>{
     const [ createRoomName, setCreateRoomName ] = React.useState("")
     const [ verse_list, setVerseList ] = React.useState([])
     const [ P_verse_list, setP_VerseList ] = React.useState([])
+    const [ status, setChangeStatus ] = React.useState(false)
+    const [ changePassword, setChangePassword ] = React.useState()
 
+    // change password
+    const change = () =>{
+        // to do
+    }
 
     const createRoom = ()=>{
         if (createRoomName===""){
@@ -220,9 +228,22 @@ const ChatRooms = () =>{
                 onClick={()=>{window.location.href="/login"}}>
                 <PoweroffOutlined />
             </button>
+            <button className="changePassword" 
+                onClick={()=>{setChangeStatus(true)}}>
+                <KeyOutlined />
+            </button>
 
-
-            
+            <Modal 
+                visible={status}
+                onOk={()=>{change()}}
+                onCancel={()=>{setChangeStatus(false)}}
+                okText={"Change Password"}
+            >
+                <div className='Sign-form-username'>
+                    <div style={{textAlign:"left", fontFamily:"Cochin"}}>Reset Password</div>
+                    <Input style={{"height":"2rem"}} id='username' type="text" value={changePassword} onChange={e=>setChangePassword(e.target.value)}/>
+                </div>
+            </Modal>
         </div>
     )
 }
