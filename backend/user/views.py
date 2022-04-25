@@ -214,18 +214,15 @@ def send_email(email, code):
     """
     mail_content += code
 
-    try:
-        msg = MIMEText(mail_content, "plain", 'utf-8')
-        msg["Subject"] = Header("Char Verse Validation Email", 'utf-8')
-        msg["From"] = "Char Verse Validation"
-        msg["To"] = receiver
-        smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
-        print("Send successfully -- " + receiver)
-        return HttpResponse("Send Email", status=200)
-    except:
-        print("Send Error unsuccessfully -- " + receiver)
-        print("sendMail-Error: Email send fail")
+ 
+    msg = MIMEText(mail_content, "plain", 'utf-8')
+    msg["Subject"] = Header("Char Verse Validation Email", 'utf-8')
+    msg["From"] = "Char Verse Validation"
+    msg["To"] = receiver
+    smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
+    print("Send successfully -- " + receiver)
     return True
+    
 
 def send_email_request(request):
     if request.method=='POST':
@@ -233,7 +230,7 @@ def send_email_request(request):
         email = body_dict.get('email')
 
         if User.objects.filter(email=email).count() > 0:
-            return HttpResponse("Same Email for Another User", code=403)
+            return HttpResponse("Same Email for Another User", status=403)
 
 
         code = secrets.token_urlsafe(6)
