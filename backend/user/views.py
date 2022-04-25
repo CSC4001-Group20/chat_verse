@@ -207,7 +207,7 @@ def send_email(email, code):
     smtp.ehlo(host_server)
     smtp.login(sender_qq, pwd)
     # mail_content = "Test"
-    receiver='1291683680@qq.com'
+    receiver=email
     mail_content = """
         Welcome To ChatVerse!
         Your Email Verification Code is  
