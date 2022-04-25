@@ -85,42 +85,6 @@ def sign(request):
         #except:
         #return HttpResponse("Sign Fail", status=403)
 
-def emailSend(request):
-    host_server = 'smtp.qq.com'
-    sender_qq = '3162557172'
-    pwd = 'xmngaqidumdrdefe'
-    sender_qq_mail = '3162557172@qq.com'
-
-    smtp = SMTP_SSL(host_server)
-    smtp.ehlo(host_server)
-    smtp.login(sender_qq, pwd)
-    # mail_content = "Test"
-    receiver='1291683680@qq.com'
-    code=''
-    for i in range(6):
-        code += str(randint(0, 9))
-    mail_content = """
-        Welcome To ChatVerse!
-        Your Email Verification Code is  
-    """
-    mail_content += code
-
-    try:
-        msg = MIMEText(mail_content, "plain", 'utf-8')
-        msg["Subject"] = Header("Char Verse Validation Email", 'utf-8')
-        msg["From"] = "Char Verse Validation"
-        msg["To"] = receiver
-        smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
-        print("Send successfully -- " + receiver)
-        return HttpResponse("Send Email", status=200)
-    except:
-        print("Send Error unsuccessfully -- " + receiver)
-        print("sendMail-Error: Email send fail")
-
-    return HttpResponse("emailValidation Fail", status=403)
-
-
-
 
 
 def avatar(request):
@@ -234,8 +198,33 @@ def use_avatar(request):
 # TODO @GLH
 def send_email(email, code):
     print(email, code)
-    # Send the email. 
-    # The email content should be written by GLH.
+    host_server = 'smtp.qq.com'
+    sender_qq = '3162557172'
+    pwd = 'xmngaqidumdrdefe'
+    sender_qq_mail = '3162557172@qq.com'
+
+    smtp = SMTP_SSL(host_server)
+    smtp.ehlo(host_server)
+    smtp.login(sender_qq, pwd)
+    # mail_content = "Test"
+    receiver='1291683680@qq.com'
+    mail_content = """
+        Welcome To ChatVerse!
+        Your Email Verification Code is  
+    """
+    mail_content += code
+
+    try:
+        msg = MIMEText(mail_content, "plain", 'utf-8')
+        msg["Subject"] = Header("Char Verse Validation Email", 'utf-8')
+        msg["From"] = "Char Verse Validation"
+        msg["To"] = receiver
+        smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
+        print("Send successfully -- " + receiver)
+        return HttpResponse("Send Email", status=200)
+    except:
+        print("Send Error unsuccessfully -- " + receiver)
+        print("sendMail-Error: Email send fail")
     return True
 
 def send_email_request(request):
