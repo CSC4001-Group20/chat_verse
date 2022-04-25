@@ -213,3 +213,22 @@ def send_email_request(request):
             return HttpResponse(status=200)
         else:
             return HttpResponse(status=403)
+
+def change_pwd(request):
+    if request.method=='POST':
+        body_dict = json.loads(request.body.decode('utf-8'))
+        uid = request.COOKIES.get('uid')
+        old_password = body_dict.get('old_password')
+        new_password = body_dict.get('new_password')
+
+        user = User.objects.get(uid=uid)
+
+        if old_password==user.password:
+            user.password = new_password
+            user.save()
+            return HttpResponse(status=200)
+        else:
+            print(user.password)
+            print(old_password)
+            print(new_password)
+            return HttpResponse(status=403)

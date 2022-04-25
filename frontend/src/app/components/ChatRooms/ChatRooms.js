@@ -17,10 +17,23 @@ const ChatRooms = () =>{
     const [ P_verse_list, setP_VerseList ] = React.useState([])
     const [ status, setChangeStatus ] = React.useState(false)
     const [ changePassword, setChangePassword ] = React.useState()
+    const [ oldPassword, setOldPassword ] = React.useState()
 
     // change password
     const change = () =>{
-        // to do
+        fetch(`/user/change_pwd/`,{
+            method:'POST',
+            body: JSON.stringify({
+                old_password: oldPassword,
+                new_password: changePassword,
+            })
+        }).then(res=>{
+            if(res.status===200){
+                message.success("Changd!")
+            }else{
+                message.warn("Cannot Change")
+            }
+        })
     }
 
     const createRoom = ()=>{
@@ -241,6 +254,7 @@ const ChatRooms = () =>{
             >
                 <div className='Sign-form-username'>
                     <div style={{textAlign:"left", fontFamily:"Cochin"}}>Reset Password</div>
+                    <Input style={{"height":"2rem"}} id='username' type="text" value={oldPassword} onChange={e=>setOldPassword(e.target.value)}/>
                     <Input style={{"height":"2rem"}} id='username' type="text" value={changePassword} onChange={e=>setChangePassword(e.target.value)}/>
                 </div>
             </Modal>
