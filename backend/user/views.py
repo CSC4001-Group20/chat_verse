@@ -38,6 +38,18 @@ def sign(request):
         body_dict = json.loads(request.body.decode('utf-8'))
         username = body_dict.get('username', '')
         password = body_dict.get('password', '')
+        email = body_dict.get('email', '')
+        code = body_dict.get('code', '')
+
+
+        try:
+            User.objects.get(email=email)
+            return HttpResponse("Same Email for Another User", code=403)
+        except: 
+            pass
+
+        if User.objects.filter(email=email).count() > 0:
+            return HttpResponse("Same Email for Another User", code=403)
 
         if username == "":
             username_error = "username is empty"
@@ -59,6 +71,7 @@ def sign(request):
         user = User.objects.create(
             user_name=username,
             password=password,
+            email = email,
         )
         return HttpResponse("Successfully Sign", status=200)
         #except:
@@ -174,3 +187,29 @@ def use_avatar(request):
         user.avatar.add(avatar)
         user.save()
         return HttpResponse(status=200)
+
+# TODO @GLH
+def send_email(email, code):
+    print(email, code)
+    # Send the email. 
+    # The email content should be written by GLH.
+    return True
+
+def send_email_request(request):
+    if request.method=='POST':
+        body_dict = json.loads(request.body.decode('utf-8'))
+        email = body_dict.get('email')
+
+        if User.objects.filter(email=email).count() > 0:
+            return HttpResponse("Same Email for Another User", code=403)
+
+
+        code = secrets.token_urlsafe(6)
+        emailcode, c = EmailCode.objects.get_or_create(email=email)
+        emailcode.code = code
+        emailcode.save()
+        success = send_email(email, code)
+        if success:
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=403)
