@@ -15,17 +15,16 @@ from email.mime.text import MIMEText
 from email.header import Header
 from random import randint
 
-
+# this function is for user to login system
 def login(request):
+    """receive a web request and check the user if exist in user database, if user in allow user login into system, otherwise refuse"""
     if request.method == 'POST':
-        # 获取表单的数据
         body_dict = json.loads(request.body.decode('utf-8'))
         username = body_dict.get('username', '')
         password = body_dict.get('password', '')
 
         print("username", username, "password", password)
 
-        # 验证用户名，密码是否正确
         try:
             user = User.objects.get(user_name=username,password=password)
             res = HttpResponse("Successfully Login",status=200)
@@ -38,8 +37,9 @@ def login(request):
         except:
             return HttpResponse("Login Fail", status=403)
 
-
+# this function is for user to register a account
 def sign(request):
+    """receive a web request and check the validation of user account, if register error return 403, otherwise create user in database"""
     if request.method == 'GET':
         return render(request, 'user/register.html')
     elif request.method == 'POST':
@@ -49,7 +49,7 @@ def sign(request):
         email = body_dict.get('email', '')
         code = body_dict.get('code', '')
 
-
+    # chcck the user email code, check user account information validation
         try:
             User.objects.get(email=email)
             return HttpResponse("Same Email for Another User", code=403)
@@ -74,20 +74,18 @@ def sign(request):
         except:
             pass
 
-        # 开始注册功能
-        #try:
+    # successfully create user account
         user = User.objects.create(
             user_name=username,
             password=password,
             email = email,
         )
         return HttpResponse("Successfully Sign", status=200)
-        #except:
-        #return HttpResponse("Sign Fail", status=403)
 
 
-
+# this function is used to get avatar list and upload a avatar
 def avatar(request):
+    """receive a web request and return the avatar list"""
     if request.method=='GET':
         if request.GET.get('uid'):
             uid = request.GET.get('uid')
@@ -114,22 +112,8 @@ def avatar(request):
                 'cover':avatar.cover
             }
             return JsonResponse({'result':avatar_info})
-        # elif request.GET.get('uid_collected'):
-        #     uid = request.GET.get('uid_collected')
-        #     cookie_uid = request.COOKIES.get('uid')
-        #     if (uid != cookie_uid):
-        #         return HttpResponse("用户错误",status=404)
-
-
-        #     user = User.objects.get(uid=uid)
-        #     avatars = user.collected_avatar.all()
-        #     # TODO  
-        #     avatar_info_list = []
-        #     return JsonResponse({'result':avatar_info})
         else:
-            # Get All Avatars
             avatars = Avatar.objects.all()
-            #TODO 
             avatar_info =[]
             for avatar in avatars:
                 result = {}
@@ -167,7 +151,10 @@ def avatar(request):
 
         return HttpResponse(status=200)
 
+
+# this function is used to get the collect avatar of a specific user
 def collect_avatar(request):
+    """receive a web request and return the avatar list of the specific user"""
     if request.method=='POST':
         uid = request.COOKIES.get('uid')
         # uid = 0 # TODO
@@ -181,7 +168,10 @@ def collect_avatar(request):
         user.save()
         return HttpResponse(status=200)
 
+
+# this function is used to change the avatar
 def use_avatar(request):
+    """receive a web request and change the avatar in user database"""
     if request.method=='POST':
         body_dict = json.loads(request.body.decode('utf-8'))
         uid = body_dict.get('uid', '')
@@ -195,12 +185,13 @@ def use_avatar(request):
         user.save()
         return HttpResponse(status=200)
 
-# TODO @GLH
+# this function is send validation email
 def send_email(email, code):
-    print(email, code)
+    """receive a web request and send a verify email with code"""
+    # print(email, code)
     host_server = 'smtp.qq.com'
     sender_qq = '3162557172'
-    pwd = 'xmngaqidumdrdefe'
+    pwd = '*' # for privacy we hide the password
     sender_qq_mail = '3162557172@qq.com'
 
     smtp = SMTP_SSL(host_server)
@@ -223,15 +214,15 @@ def send_email(email, code):
     print("Send successfully -- " + receiver)
     return True
     
-
+# this function is used to check the email code
 def send_email_request(request):
+    """receive a web request and send a verify email with code, return the send status"""
     if request.method=='POST':
         body_dict = json.loads(request.body.decode('utf-8'))
         email = body_dict.get('email')
 
         if User.objects.filter(email=email).count() > 0:
             return HttpResponse("Same Email for Another User", status=403)
-
 
         code = secrets.token_urlsafe(6)
         emailcode, c = EmailCode.objects.get_or_create(email=email)
@@ -243,7 +234,9 @@ def send_email_request(request):
         else:
             return HttpResponse(status=403)
 
+# this function is used to change the password
 def change_pwd(request):
+    """receive a web request and change the password of a user, return the change status"""
     if request.method=='POST':
         body_dict = json.loads(request.body.decode('utf-8'))
         uid = request.COOKIES.get('uid')

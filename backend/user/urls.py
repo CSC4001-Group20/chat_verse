@@ -2,6 +2,10 @@
 from django.urls import path
 from . import views
 
+
+
+
+# urlpatterns are used to direct the web requests to backend functions
 urlpatterns = [
     path('login/', views.login, name='login'),
     path('sign/', views.sign, name='sign'),
