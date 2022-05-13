@@ -1,5 +1,3 @@
-// import logo from './logo.svg';
-// import { Face, Pose, Hand } from "kalidokit";
 import React from 'react';
 import { Holistic } from "@mediapipe/holistic"
 import { Camera } from "@mediapipe/camera_utils"
@@ -11,7 +9,6 @@ import * as Kalidokit from "kalidokit";
 import ChatBar from './ChatBar';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader'
 import "./ChatRoom.css"
-import { PoweroffOutlined } from '@ant-design/icons';
 import { ImportOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { message } from 'antd';
@@ -45,11 +42,9 @@ function ChatRoom() {
     const [ camera, setCamera ] = React.useState(null)
     const [ holistic, setHolistic ] = React.useState(null)
     const [ scene, setScene ] = React.useState(null)
-    // const [ avatar, setAvatar ] = React.useState(null)
 
     
     /* Initalizing Functions */
-
     const getUsingAvatar = (uid, next)=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/user/avatar/?uid=${uid}`,{
@@ -107,9 +102,6 @@ function ChatRoom() {
     }
 
     const newLight = () => {
-        // const light = new THREE.DirectionalLight(0xffffff);
-        // light.position.set(1.0, 1.0, 1.0).normalize();
-        // scene.add(light);
         let Ambient = new THREE.AmbientLight(0x404040, 2);
         scene.add(Ambient);
 
@@ -125,7 +117,7 @@ function ChatRoom() {
         Sun.shadow.camera.bottom = -22;
         Sun.shadow.camera.left = -35;
         Sun.shadow.camera.right = 35;
-        // //set Shadow resolution
+        //set Shadow resolution
         Sun.shadow.mapSize.width = 2048;  // default
         Sun.shadow.mapSize.height = 2048; // default
         //Shadow limit
@@ -210,7 +202,6 @@ function ChatRoom() {
 
 
     /* Logic Functions */
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadVRM = (_uid) => {
 
@@ -237,7 +228,6 @@ function ChatRoom() {
                         scene.add(vrm.scene);
                         VRMs[idx] = vrm
                         uids[idx] = _uid
-                        // console.log("2",uid, _uid)
                         if(_uid===uid){
                             my_idx=idx
                             console.log("init control")
@@ -249,16 +239,8 @@ function ChatRoom() {
                     
                 },
         
-                progress =>
-                    // console.log(
-                    //     "Loading model...",
-                    //     100.0 * (progress.loaded / progress.total),
-                    //     "%"
-                    // ),
-        
                 error => {
                     console.error(error)
-
                 }
             );
         })
@@ -267,7 +249,6 @@ function ChatRoom() {
     }
 
     /* SHOULD DEBUG */
-
     const initControl = () => {
 
         if(my_idx!==undefined){
@@ -466,8 +447,6 @@ function ChatRoom() {
         }
         
         if(flag) motion_socket.send(JSON.stringify(my_data))
-
-        // applyMovements( my_data, idx )
     }
 
     const applyMovements = ( data, idx ) => {
@@ -482,8 +461,6 @@ function ChatRoom() {
 
 
         try{
-
-            // console.log(riggedFace)
             rigFace(idx, riggedFace)
         }catch{}
 
@@ -627,7 +604,6 @@ function ChatRoom() {
 
 
     /* Lifecycle Hooks */
-
     // Init HTML element reference and some mudules
     React.useEffect(()=>{
         getUid()
@@ -657,18 +633,8 @@ function ChatRoom() {
             animate()
             loadVRM(uid);  
             initSocket()  
-            // var axisHelper = new THREE.AxisHelper(250);
-            // scene.add(axisHelper);
             }
     },[scene])
-
-    // React.useEffect(()=>{
-    //     setInterval(() => {
-    //         // console.log("position",orbitCamera.position)
-    //         console.log("target",orbitControls.target)
-    //         console.log("transforms",transforms[my_idx])
-    //     }, 500);
-    // },[])
 
     React.useEffect(()=>{
         if(holistic) initHolistic()

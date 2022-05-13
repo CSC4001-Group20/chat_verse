@@ -5,8 +5,14 @@ import { setCookie } from '../Login/cookie'
 
 import './Sign.css'
 
+/* the sign up(register) page module*/
 var Sign = () =>{
-    
+
+    /* 
+    the state variables 
+    page will be refreshed when the variables are updated
+    API:https://zh-hans.reactjs.org/docs/hooks-state.html
+    */
     var [Username, setUsername] = React.useState()
     var [SignPassword, setSignPassword] = React.useState()
     var [SignPasswordConfir, setSignPasswordConfir] = React.useState()
@@ -14,9 +20,15 @@ var Sign = () =>{
     var [code, setCode] = React.useState()
     const [ sent, setSent ] = React.useState()
 
+    /*
+    front and back end interaction
+    register a new account
+    the system will compare the input email-validation-code with the one in our database 
+    if the codes match, the input username, password and the email address will be recorded into the database
+    */
     const sign = () =>{
         if(SignPassword===SignPasswordConfir && Email && code){
-            let bodydata = {
+            let bodydata = { // input data
                 username: Username,
                 password: SignPassword,
                 code: code,
@@ -28,19 +40,19 @@ var Sign = () =>{
                 body: JSON.stringify(bodydata),
             })
             .then(response=>{
-                if (response.status===200) {
+                if (response.status===200) { // success
                     message.success("Sussessfully Sign! Return Login pagr to Login")
                     setTimeout(() => {
                         window.location.href="/login"
                     }, 1000);
-                }else if (response.status===403){
+                }else if (response.status===403){ // check whether the username or the email address already exist
                     message.warn("User Already Exist, Please Change Your Username")
                 }else{
                     message.warn("User already exists") 
                 }
             })
         }
-        else{
+        else{ // the confirming password does not match with the previous one
             message.warn("Inconsistent Password!")
             setTimeout(() => {
                 window.location.reload()
@@ -48,6 +60,13 @@ var Sign = () =>{
         }
     }
 
+    /** 
+    front and back end interaction
+    after the user input the email address, and click the button "send"
+    this function will carry the email address to the backend
+    after that, the backend will process the address and do the sending
+    if the address is invalid, the backend will return an unsuccess http response
+    **/
     const send_email_code = (email) => {
         if(!email) return
         fetch(`/user/send_email/`,{
@@ -63,13 +82,16 @@ var Sign = () =>{
         })
     }
 
+    /** the frontend UI **/
     return(
         <div className='Sign'>
             <div style={{display:"flex", flexDirection:"column"}}>
+                {/* header */}
                 <div style={{
                     "fontSize":"calc(4vh + 25px)", color:"white", fontFamily:"Cochin",
                     marginTop:"10vh"
                 }}>Sign up</div>
+                {/* register form, containing the input data for registration */}
                 <div>
                     <form className='Sign-form'>
                         <div className='Sign-form-username'>
