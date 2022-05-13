@@ -1,3 +1,7 @@
+/*
+information like the username and the password may be stored as cookies in the browser
+we define some functions to create, delete, and fetch cookies
+*/
 export function setCookie(name,value)
 {
     var Days = 30;

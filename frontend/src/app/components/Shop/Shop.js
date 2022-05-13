@@ -1,27 +1,19 @@
-import { UserOutlined } from '@ant-design/icons'
-import { RestOutlined } from '@ant-design/icons'
-import { SendOutlined } from '@ant-design/icons'
 import { AccountBookFilled, ImportOutlined } from '@ant-design/icons'
 import { Input, Button, message, Upload } from 'antd'
 
 import React from 'react'
-import { setCookie } from '../Login/cookie'
+import { getCookie, setCookie } from '../Login/cookie'
 
 import './Shop.css'
 
-export function getCookie(name)
-{
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
- 
-    if(arr=document.cookie.match(reg))
- 
-        return unescape(arr[2]);
-    else
-        return null;
-}
-
+/* the avatar shop module, to manage user's avatar */
 var Shop = () =>{
-    
+
+    /* 
+    the state variables 
+    page will be refreshed when the variables are updated
+    API:https://zh-hans.reactjs.org/docs/hooks-state.html
+    */
     const [ avatar_list, setAvatarList ] = React.useState([])
     const [ avatar, setAvatar ] = React.useState(null)
     const [ title, setTitle ] = React.useState("")
@@ -30,10 +22,11 @@ var Shop = () =>{
     const [ src, setAvatarSrc ] = React.useState("")
     const [ cover, setAvatarCover ] = React.useState("")
 
-    
-
-
-    //TODO
+    /**
+    front and back end interaction
+    fetch all the available avatars in the database,
+    including the original ones and the ones that users upload
+    **/
     const getAvatarList = ()=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/user/avatar/`,{
@@ -49,7 +42,10 @@ var Shop = () =>{
         })
     }
 
-    // //TODO
+    /**
+    front and back end interaction
+    fetch the avatar that the current user is using
+    **/
     const getUsingAvatar = ()=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/user/avatar/?uid=${uid}`,{
@@ -65,6 +61,11 @@ var Shop = () =>{
         }) 
     }
 
+    /**
+    This function will upload an avatar to a cloud storage.
+    Since uploading avatars involves uploading files,
+    we use tencent-cloud storage to store the VRM files
+    **/
     const uploadVRM = (file) => new Promise(resolve => {
         if(file){
             var timestamp = new Date().getTime();
@@ -205,7 +206,11 @@ var Shop = () =>{
         })
     })
 
-    //TODO
+    /**
+    React useeffect hook
+    the functions (the former arugments) will be executed whenever the variables (the latter arguments) are changed
+    reference API: https://zh-hans.reactjs.org/docs/hooks-effect.html
+    **/
     React.useEffect(()=>{
         console.log(getCookie('uid'))
         setUid(getCookie('uid'))
@@ -219,6 +224,7 @@ var Shop = () =>{
     },[uid])
 
 
+    /* the frontend UI */
     return(
         <div className='Shop'>
             <button className='back' onClick={()=>

@@ -10,8 +10,13 @@ import { RestOutlined } from '@ant-design/icons'
 import { KeyOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 
-
+/* the chatrooms module, to manage or to join chatrooms */
 const ChatRooms = () =>{
+    /* 
+    the state variables 
+    page will be refreshed when the variables are updated
+    API:https://zh-hans.reactjs.org/docs/hooks-state.html
+    */
     const [ createRoomName, setCreateRoomName ] = React.useState("")
     const [ verse_list, setVerseList ] = React.useState([])
     const [ P_verse_list, setP_VerseList ] = React.useState([])
@@ -19,7 +24,11 @@ const ChatRooms = () =>{
     const [ changePassword, setChangePassword ] = React.useState()
     const [ oldPassword, setOldPassword ] = React.useState()
 
-    // change password
+    /* 
+    front and back end interaction
+    this function can help user change their password
+    user will input their old password as well as the new password
+    */
     const change = () =>{
         fetch(`/user/change_pwd/`,{
             method:'POST',
@@ -35,7 +44,10 @@ const ChatRooms = () =>{
             }
         })
     }
-
+    /* 
+    front and back end interaction
+    create a room with a desired name (the name cannot be the same with any existing room)
+    */
     const createRoom = ()=>{
         if (createRoomName===""){
             message.warn("Room Name Cannot Be Empty!")
@@ -47,14 +59,10 @@ const ChatRooms = () =>{
                     title:createRoomName
                 })
             }).then(res=>{
-                if(res.status===200){
+                if(res.status===200){ // success
                     message.success("Succfssfully Create Room")
                     return res.json()
-                    // setTimeout(() => {
-                    //     console.log(res)
-                    //     window.location.href="/chatroom/?room_name="+res.json()['room_name']
-                    // }, 1000);
-                }else if (res.status===403){
+                }else if (res.status===403){ // invalid account
                     message.warn("Create Room Fail")
                 }else if (res.status===405){
                     message.warn("Chat Room Already Exist")
@@ -62,15 +70,19 @@ const ChatRooms = () =>{
                     message.warn("Create Room Fail")
                 }
             }).then(data=>{
-                if (data){
-                    // window.location.href="/chatroom/?room_name="+data.room_name
+                if (data){ // reload window
                     window.location.reload()
                 }
                 
             })
         }
     }
-
+    /* 
+    front and back end interaction
+    join an existing room
+    each user will send his token containing the information about his account to the system
+    this token can distinguish the user from other users inside the room
+    */
     const joinRoom = (room_name)=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/chat/joinRoom/`,{
@@ -79,9 +91,9 @@ const ChatRooms = () =>{
                 room_name:room_name
             })
         }).then(res=>{
-            if(res.status===200){
+            if(res.status===200){ // success
                 message.success("Succfssfully Join Room")
-                window.location.href="/chatroom/?room_name="+room_name+'&uid='+getCookie('uid')
+                window.location.href="/chatroom/?room_name="+room_name+'&uid='+getCookie('uid') // use cookie as the token
             }else{
                 message.warn("Join Room Fail")
             }
@@ -90,7 +102,10 @@ const ChatRooms = () =>{
             }
         })
     }
-
+    /* 
+    front and back end interaction
+    a user can delete his chatrooms
+    */
     const deleteRoom = (room_name)=>{
         setCookie("update",new Date().toUTCString())
         fetch(`/chat/deleteRoom/`,{
@@ -110,6 +125,11 @@ const ChatRooms = () =>{
         })
     }
 
+    /* 
+    front and back end interaction
+    fetch all the chatrooms available in the backend database
+    the result will be rendered in the frontend UI
+    */
     const get_verse_list = ()=>{
         fetch(`/chat/verse_list/`,{
             method:'GET',
@@ -125,6 +145,11 @@ const ChatRooms = () =>{
         })
     }
 
+    /* 
+    front and back end interaction
+    fetch all the chatrooms available in the backend database
+    however this time the system will only return the belonging chatrooms for the user
+    */
     const get_personal_verse_list = (uid)=>{
         fetch(`/chat/verse_list/?filter_uid=true`,{
             method:'GET',
@@ -139,12 +164,17 @@ const ChatRooms = () =>{
         })
     }
 
+    /**
+    React useeffect hook
+    the functions (the former arugments) will be executed whenever the variables (the latter arguments) are changed
+    reference API: https://zh-hans.reactjs.org/docs/hooks-effect.html
+    **/
     React.useEffect(()=>{
         get_verse_list()
         get_personal_verse_list()
     },[])
 
-
+    /* the frontend UI */
     return(
         <div className='ChatRooms'>
             <div className='ChatRooms-My'>

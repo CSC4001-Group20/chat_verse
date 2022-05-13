@@ -9,8 +9,14 @@ var chat_socket = null;
 
 var timeout
 
+/* the chatbar module, a plugged in module for the chatroom, to control the chat box */
 const ChatBar = () => {
 
+    /* 
+    the state variables 
+    page will be refreshed when the variables are updated
+    API:https://zh-hans.reactjs.org/docs/hooks-state.html
+    */
     const [ text, setText ] = React.useState("")
     const [ user_name, setUser_Name] = React.useState("")
     const [ messages, setMessages ] = React.useState([])

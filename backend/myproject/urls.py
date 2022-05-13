@@ -19,6 +19,10 @@ from django.conf.urls import include
 from chat import views
 from .views import get_cos_credential
 
+
+
+
+# urlpatterns are used to direct the web requests to backend functions
 urlpatterns = [
     path('', views.index, name='index'),
     path('chat/', include('chat.urls')),
