@@ -4,8 +4,6 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    // useRouteMatch,
-    // useParams
   } from "react-router-dom";
 import ChatRoom from './components/ChatRoom/ChatRoom';
 import Login from './components/Login/Login';
@@ -16,6 +14,10 @@ import Shop from './components/Shop/Shop';
 function App() {
 
     return (
+        /**
+        the root module
+        we adopt the react-router to navigate different urls to our corresponding sub-modules
+        **/
         <div className="App">
             <Router>
                 <Routes>
