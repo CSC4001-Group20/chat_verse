@@ -52,12 +52,12 @@ def sign(request):
 
         try:
             User.objects.get(email=email)
-            return HttpResponse("Same Email for Another User", code=403)
+            return HttpResponse("Same Email for Another User", status=403)
         except: 
             pass
 
         if User.objects.filter(email=email).count() > 0:
-            return HttpResponse("Same Email for Another User", code=403)
+            return HttpResponse("Same Email for Another User", status=403)
 
         if username == "":
             username_error = "username is empty"
@@ -147,6 +147,7 @@ def avatar(request):
 
     elif request.method=='POST':
         uid = request.COOKIES.get('uid')
+        print("Cookie UID", request.COOKIES)
         body_dict = json.loads(request.body.decode('utf-8'))
         # TODO Create A Single Avatar
         user = User.objects.get(uid=uid)
@@ -239,9 +240,9 @@ def send_email_request(request):
         emailcode.save()
         success = send_email(email, code)
         if success:
-            return HttpResponse(status=200)
+            return HttpResponse(code, status=200)
         else:
-            return HttpResponse(status=403)
+            return HttpResponse(code, status=403)
 
 def change_pwd(request):
     if request.method=='POST':
